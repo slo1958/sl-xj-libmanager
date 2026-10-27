@@ -21,42 +21,65 @@ Protected Class clXojoProjectItemBase
 
 	#tag Method, Flags = &h0
 		Sub Dump()
-		  System.DebugLog(KeyString  _
-		  +"..." + paramStr(0) _
-		  +"..." + paramStr(1) _
-		  +"..." + paramStr(2) _
-		  +"..." + paramStr(3) _
-		  +" ["  +  paramStr.LastIndex.ToString+ "]" _
-		  )
+		  
+		  System.DebugLog(self.ToString())
 		  
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Shared Function ProcessLine(Source as String) As clXojoProjectItemBase
+		Function GetName() As String
+		  
+		  return self.paramStr(0)
 		  
 		  
-		  var ret as clXojoProjectItemBase = nil
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetOwnID() As string
+		  Return paramStr(2)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetParentID() As string
+		  Return paramStr(3)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetPath() As string
+		  return self.paramStr(1)
 		  
-		  var keyEndPosition as integer = Source.IndexOf("=")
-		  var lineKey as string = Source.Left(keyEndPosition)
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function IsLibraryInfoModule() As Boolean
 		  
-		  var params() as string = Source.Middle(keyEndPosition+1, 999).Split(";")
-		  
+		  Return self.KeyString = "Module" and self.GetName.left(ModNameForInfo.Length) = ModNameForInfo
 		   
-		  if params.LastIndex >= 4 and params(1).left(clXojoProjectItem.ShareableText.Length) = clXojoProjectItem.ShareableText then
-		    
-		    if Linekey  = "Folder" and params(0) = ShareableText then
-		      ret  = new clXojoProjectFolder(source, lineKey, params)
-		      
-		    else
-		      ret  = new clXojoProjectItem(source, lineKey, params)
-		      
-		    end if
-		    
-		  end if
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function ToString(fullContent as Boolean = true) As String
 		  
-		  Return ret
+		  if fullContent then
+		    return KeyString  _
+		    +"..." + paramStr(0) _
+		    +"..." + paramStr(1) _
+		    +"..." + paramStr(2) _
+		    +"..." + paramStr(3) _
+		    +" ["  +  paramStr.LastIndex.ToString+ "]" 
+		    
+		  else
+		    return paramStr(0) _
+		    +"..." + paramStr(1) _
+		    +"..." + paramStr(2) _
+		    +"..." + paramStr(3) 
+		  end if
 		  
 		End Function
 	#tag EndMethod
@@ -75,7 +98,7 @@ Protected Class clXojoProjectItemBase
 	#tag EndProperty
 
 
-	#tag Constant, Name = ShareableText, Type = String, Dynamic = False, Default = \"Shareable", Scope = Public
+	#tag Constant, Name = ModNameForInfo, Type = String, Dynamic = False, Default = \"LibraryInfo", Scope = Public
 	#tag EndConstant
 
 

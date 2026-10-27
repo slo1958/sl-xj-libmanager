@@ -15,7 +15,6 @@ Protected Class clCodeLibray
 		  var sgReqArray() as JSONItem
 		  var sgdep() as clLibDependency
 		  
-		  var x as integer
 		  
 		  for each k as string in js.Keys
 		    
@@ -30,7 +29,7 @@ Protected Class clCodeLibray
 		        
 		      end try
 		      
-		      x=0
+		      
 		      
 		    case "Information"
 		      sgInformation = js.value(k)

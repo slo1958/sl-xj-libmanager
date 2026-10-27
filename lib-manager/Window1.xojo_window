@@ -87,6 +87,121 @@ Begin DesktopWindow Window1
       Visible         =   True
       Width           =   80
    End
+   Begin DesktopButton Button3
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Cancel          =   False
+      Caption         =   "Button3"
+      Default         =   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   47
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      MacButtonStyle  =   0
+      Scope           =   0
+      TabIndex        =   2
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   140
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   80
+   End
+   Begin DesktopButton Button4
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Cancel          =   False
+      Caption         =   "Button"
+      Default         =   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   450
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      MacButtonStyle  =   0
+      Scope           =   0
+      TabIndex        =   3
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   56
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   80
+   End
+   Begin URLConnection URLConnection1
+      Index           =   -2147483648
+      LockedInPosition=   False
+      Scope           =   0
+      TabPanelIndex   =   0
+   End
+   Begin DesktopListBox ListBox1
+      AllowAutoDeactivate=   True
+      AllowAutoHideScrollbars=   True
+      AllowExpandableRows=   False
+      AllowFocusRing  =   True
+      AllowResizableColumns=   False
+      AllowRowDragging=   False
+      AllowRowReordering=   False
+      Bold            =   False
+      ColumnCount     =   1
+      ColumnWidths    =   ""
+      DefaultRowHeight=   -1
+      DropIndicatorVisible=   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      GridLineStyle   =   0
+      HasBorder       =   True
+      HasHeader       =   True
+      HasHorizontalScrollbar=   False
+      HasVerticalScrollbar=   True
+      HeadingIndex    =   -1
+      Height          =   200
+      Index           =   -2147483648
+      InitialValue    =   ""
+      Italic          =   False
+      Left            =   280
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   False
+      LockRight       =   True
+      LockTop         =   True
+      RequiresSelection=   False
+      RowSelectionType=   0
+      Scope           =   0
+      TabIndex        =   4
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   114
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   300
+      _ScrollWidth    =   -1
+   End
 End
 #tag EndDesktopWindow
 
@@ -115,9 +230,30 @@ End
 		  
 		  fd = fd.Child("test-project1")
 		  
-		  var c as new clXojoProject(fd)
+		  var c as new clXojoProject(fd, clXojoProject.UsedAs.LibrarySource)
 		  
 		  
+		  for each fldDesc as clXPLTopFolderDesc in c.LibraryTopFolder
+		    fldDesc.Dump()
+		    
+		    System.DebugLog(fldDesc.GetName)
+		    System.DebugLog(fldDesc.GetPath)
+		    
+		    var fld as FolderItem = c.LibraryFolderItem(fldDesc.GetName)
+		    
+		    if fld <> nil then 
+		      System.DebugLog(fld.NativePath)
+		      
+		      var fdList() as FolderItem = c.AllFolderItems(fldDesc.GetName)
+		      
+		      
+		    end if
+		    
+		    call c.FindLibraryInfo(fldDesc.GetName)
+		    
+		    System.DebugLog("----")
+		    
+		  next
 		  
 		  // Return
 		  
@@ -145,6 +281,112 @@ End
 		  var ccc as new clCodeLibray(js.ToString)
 		  
 		  return
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events Button3
+	#tag Event
+		Sub Pressed()
+		  //
+		  // Navigate to test project
+		  //
+		  
+		  var fd as new FolderItem
+		  
+		  fd = fd.Parent
+		  
+		  fd = fd.Child("test-project1")
+		  
+		  wnd_project_info.SetProjectFolder(fd)
+		  
+		  wnd_project_info.Show
+		  
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events Button4
+	#tag Event
+		Sub Pressed()
+		  //
+		  // For a GitHub repo, there's a zip at https://github.com/<user>/<repo>/archive/<branch>.zip, 
+		  // so you can download it with:
+		  // wget https://github.com/<user>/<repo>/archive/<branch>.zip
+		  //
+		  //
+		  // GH_USER=REPLACE_WITH_USER \
+		  // GH_REPO=REPLACE_WITH_REPO \
+		  // GH_BRANCH=REPLACE_WITH_BRANCH \
+		  // wget https://github.com/${GH_USER}/${GH_REPO}/archive/refs/tags/${GH_BRANCH}.zip \
+		  // -O "${GH_REPO}-${GH_BRANCH}.zip" && \ 
+		  // unzip ./"${GH_REPO}-${GH_BRANCH}.zip" && \
+		  // rm ./"${GH_REPO}-${GH_BRANCH}.zip"
+		  
+		  
+		  
+		  var GH_RepoOwner as string = "slo1958"
+		  var GH_RepoName as string = "sl-xj-lib-loging"
+		  var GH_RepoBranch as string = "BaseVersion2026"
+		  
+		  
+		  var repo_url as string = "https://github.com/${GH_USER}/${GH_REPO}/archive/refs/tags/${GH_BRANCH}.zip"
+		  
+		  repo_url = repo_url.ReplaceAll("${GH_USER}", GH_RepoOwner)
+		  repo_url = repo_url.ReplaceAll("${GH_REPO}", GH_RepoName)
+		  repo_url = repo_url.ReplaceAll("${GH_BRANCH}", GH_RepoBranch)
+		  
+		  System.DebugLog(repo_url)
+		  
+		  URLConnection1.Send("GET",repo_url)
+		  
+		  
+		  
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events URLConnection1
+	#tag Event
+		Function AuthenticationRequested(realm As String, ByRef name As String, ByRef password As String) As Boolean
+		  Listbox1.AddRow("Authentication required")
+		  Return false
+		  
+		End Function
+	#tag EndEvent
+	#tag Event
+		Sub ContentReceived(URL As String, HTTPStatus As Integer, content As String)
+		  Listbox1.AddRow("Status " + HTTPStatus.ToString + " content received " + content.Length.ToString)
+		  
+		  var fld as FolderItem = SpecialFolder.Desktop.child("test.zip")
+		  var bin as BinaryStream = BinaryStream.Create(fld, true)
+		  bin.Write(content)
+		  bin.close
+		  
+		  Return
+		  
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub Error(e As RuntimeException)
+		  Listbox1.AddRow("Error "  + e.Message)
+		  
+		  Return 
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub FileReceived(URL As String, HTTPStatus As Integer, file As FolderItem)
+		  Listbox1.AddRow("Status " + HTTPStatus.ToString + " File received " + file.NativePath)
+		  System.DebugLog(file.NativePath)
+		  
+		  Return 
+		  
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub HeadersReceived(URL As String, HTTPStatus As Integer)
+		  Listbox1.AddRow("Status " + HTTPStatus.ToString + " Header received " )
+		  Return 
 		  
 		End Sub
 	#tag EndEvent

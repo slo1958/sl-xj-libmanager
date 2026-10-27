@@ -1,13 +1,13 @@
 #tag Class
-Protected Class clXojoProjectFolder
+Protected Class clXPLFolderDescAbstract
 Inherits clXojoProjectItemBase
 	#tag Method, Flags = &h0
-		Sub Constructor(Source as String, Key as string, params() as string)
+		Sub Constructor(Source as String, Key as string, params() as string, FolderOfInterest as string)
 		  
 		  super.Constructor(Source, Key, params)
 		  
 		  
-		  if key  = "Folder" and self.paramStr(0) = ShareableText then
+		  if key  = "Folder" and self.paramStr(0) = FolderOfInterest then
 		    self.FolderID = self.paramStr(2)
 		    
 		  end if
@@ -83,8 +83,8 @@ Inherits clXojoProjectItemBase
 			Visible=false
 			Group="Behavior"
 			InitialValue=""
-			Type="Integer"
-			EditorType=""
+			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class
