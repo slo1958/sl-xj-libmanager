@@ -1,11 +1,49 @@
 #tag Class
-Protected Class clLibraryVersionInfo
+Protected Class clLibDependency
+	#tag Method, Flags = &h0
+		Sub Constructor(Source as JSONItem)
+		  
+		  // {"Libary":"Another library","Version":"AAA"}
+		  
+		  try
+		    self.mLibraryLabel = source.Value("Library")
+		    self.mBaseVersion = source.Value("Version")
+		    
+		  Catch
+		    self.mLibraryLabel = ""
+		    self.mBaseVersion = ""
+		    
+		  end try
+		  
+		  Return
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function LibraryLabel() As string
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function LibraryVersionMaximum() As clLibraryVersionInfo
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function LibraryVersionMinimum() As clLibraryVersionInfo
+		  
+		End Function
+	#tag EndMethod
+
+
 	#tag Property, Flags = &h0
-		Major As Integer
+		mBaseVersion As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		Minor As Integer
+		mLibraryLabel As string
 	#tag EndProperty
 
 
@@ -47,14 +85,6 @@ Protected Class clLibraryVersionInfo
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			Type="Integer"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="Major"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
 			Type="Integer"
 			EditorType=""
 		#tag EndViewProperty

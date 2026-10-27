@@ -70,6 +70,7 @@ Begin DesktopWindow wnd_lib_source
       Underline       =   False
       Visible         =   True
       Width           =   560
+      _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
    Begin DesktopTaggedButton btn_New
@@ -401,7 +402,7 @@ End
 
 	#tag Method, Flags = &h0
 		Sub AddCurrent()
-		   
+		  
 		  var row as integer = Self.RowTagCounter + 1
 		  self.RowTagCounter = row
 		  
@@ -640,7 +641,7 @@ End
 #tag Events ListBox1
 	#tag Event
 		Function CellPressed(row As Integer, column As Integer, x As Integer, y As Integer) As Boolean
-		   
+		  
 		  if row < 0 then Return false
 		  if row > Listbox1.LastRowIndex then return False
 		  

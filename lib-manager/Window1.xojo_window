@@ -105,15 +105,44 @@ End
 #tag Events Button2
 	#tag Event
 		Sub Pressed()
+		  //
+		  // Navigate to test project
+		  //
+		  
+		  var fd as new FolderItem
+		  
+		  fd = fd.Parent
+		  
+		  fd = fd.Child("test-project1")
+		  
+		  var c as new clXojoProject(fd)
+		  
+		  
+		  
+		  // Return
+		  
+		  
+		  //
+		  // {"Signature":"Something","Information":{"Name":"Test library","Author":"John Doe"},"Requirements":[{"Libary":"Another library","Version":"AAA"},{"Libary":"A new library","Version":"AAA"}]}
+		  //
+		  
+		  
 		  var js as new JSONItem
+		   
+		  js.Value("Signature") =   "Something"
 		  
-		  var subjs as JSONItem
+		  js.Child("Information")=  new JSONItem(new Dictionary("Name":"Test library", "Author":"John Doe","Version":"alpha"))
 		  
-		  js.Child("Major") =   new JSONItem(new Dictionary("alpha":"beta","beta":123))
+		  var jsreq as new JSONItem
 		  
-		  js.Child("Minor")=  new JSONItem(new Dictionary("Date":"2016-10-02 12:55:32", "beta":123))
+		  jsreq.Add(new JSONItem(new Dictionary("Library":"Another library","Version":"AAA")))
+		  jsreq.Add(new JSONItem(new Dictionary("Library":"A new library","Version":"AAA")))
+		  
+		  js.Child("Requirements") = jsreq
 		  
 		  System.DebugLog(js.ToString)
+		  
+		  var ccc as new clCodeLibray(js.ToString)
 		  
 		  return
 		  
