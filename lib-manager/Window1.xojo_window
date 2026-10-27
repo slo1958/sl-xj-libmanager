@@ -237,6 +237,57 @@ End
 #tag EndDesktopWindow
 
 #tag WindowCode
+	#tag Method, Flags = &h0
+		Sub Untitled1(parentFld as FolderItem)
+		  var temp() as string
+		  var fld as FolderItem = parentFld
+		  
+		  fld = fld.Child("test_list_tags_1.txt")
+		  
+		  var s as string = TextInputStream.Open(fld).ReadAll
+		  
+		  temp = locateTags(s, "slo1958", "sl-xj-lib-loging")
+		  
+		  System.DebugLog("---------------")
+		  
+		  for each t as string in temp
+		    System.DebugLog(t)
+		    
+		  next
+		  
+		  System.DebugLog("---------------")
+		  
+		  return 
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Untitled2(parentFld as FolderItem)
+		  var temp() as string
+		  var fld as FolderItem = parentFld
+		  
+		  fld = fld.Child("test_list_tags_2.txt")
+		  
+		  var s as string = TextInputStream.Open(fld).ReadAll
+		  
+		  temp =  locateTags(s, "slo1958", "sl-xj-lib-data")
+		  
+		  System.DebugLog("---------------")
+		  
+		  for each t as string in temp
+		    System.DebugLog(t)
+		    
+		  next
+		  
+		  System.DebugLog("---------------")
+		  
+		  return
+		  
+		End Sub
+	#tag EndMethod
+
+
 #tag EndWindowCode
 
 #tag Events Button1
@@ -434,15 +485,19 @@ End
 		  
 		  fld = fld.Child("DownloadSample")
 		  
-		  //fld = fld.Child("test_list_tags_1.txt")
-		  fld = fld.Child("test_list_tags_2.txt")
+		  Untitled1(fld)
 		  
-		  var s as string = TextInputStream.Open(fld).ReadAll
+		  Untitled2(fld)
 		  
-		  //call locateTags(s, "slo1958", "sl-xj-lib-loging")
-		  call locateTags(s, "slo1958", "sl-xj-lib-data")
+		  // //fld = fld.Child("test_list_tags_1.txt")
+		  // fld = fld.Child("test_list_tags_2.txt")
+		  // 
+		  // var s as string = TextInputStream.Open(fld).ReadAll
+		  // 
+		  // //call locateTags(s, "slo1958", "sl-xj-lib-loging")
+		  // call locateTags(s, "slo1958", "sl-xj-lib-data")
 		  
-		   
+		  
 		  
 		  Return
 		  
