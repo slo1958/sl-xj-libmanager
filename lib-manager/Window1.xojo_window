@@ -202,6 +202,37 @@ Begin DesktopWindow Window1
       Width           =   300
       _ScrollWidth    =   -1
    End
+   Begin DesktopButton Button5
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Cancel          =   False
+      Caption         =   "Button"
+      Default         =   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   47
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      MacButtonStyle  =   0
+      Scope           =   2
+      TabIndex        =   5
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   326
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   80
+   End
 End
 #tag EndDesktopWindow
 
@@ -336,6 +367,9 @@ End
 		  repo_url = repo_url.ReplaceAll("${GH_REPO}", GH_RepoName)
 		  repo_url = repo_url.ReplaceAll("${GH_BRANCH}", GH_RepoBranch)
 		  
+		  repo_url = "https://github.com/slo1958/sl-xj-lib-loging/tags"
+		  repo_url = "https://github.com/slo1958/sl-xj-lib-data/tags"
+		  
 		  System.DebugLog(repo_url)
 		  
 		  URLConnection1.Send("GET",repo_url)
@@ -387,6 +421,30 @@ End
 		Sub HeadersReceived(URL As String, HTTPStatus As Integer)
 		  Listbox1.AddRow("Status " + HTTPStatus.ToString + " Header received " )
 		  Return 
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events Button5
+	#tag Event
+		Sub Pressed()
+		  var fld as new FolderItem()
+		  
+		  fld = fld.Parent
+		  
+		  fld = fld.Child("DownloadSample")
+		  
+		  //fld = fld.Child("test_list_tags_1.txt")
+		  fld = fld.Child("test_list_tags_2.txt")
+		  
+		  var s as string = TextInputStream.Open(fld).ReadAll
+		  
+		  //call locateTags(s, "slo1958", "sl-xj-lib-loging")
+		  call locateTags(s, "slo1958", "sl-xj-lib-data")
+		  
+		   
+		  
+		  Return
 		  
 		End Sub
 	#tag EndEvent
