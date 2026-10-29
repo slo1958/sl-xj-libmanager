@@ -18,13 +18,13 @@ Begin DesktopWindow Window1 Implements itfShareProgress
    MaximumWidth    =   32000
    MenuBar         =   71530495
    MenuBarVisible  =   False
-   MinimumHeight   =   64
-   MinimumWidth    =   64
+   MinimumHeight   =   700
+   MinimumWidth    =   768
    Resizeable      =   True
    Title           =   "Untitled"
    Type            =   0
    Visible         =   True
-   Width           =   640
+   Width           =   768
    Begin DesktopLabel Label2
       AllowAutoDeactivate=   True
       Bold            =   False
@@ -321,6 +321,99 @@ Begin DesktopWindow Window1 Implements itfShareProgress
       Underline       =   False
       Visible         =   True
       Width           =   137
+   End
+   Begin DesktopButton Button1
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Cancel          =   False
+      Caption         =   "Remove"
+      Default         =   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   632
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      MacButtonStyle  =   0
+      Scope           =   0
+      TabIndex        =   14
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   267
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   116
+   End
+   Begin DesktopButton Button2
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Cancel          =   False
+      Caption         =   "Add to project"
+      Default         =   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   632
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      MacButtonStyle  =   0
+      Scope           =   0
+      TabIndex        =   15
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   506
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   116
+   End
+   Begin DesktopButton Button3
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Cancel          =   False
+      Caption         =   "Update project"
+      Default         =   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   632
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      MacButtonStyle  =   0
+      Scope           =   0
+      TabIndex        =   16
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   474
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   116
    End
 End
 #tag EndDesktopWindow
