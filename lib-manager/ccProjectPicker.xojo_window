@@ -125,14 +125,12 @@ End
 
 #tag WindowCode
 	#tag Method, Flags = &h0
-		Sub Prepare(ButtonLabel as string, Message as string, projMode as clXojoProject.UsedAs, log as itfShareProgress, callback as itfActionHandler, IdForControler as integer)
+		Sub Prepare(ButtonLabel as string, Message as string, projMode as clXojoProject.UsedAs, log as itfShareProgress)
 		  self.DefaultXForText = lbl_Target.left
 		  self.TextForButton = ButtonLabel
 		  self.TextForLabel = Message
 		  self.LogWriter = log
-		  self.actionHandler = callback
 		  self.mode = projMode
-		  self.IdForCallback = IdForControler
 		  
 		  btn_selectTarget.Caption = ButtonLabel
 		  UpdateTargetSelectionUI(nil)
@@ -198,9 +196,18 @@ End
 	#tag EndMethod
 
 
-	#tag Property, Flags = &h0
-		actionHandler As itfActionHandler
-	#tag EndProperty
+	#tag Hook, Flags = &h0
+		Event ClearSelected()
+	#tag EndHook
+
+	#tag Hook, Flags = &h0
+		Event ErrorOnTargetSelection()
+	#tag EndHook
+
+	#tag Hook, Flags = &h0
+		Event TargetSelected()
+	#tag EndHook
+
 
 	#tag Property, Flags = &h0
 		DefaultXForText As Integer
@@ -231,17 +238,6 @@ End
 	#tag EndProperty
 
 
-	#tag Constant, Name = ActionClear, Type = Double, Dynamic = False, Default = \"100", Scope = Public
-		#Tag Instance, Platform = Any, Language = Default, Definition  = \""
-	#tag EndConstant
-
-	#tag Constant, Name = ActionErrorOnSelect, Type = Double, Dynamic = False, Default = \"150", Scope = Public
-	#tag EndConstant
-
-	#tag Constant, Name = ActionSelect, Type = Double, Dynamic = False, Default = \"200", Scope = Public
-	#tag EndConstant
-
-
 #tag EndWindowCode
 
 #tag Events btn_selectTarget
@@ -252,10 +248,10 @@ End
 		  UpdateTargetSelectionUI(f)
 		  
 		  if f = nil then
-		    actionHandler.CallBack(IdForCallback, ActionErrorOnSelect)
+		    ErrorOnTargetSelection
 		    
 		  else
-		    actionHandler.CallBack(IdForCallback, ActionSelect)
+		    TargetSelected
 		    
 		  end if
 		End Sub
@@ -267,9 +263,8 @@ End
 		  
 		  UpdateTargetSelectionUI(nil)
 		  
-		  actionHandler.CallBack(IdForCallback, ActionClear)
-		  
-		  
+		  ClearSelected()
+		   
 		End Sub
 	#tag EndEvent
 #tag EndEvents

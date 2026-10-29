@@ -24,7 +24,6 @@ DesktopWindow=wnd_tests;wnd_tests.xojo_window;&h000000002E67CFFF;&h0000000000000
 Interface=itfShareProgress;itfShareProgress.xojo_code;&h0000000068B31FFF;&h0000000000000000;false
 DesktopWindow=ccProjectPicker;ccProjectPicker.xojo_window;&h000000004FC06FFF;&h0000000000000000;false
 Class=clXojoLibraryInfo;XojoProjectInfo/clXojoLibraryInfo.xojo_code;&h0000000016FFDFFF;&h0000000070EFF7FF;false
-Interface=itfActionHandler;itfActionHandler.xojo_code;&h00000000653D87FF;&h0000000000000000;false
 DefaultWindow=Window1
 AppMenuBar=MainMenuBar
 MajorVersion=1

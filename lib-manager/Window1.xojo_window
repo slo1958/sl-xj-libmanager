@@ -1,5 +1,5 @@
 #tag DesktopWindow
-Begin DesktopWindow Window1 Implements itfShareProgress, itfActionHandler
+Begin DesktopWindow Window1 Implements itfShareProgress
    Backdrop        =   0
    BackgroundColor =   &cFFFFFF
    Composite       =   False
@@ -11,7 +11,7 @@ Begin DesktopWindow Window1 Implements itfShareProgress, itfActionHandler
    HasMaximizeButton=   True
    HasMinimizeButton=   True
    HasTitleBar     =   True
-   Height          =   648
+   Height          =   700
    ImplicitInstance=   True
    MacProcID       =   0
    MaximumHeight   =   32000
@@ -24,7 +24,7 @@ Begin DesktopWindow Window1 Implements itfShareProgress, itfActionHandler
    Title           =   "Untitled"
    Type            =   0
    Visible         =   True
-   Width           =   1252
+   Width           =   640
    Begin DesktopLabel Label2
       AllowAutoDeactivate=   True
       Bold            =   False
@@ -80,7 +80,7 @@ Begin DesktopWindow Window1 Implements itfShareProgress, itfActionHandler
       HasHorizontalScrollbar=   False
       HasVerticalScrollbar=   True
       HeadingIndex    =   -1
-      Height          =   200
+      Height          =   135
       Index           =   -2147483648
       InitialValue    =   ""
       Italic          =   False
@@ -97,11 +97,11 @@ Begin DesktopWindow Window1 Implements itfShareProgress, itfActionHandler
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   428
+      Top             =   545
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      Width           =   675
+      Width           =   600
       _ScrollWidth    =   -1
    End
    Begin ccProjectPicker ccTargetProject
@@ -128,7 +128,7 @@ Begin DesktopWindow Window1 Implements itfShareProgress, itfActionHandler
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   45
+      Top             =   97
       Transparent     =   False
       Visible         =   True
       Width           =   600
@@ -146,18 +146,18 @@ Begin DesktopWindow Window1 Implements itfShareProgress, itfActionHandler
       Height          =   40
       Index           =   -2147483648
       InitialParent   =   ""
-      Left            =   632
+      Left            =   20
       LockBottom      =   False
       LockedInPosition=   False
-      LockLeft        =   False
-      LockRight       =   True
+      LockLeft        =   True
+      LockRight       =   False
       LockTop         =   True
       Scope           =   0
       TabIndex        =   7
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   45
+      Top             =   336
       Transparent     =   False
       Visible         =   True
       Width           =   600
@@ -185,15 +185,15 @@ Begin DesktopWindow Window1 Implements itfShareProgress, itfActionHandler
       HasHorizontalScrollbar=   False
       HasVerticalScrollbar=   True
       HeadingIndex    =   -1
-      Height          =   246
+      Height          =   138
       Index           =   -2147483648
       InitialValue    =   ""
       Italic          =   False
-      Left            =   632
-      LockBottom      =   True
+      Left            =   20
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   True
+      LockRight       =   False
       LockTop         =   True
       RequiresSelection=   False
       RowSelectionType=   0
@@ -202,44 +202,13 @@ Begin DesktopWindow Window1 Implements itfShareProgress, itfActionHandler
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   135
+      Top             =   388
       Transparent     =   False
       Underline       =   False
       Visible         =   True
       Width           =   600
       _ScrollOffset   =   0
       _ScrollWidth    =   -1
-   End
-   Begin DesktopButton Button1
-      AllowAutoDeactivate=   True
-      Bold            =   False
-      Cancel          =   False
-      Caption         =   "Button"
-      Default         =   False
-      Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
-      FontUnit        =   0
-      Height          =   20
-      Index           =   -2147483648
-      Italic          =   False
-      Left            =   632
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      MacButtonStyle  =   0
-      Scope           =   0
-      TabIndex        =   9
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Tooltip         =   ""
-      Top             =   97
-      Transparent     =   False
-      Underline       =   False
-      Visible         =   True
-      Width           =   80
    End
    Begin DesktopListBox lb_librariesInTarget
       AllowAutoDeactivate=   True
@@ -264,15 +233,15 @@ Begin DesktopWindow Window1 Implements itfShareProgress, itfActionHandler
       HasHorizontalScrollbar=   False
       HasVerticalScrollbar=   True
       HeadingIndex    =   -1
-      Height          =   246
+      Height          =   138
       Index           =   -2147483648
       InitialValue    =   ""
       Italic          =   False
       Left            =   20
-      LockBottom      =   True
+      LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
-      LockRight       =   True
+      LockRight       =   False
       LockTop         =   True
       RequiresSelection=   False
       RowSelectionType=   0
@@ -281,7 +250,7 @@ Begin DesktopWindow Window1 Implements itfShareProgress, itfActionHandler
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   135
+      Top             =   149
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -289,17 +258,14 @@ Begin DesktopWindow Window1 Implements itfShareProgress, itfActionHandler
       _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
-   Begin DesktopButton Button2
+   Begin DesktopLabel Label3
       AllowAutoDeactivate=   True
       Bold            =   False
-      Cancel          =   False
-      Caption         =   "Button"
-      Default         =   False
       Enabled         =   True
       FontName        =   "System"
       FontSize        =   0.0
       FontUnit        =   0
-      Height          =   20
+      Height          =   30
       Index           =   -2147483648
       Italic          =   False
       Left            =   20
@@ -308,17 +274,53 @@ Begin DesktopWindow Window1 Implements itfShareProgress, itfActionHandler
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      MacButtonStyle  =   0
+      Multiline       =   True
       Scope           =   0
+      Selectable      =   False
       TabIndex        =   12
       TabPanelIndex   =   0
       TabStop         =   True
+      Text            =   "User Project"
+      TextAlignment   =   0
+      TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   97
+      Top             =   62
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      Width           =   80
+      Width           =   137
+   End
+   Begin DesktopLabel Label4
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   30
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Multiline       =   True
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   13
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   "Library source"
+      TextAlignment   =   0
+      TextColor       =   &c000000
+      Tooltip         =   ""
+      Top             =   306
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   137
    End
 End
 #tag EndDesktopWindow
@@ -328,31 +330,12 @@ End
 		Sub Opening()
 		  
 		  
-		  ccSourceProject.Prepare("Select source", "Select the projet containing the libraries", clXojoProject.UsedAs.LibrarySource, self, self, 0)
-		  ccTargetProject.Prepare("Select target", "Select the target project", clXojoProject.UsedAs.Destination, self, self, 1)
+		  ccSourceProject.Prepare("Select source", "Select the projet containing the libraries", clXojoProject.UsedAs.LibrarySource, self)
+		  ccTargetProject.Prepare("Select target", "Select the target project", clXojoProject.UsedAs.Destination, self)
 		  
 		End Sub
 	#tag EndEvent
 
-
-	#tag Method, Flags = &h0
-		Sub CallBack(ControlerID as integer, ActionID as integer)
-		  
-		  select case Actionid
-		    
-		  case ccProjectPicker.ActionClear
-		    
-		  case ccProjectPicker.ActionErrorOnSelect
-		    
-		  case ccProjectPicker.ActionSelect
-		    
-		  case else
-		    
-		  end Select
-		  
-		  
-		End Sub
-	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub ShareStatus(MsgTime as string, MsgText as string)
@@ -438,6 +421,48 @@ End
 
 #tag EndWindowCode
 
+#tag Events ccTargetProject
+	#tag Event
+		Sub TargetSelected()
+		  
+		  if ccTargetProject.selectedProject = nil then Return
+		  
+		  ShowLibraryInfo(lb_librariesInTarget, ccTargetProject.selectedProject )
+		  
+		  return
+		  
+		  
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub ClearSelected()
+		  lb_librariesInTarget.RemoveAllRows
+		  Return
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events ccSourceProject
+	#tag Event
+		Sub TargetSelected()
+		  
+		  if ccSourceProject.selectedProject = nil then Return
+		  
+		  ShowLibraryInfo(lb_librariesInSource, ccSourceProject.selectedProject )
+		  
+		  return
+		  
+		  
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub ClearSelected()
+		  lb_librariesInSource.RemoveAllRows
+		  Return
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
 #tag Events lb_librariesInSource
 	#tag Event
 		Sub SelectionChanged()
@@ -473,20 +498,6 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events Button1
-	#tag Event
-		Sub Pressed()
-		  
-		  if ccSourceProject.selectedProject = nil then Return
-		  
-		  ShowLibraryInfo(lb_librariesInSource, ccSourceProject.selectedProject )
-		  
-		  return
-		  
-		  
-		End Sub
-	#tag EndEvent
-#tag EndEvents
 #tag Events lb_librariesInTarget
 	#tag Event
 		Sub SelectionChanged()
@@ -517,20 +528,6 @@ End
 		  
 		  return
 		  
-		  
-		  
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events Button2
-	#tag Event
-		Sub Pressed()
-		  
-		  if ccTargetProject.selectedProject = nil then Return
-		  
-		  ShowLibraryInfo(lb_librariesInTarget, ccTargetProject.selectedProject )
-		  
-		  return
 		  
 		  
 		End Sub
