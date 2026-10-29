@@ -70,6 +70,7 @@ Begin DesktopWindow wnd_project_info
       Underline       =   False
       Visible         =   True
       Width           =   270
+      _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
    Begin DesktopLabel Label1
@@ -149,6 +150,7 @@ Begin DesktopWindow wnd_project_info
       Underline       =   False
       Visible         =   True
       Width           =   261
+      _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
 End
@@ -160,10 +162,10 @@ End
 		  
 		  if not IsExistingFolder(self.MainFolderItem) then return nil
 		  
-		  var c as new clXojoProject(MainFolderItem, clXojoProject.UsedAs.LibrarySource)
+		  var c as new clXojoProject(MainFolderItem, clXojoProject.UsedAs.LibrarySource, nil)
 		  
 		  
-		  for each fldDesc as clXPLTopFolderDesc in c.LibraryTopFolder
+		  for each fldDesc as clXojoProjectItem in c.LibrariesTopFolder
 		    
 		    var thisProjectName as string = fldDesc.GetName
 		    
@@ -248,7 +250,7 @@ End
 		  const ProjectNameColumn as integer  = 2
 		  const ProjectAuthorColumn  as integer  = 3
 		  const ProjectVersionColumn as integer  = 4 
-		    
+		  
 		  Listbox1.HeaderAt(ProjectColumn) = "Project" 
 		  Listbox1.HeaderAt(ProjectIdColumn) =  "ID"
 		  Listbox1.HeaderAt( ProjectNameColumn) = "Name"

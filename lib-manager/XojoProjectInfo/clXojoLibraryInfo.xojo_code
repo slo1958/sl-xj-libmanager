@@ -1,23 +1,27 @@
 #tag Class
-Protected Class clXPLFolderDescAbstract
-Inherits clXojoProjectItemBase
-	#tag Method, Flags = &h0
-		Sub Constructor(Source as String, Key as string, params() as string, FolderOfInterest as string)
-		  
-		  super.Constructor(Source, Key, params)
-		  
-		  
-		  if key  = "Folder" and self.paramStr(0) = FolderOfInterest then
-		    self.FolderID = self.paramStr(2)
-		    
-		  end if
-		  
-		End Sub
-	#tag EndMethod
-
+Protected Class clXojoLibraryInfo
+	#tag Property, Flags = &h0
+		Author As string
+	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		FolderID As String
+		Name As string
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		Path As string
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		ProjectAttributes As Dictionary
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		projName As string
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		Version As string
 	#tag EndProperty
 
 
@@ -63,28 +67,12 @@ Inherits clXojoProjectItemBase
 			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="SourceLine"
+			Name="Author"
 			Visible=false
 			Group="Behavior"
 			InitialValue=""
-			Type="string"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="KeyString"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="string"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="FolderID"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="String"
-			EditorType="MultiLineEditor"
+			Type="Integer"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

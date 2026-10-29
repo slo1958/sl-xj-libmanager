@@ -1,5 +1,5 @@
 #tag DesktopWindow
-Begin DesktopWindow Window1
+Begin DesktopWindow Window1 Implements itfShareProgress
    Backdrop        =   0
    BackgroundColor =   &cFFFFFF
    Composite       =   False
@@ -11,7 +11,7 @@ Begin DesktopWindow Window1
    HasMaximizeButton=   True
    HasMinimizeButton=   True
    HasTitleBar     =   True
-   Height          =   400
+   Height          =   648
    ImplicitInstance=   True
    MacProcID       =   0
    MaximumHeight   =   32000
@@ -24,138 +24,40 @@ Begin DesktopWindow Window1
    Title           =   "Untitled"
    Type            =   0
    Visible         =   True
-   Width           =   600
-   Begin DesktopButton Button1
+   Width           =   726
+   Begin DesktopLabel Label2
       AllowAutoDeactivate=   True
       Bold            =   False
-      Cancel          =   False
-      Caption         =   "Button"
-      Default         =   False
       Enabled         =   True
       FontName        =   "System"
       FontSize        =   0.0
       FontUnit        =   0
-      Height          =   20
+      Height          =   30
       Index           =   -2147483648
       Italic          =   False
-      Left            =   47
+      Left            =   20
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      MacButtonStyle  =   0
+      Multiline       =   True
       Scope           =   0
-      TabIndex        =   0
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Tooltip         =   ""
-      Top             =   56
-      Transparent     =   False
-      Underline       =   False
-      Visible         =   True
-      Width           =   80
-   End
-   Begin DesktopButton Button2
-      AllowAutoDeactivate=   True
-      Bold            =   False
-      Cancel          =   False
-      Caption         =   "Button"
-      Default         =   False
-      Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
-      FontUnit        =   0
-      Height          =   20
-      Index           =   -2147483648
-      Italic          =   False
-      Left            =   47
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      MacButtonStyle  =   0
-      Scope           =   0
+      Selectable      =   False
       TabIndex        =   1
       TabPanelIndex   =   0
       TabStop         =   True
+      Text            =   "If the project is open in the IDE, make sure you save all changes before proceeding."
+      TextAlignment   =   0
+      TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   243
+      Top             =   20
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      Width           =   80
+      Width           =   527
    End
-   Begin DesktopButton Button3
-      AllowAutoDeactivate=   True
-      Bold            =   False
-      Cancel          =   False
-      Caption         =   "Button3"
-      Default         =   False
-      Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
-      FontUnit        =   0
-      Height          =   20
-      Index           =   -2147483648
-      Italic          =   False
-      Left            =   47
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      MacButtonStyle  =   0
-      Scope           =   0
-      TabIndex        =   2
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Tooltip         =   ""
-      Top             =   140
-      Transparent     =   False
-      Underline       =   False
-      Visible         =   True
-      Width           =   80
-   End
-   Begin DesktopButton Button4
-      AllowAutoDeactivate=   True
-      Bold            =   False
-      Cancel          =   False
-      Caption         =   "Button"
-      Default         =   False
-      Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
-      FontUnit        =   0
-      Height          =   20
-      Index           =   -2147483648
-      Italic          =   False
-      Left            =   450
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      MacButtonStyle  =   0
-      Scope           =   0
-      TabIndex        =   3
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Tooltip         =   ""
-      Top             =   56
-      Transparent     =   False
-      Underline       =   False
-      Visible         =   True
-      Width           =   80
-   End
-   Begin URLConnection URLConnection1
-      Index           =   -2147483648
-      LockedInPosition=   False
-      Scope           =   0
-      TabPanelIndex   =   0
-   End
-   Begin DesktopListBox ListBox1
+   Begin DesktopListBox lb_logs
       AllowAutoDeactivate=   True
       AllowAutoHideScrollbars=   True
       AllowExpandableRows=   False
@@ -182,27 +84,133 @@ Begin DesktopWindow Window1
       Index           =   -2147483648
       InitialValue    =   ""
       Italic          =   False
-      Left            =   280
+      Left            =   20
       LockBottom      =   False
       LockedInPosition=   False
-      LockLeft        =   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      RequiresSelection=   False
+      RowSelectionType=   0
+      Scope           =   0
+      TabIndex        =   5
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   428
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   675
+      _ScrollWidth    =   -1
+   End
+   Begin ccProjectPicker ccTargetProject
+      AllowAutoDeactivate=   True
+      AllowFocus      =   False
+      AllowFocusRing  =   False
+      AllowTabs       =   True
+      Backdrop        =   0
+      BackgroundColor =   &cFFFFFF
+      Composited      =   False
+      Enabled         =   True
+      HasBackgroundColor=   False
+      Height          =   40
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   6
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   45
+      Transparent     =   False
+      Visible         =   True
+      Width           =   666
+   End
+   Begin ccProjectPicker ccSourceProject
+      AllowAutoDeactivate=   True
+      AllowFocus      =   False
+      AllowFocusRing  =   False
+      AllowTabs       =   True
+      Backdrop        =   0
+      BackgroundColor =   &cFFFFFF
+      Composited      =   False
+      Enabled         =   True
+      HasBackgroundColor=   False
+      Height          =   40
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   7
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   108
+      Transparent     =   False
+      Visible         =   True
+      Width           =   666
+   End
+   Begin DesktopListBox lb_libraries
+      AllowAutoDeactivate=   True
+      AllowAutoHideScrollbars=   True
+      AllowExpandableRows=   False
+      AllowFocusRing  =   True
+      AllowResizableColumns=   False
+      AllowRowDragging=   False
+      AllowRowReordering=   False
+      Bold            =   False
+      ColumnCount     =   1
+      ColumnWidths    =   ""
+      DefaultRowHeight=   -1
+      DropIndicatorVisible=   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      GridLineStyle   =   0
+      HasBorder       =   True
+      HasHeader       =   True
+      HasHorizontalScrollbar=   False
+      HasVerticalScrollbar=   True
+      HeadingIndex    =   -1
+      Height          =   215
+      Index           =   -2147483648
+      InitialValue    =   ""
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockLeft        =   True
       LockRight       =   True
       LockTop         =   True
       RequiresSelection=   False
       RowSelectionType=   0
       Scope           =   0
-      TabIndex        =   4
+      TabIndex        =   8
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   114
+      Top             =   201
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      Width           =   300
+      Width           =   666
+      _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
-   Begin DesktopButton Button5
+   Begin DesktopButton Button1
       AllowAutoDeactivate=   True
       Bold            =   False
       Cancel          =   False
@@ -215,291 +223,192 @@ Begin DesktopWindow Window1
       Height          =   20
       Index           =   -2147483648
       Italic          =   False
-      Left            =   47
+      Left            =   20
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
       MacButtonStyle  =   0
-      Scope           =   2
-      TabIndex        =   5
+      Scope           =   0
+      TabIndex        =   9
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   326
+      Top             =   169
       Transparent     =   False
       Underline       =   False
       Visible         =   True
       Width           =   80
    End
+   Begin DesktopLabel Label1
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   112
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Multiline       =   False
+      Scope           =   2
+      Selectable      =   False
+      TabIndex        =   10
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   "Untitled"
+      TextAlignment   =   0
+      TextColor       =   &c000000
+      Tooltip         =   ""
+      Top             =   169
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   574
+   End
 End
 #tag EndDesktopWindow
 
 #tag WindowCode
+	#tag Event
+		Sub Opening()
+		  
+		  
+		  ccSourceProject.Prepare("Select source", "Select the projet containing the libraries", clXojoProject.UsedAs.LibrarySource, self)
+		  ccTargetProject.Prepare("Select target", "Select the target project", clXojoProject.UsedAs.Destination, self)
+		  
+		End Sub
+	#tag EndEvent
+
+
 	#tag Method, Flags = &h0
-		Sub Untitled1(parentFld as FolderItem)
-		  var temp() as string
-		  var fld as FolderItem = parentFld
+		Sub ShareStatus(MsgTime as string, MsgText as string)
+		  lb_logs.ColumnCount = 2
 		  
-		  fld = fld.Child("test_list_tags_1.txt")
+		  lb_logs.AddRow(MsgTime)
+		  lb_logs.CellTextAt(lb_logs.LastAddedRowIndex,1) = MsgText
 		  
-		  var s as string = TextInputStream.Open(fld).ReadAll
-		  
-		  temp = locateTags(s, "slo1958", "sl-xj-lib-loging")
-		  
-		  System.DebugLog("---------------")
-		  
-		  for each t as string in temp
-		    System.DebugLog(t)
-		    
-		  next
-		  
-		  System.DebugLog("---------------")
-		  
-		  return 
+		  Return
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub ShowExtraInfo(dct as Dictionary)
 		  
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Untitled2(parentFld as FolderItem)
-		  var temp() as string
-		  var fld as FolderItem = parentFld
+		Function SourceProject() As clXojoProject
 		  
-		  fld = fld.Child("test_list_tags_2.txt")
+		  Return ccSourceProject.selectedProject
 		  
-		  var s as string = TextInputStream.Open(fld).ReadAll
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function TargetProject() As clXojoProject
 		  
-		  temp =  locateTags(s, "slo1958", "sl-xj-lib-data")
+		  Return ccSourceProject.selectedProject
 		  
-		  System.DebugLog("---------------")
-		  
-		  for each t as string in temp
-		    System.DebugLog(t)
-		    
-		  next
-		  
-		  System.DebugLog("---------------")
-		  
-		  return
-		  
-		End Sub
+		End Function
 	#tag EndMethod
 
 
 #tag EndWindowCode
 
-#tag Events Button1
+#tag Events lb_libraries
 	#tag Event
-		Sub Pressed()
-		  wnd_lib_source.Show
+		Sub SelectionChanged()
 		  
+		  var currow as integer = me.SelectedRowIndex
 		  
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events Button2
-	#tag Event
-		Sub Pressed()
-		  //
-		  // Navigate to test project
-		  //
-		  
-		  var fd as new FolderItem
-		  
-		  fd = fd.Parent
-		  
-		  fd = fd.Child("test-project1")
-		  
-		  var c as new clXojoProject(fd, clXojoProject.UsedAs.LibrarySource)
-		  
-		  
-		  for each fldDesc as clXPLTopFolderDesc in c.LibraryTopFolder
-		    fldDesc.Dump()
+		  if currow < 0 then 
+		    ShowExtraInfo(nil)
+		    Return
 		    
-		    System.DebugLog(fldDesc.GetName)
-		    System.DebugLog(fldDesc.GetPath)
+		  end if
+		  
+		  if currow > me.LastRowIndex then 
+		    ShowExtraInfo(nil)
+		    Return
 		    
-		    var fld as FolderItem = c.LibraryFolderItem(fldDesc.GetName)
+		  end if
+		  
+		  var r as variant = me.RowTagAt(currow)
+		  
+		  if r isa Dictionary then 
+		    ShowExtraInfo(Dictionary(r))
 		    
-		    if fld <> nil then 
-		      System.DebugLog(fld.NativePath)
-		      
-		      var fdList() as FolderItem = c.AllFolderItems(fldDesc.GetName)
-		      
-		      
-		    end if
+		  else
+		    ShowExtraInfo(nil)
 		    
-		    call c.FindLibraryInfo(fldDesc.GetName)
-		    
-		    System.DebugLog("----")
-		    
-		  next
-		  
-		  // Return
-		  
-		  
-		  //
-		  // {"Signature":"Something","Information":{"Name":"Test library","Author":"John Doe"},"Requirements":[{"Libary":"Another library","Version":"AAA"},{"Libary":"A new library","Version":"AAA"}]}
-		  //
-		  
-		  
-		  var js as new JSONItem
-		   
-		  js.Value("Signature") =   "Something"
-		  
-		  js.Child("Information")=  new JSONItem(new Dictionary("Name":"Test library", "Author":"John Doe","Version":"alpha"))
-		  
-		  var jsreq as new JSONItem
-		  
-		  jsreq.Add(new JSONItem(new Dictionary("Library":"Another library","Version":"AAA")))
-		  jsreq.Add(new JSONItem(new Dictionary("Library":"A new library","Version":"AAA")))
-		  
-		  js.Child("Requirements") = jsreq
-		  
-		  System.DebugLog(js.ToString)
-		  
-		  var ccc as new clCodeLibray(js.ToString)
+		  end if
 		  
 		  return
 		  
+		  
+		  
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events Button3
+#tag Events Button1
 	#tag Event
 		Sub Pressed()
-		  //
-		  // Navigate to test project
-		  //
-		  
-		  var fd as new FolderItem
-		  
-		  fd = fd.Parent
-		  
-		  fd = fd.Child("test-project1")
-		  
-		  wnd_project_info.SetProjectFolder(fd)
-		  
-		  wnd_project_info.Show
-		  
-		  
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events Button4
-	#tag Event
-		Sub Pressed()
-		  //
-		  // For a GitHub repo, there's a zip at https://github.com/<user>/<repo>/archive/<branch>.zip, 
-		  // so you can download it with:
-		  // wget https://github.com/<user>/<repo>/archive/<branch>.zip
-		  //
-		  //
-		  // GH_USER=REPLACE_WITH_USER \
-		  // GH_REPO=REPLACE_WITH_REPO \
-		  // GH_BRANCH=REPLACE_WITH_BRANCH \
-		  // wget https://github.com/${GH_USER}/${GH_REPO}/archive/refs/tags/${GH_BRANCH}.zip \
-		  // -O "${GH_REPO}-${GH_BRANCH}.zip" && \ 
-		  // unzip ./"${GH_REPO}-${GH_BRANCH}.zip" && \
-		  // rm ./"${GH_REPO}-${GH_BRANCH}.zip"
-		  
-		  
-		  
-		  var GH_RepoOwner as string = "slo1958"
-		  var GH_RepoName as string = "sl-xj-lib-loging"
-		  var GH_RepoBranch as string = "BaseVersion2026"
-		  
-		  
-		  var repo_url as string = "https://github.com/${GH_USER}/${GH_REPO}/archive/refs/tags/${GH_BRANCH}.zip"
-		  
-		  repo_url = repo_url.ReplaceAll("${GH_USER}", GH_RepoOwner)
-		  repo_url = repo_url.ReplaceAll("${GH_REPO}", GH_RepoName)
-		  repo_url = repo_url.ReplaceAll("${GH_BRANCH}", GH_RepoBranch)
-		  
-		  repo_url = "https://github.com/slo1958/sl-xj-lib-loging/tags"
-		  repo_url = "https://github.com/slo1958/sl-xj-lib-data/tags"
-		  
-		  System.DebugLog(repo_url)
-		  
-		  URLConnection1.Send("GET",repo_url)
-		  
-		  
-		  
-		  
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events URLConnection1
-	#tag Event
-		Function AuthenticationRequested(realm As String, ByRef name As String, ByRef password As String) As Boolean
-		  Listbox1.AddRow("Authentication required")
-		  Return false
-		  
-		End Function
-	#tag EndEvent
-	#tag Event
-		Sub ContentReceived(URL As String, HTTPStatus As Integer, content As String)
-		  Listbox1.AddRow("Status " + HTTPStatus.ToString + " content received " + content.Length.ToString)
-		  
-		  var fld as FolderItem = SpecialFolder.Desktop.child("test.zip")
-		  var bin as BinaryStream = BinaryStream.Create(fld, true)
-		  bin.Write(content)
-		  bin.close
-		  
-		  Return
-		  
-		End Sub
-	#tag EndEvent
-	#tag Event
-		Sub Error(e As RuntimeException)
-		  Listbox1.AddRow("Error "  + e.Message)
-		  
-		  Return 
-		End Sub
-	#tag EndEvent
-	#tag Event
-		Sub FileReceived(URL As String, HTTPStatus As Integer, file As FolderItem)
-		  Listbox1.AddRow("Status " + HTTPStatus.ToString + " File received " + file.NativePath)
-		  System.DebugLog(file.NativePath)
-		  
-		  Return 
-		  
-		End Sub
-	#tag EndEvent
-	#tag Event
-		Sub HeadersReceived(URL As String, HTTPStatus As Integer)
-		  Listbox1.AddRow("Status " + HTTPStatus.ToString + " Header received " )
-		  Return 
-		  
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events Button5
-	#tag Event
-		Sub Pressed()
-		  var fld as new FolderItem()
-		  
-		  fld = fld.Parent
-		  
-		  fld = fld.Child("DownloadSample")
-		  
-		  Untitled1(fld)
-		  
-		  Untitled2(fld)
-		  
-		  // //fld = fld.Child("test_list_tags_1.txt")
-		  // fld = fld.Child("test_list_tags_2.txt")
 		  // 
-		  // var s as string = TextInputStream.Open(fld).ReadAll
-		  // 
-		  // //call locateTags(s, "slo1958", "sl-xj-lib-loging")
-		  // call locateTags(s, "slo1958", "sl-xj-lib-data")
+		  // remove this button and move this code to a callback
+		  //
+		  
+		  if ccSourceProject.selectedProject = nil then Return
+		  
+		  var p as clXojoProject = ccSourceProject.selectedProject 
+		  
+		  var m as FolderItem = p.ProjFolderItem
+		  var cc() as clXojoLibraryInfo = p.LibraryInformation
 		  
 		  
+		  lb_libraries.RemoveAllRows
+		  lb_libraries.ColumnCount = 6
+		  lb_libraries.HasHeader = true
 		  
-		  Return
+		  const ProjectColumn as integer = 1
+		  const ProjectIdColumn as integer = 2
+		  const ProjectNameColumn as integer  = 3
+		  const ProjectAuthorColumn  as integer  = 4
+		  const ProjectVersionColumn as integer  = 5 
+		  
+		  lb_libraries.HeaderAt(0) = "Select" 
+		  lb_libraries.HeaderAt(ProjectColumn) = "Project" 
+		  lb_libraries.HeaderAt(ProjectIdColumn) =  "ID"
+		  lb_libraries.HeaderAt( ProjectNameColumn) = "Name"
+		  lb_libraries.HeaderAt( ProjectAuthorColumn) = "Auhtor"
+		  lb_libraries.HeaderAt( ProjectVersionColumn) = "Version"
+		  
+		  lb_libraries.ColumnTypeAt(0) = DesktopListBox.CellTypes.CheckBox
+		  
+		  for each c as clXojoLibraryInfo in cc
+		    lb_libraries.AddRow("")
+		    
+		    lb_libraries.CellTextAt(lb_libraries.LastAddedRowIndex, ProjectColumn) = c.projName
+		    lb_libraries.CellTextAt(lb_libraries.LastAddedRowIndex, ProjectIdColumn) = c.Path
+		    lb_libraries.CellTextAt(lb_libraries.LastAddedRowIndex, ProjectNameColumn) = c.name
+		    lb_libraries.CellTextAt(lb_libraries.LastAddedRowIndex, ProjectAuthorColumn) = c.Author
+		    lb_libraries.CellTextAt(lb_libraries.LastAddedRowIndex, ProjectVersionColumn) = c.Version
+		    
+		    lb_libraries.RowTagAt(lb_libraries.LastAddedRowIndex) =c.ProjectAttributes
+		    
+		  next
+		  
+		  
+		  return
+		  
 		  
 		End Sub
 	#tag EndEvent
