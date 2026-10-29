@@ -1,7 +1,7 @@
 #tag Interface
-Protected Interface itfSimpleMethod
+Protected Interface itfActionHandler
 	#tag Method, Flags = &h0
-		Sub CallBack(v as variant)
+		Sub CallBack(ControlerID as integer, ActionID as integer)
 		  
 		End Sub
 	#tag EndMethod

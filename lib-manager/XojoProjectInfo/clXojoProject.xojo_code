@@ -288,7 +288,7 @@ Protected Class clXojoProject
 		  
 		  var ret() as clXojoLibraryInfo
 		  
-		  if not self.IsSourceOfLibraries then return ret
+		  // if not self.IsSourceOfLibraries then return ret
 		  
 		  for each fldDesc as clXojoProjectItem in self.LibrariesTopFolder
 		    

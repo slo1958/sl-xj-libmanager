@@ -24,7 +24,7 @@ Begin DesktopContainer ccProjectPicker
    Top             =   0
    Transparent     =   False
    Visible         =   True
-   Width           =   666
+   Width           =   700
    Begin DesktopLabel lbl_Target
       AllowAutoDeactivate=   True
       Bold            =   False
@@ -55,7 +55,7 @@ Begin DesktopContainer ccProjectPicker
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      Width           =   419
+      Width           =   489
    End
    Begin DesktopButton btn_selectTarget
       AllowAutoDeactivate=   True
@@ -102,7 +102,7 @@ Begin DesktopContainer ccProjectPicker
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   False
-      Left            =   566
+      Left            =   620
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   False
@@ -125,12 +125,14 @@ End
 
 #tag WindowCode
 	#tag Method, Flags = &h0
-		Sub Prepare(ButtonLabel as string, Message as string, projMode as clXojoProject.UsedAs, log as itfShareProgress)
+		Sub Prepare(ButtonLabel as string, Message as string, projMode as clXojoProject.UsedAs, log as itfShareProgress, callback as itfActionHandler, IdForControler as integer)
 		  self.DefaultXForText = lbl_Target.left
 		  self.TextForButton = ButtonLabel
 		  self.TextForLabel = Message
 		  self.LogWriter = log
+		  self.actionHandler = callback
 		  self.mode = projMode
+		  self.IdForCallback = IdForControler
 		  
 		  btn_selectTarget.Caption = ButtonLabel
 		  UpdateTargetSelectionUI(nil)
@@ -197,7 +199,15 @@ End
 
 
 	#tag Property, Flags = &h0
+		actionHandler As itfActionHandler
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
 		DefaultXForText As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		IdForCallback As Integer
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -221,6 +231,17 @@ End
 	#tag EndProperty
 
 
+	#tag Constant, Name = ActionClear, Type = Double, Dynamic = False, Default = \"100", Scope = Public
+		#Tag Instance, Platform = Any, Language = Default, Definition  = \""
+	#tag EndConstant
+
+	#tag Constant, Name = ActionErrorOnSelect, Type = Double, Dynamic = False, Default = \"150", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = ActionSelect, Type = Double, Dynamic = False, Default = \"200", Scope = Public
+	#tag EndConstant
+
+
 #tag EndWindowCode
 
 #tag Events btn_selectTarget
@@ -230,6 +251,13 @@ End
 		  
 		  UpdateTargetSelectionUI(f)
 		  
+		  if f = nil then
+		    actionHandler.CallBack(IdForCallback, ActionErrorOnSelect)
+		    
+		  else
+		    actionHandler.CallBack(IdForCallback, ActionSelect)
+		    
+		  end if
 		End Sub
 	#tag EndEvent
 #tag EndEvents
@@ -238,6 +266,8 @@ End
 		Sub Pressed()
 		  
 		  UpdateTargetSelectionUI(nil)
+		  
+		  actionHandler.CallBack(IdForCallback, ActionClear)
 		  
 		  
 		End Sub
@@ -496,5 +526,13 @@ End
 			"1 - LibrarySource"
 			"2 - SomethingElse"
 		#tag EndEnumValues
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="IdForCallback"
+		Visible=false
+		Group="Behavior"
+		InitialValue=""
+		Type="Integer"
+		EditorType=""
 	#tag EndViewProperty
 #tag EndViewBehavior

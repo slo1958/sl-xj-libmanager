@@ -1,5 +1,5 @@
 #tag DesktopWindow
-Begin DesktopWindow Window1 Implements itfShareProgress
+Begin DesktopWindow Window1 Implements itfShareProgress, itfActionHandler
    Backdrop        =   0
    BackgroundColor =   &cFFFFFF
    Composite       =   False
@@ -24,7 +24,7 @@ Begin DesktopWindow Window1 Implements itfShareProgress
    Title           =   "Untitled"
    Type            =   0
    Visible         =   True
-   Width           =   726
+   Width           =   1252
    Begin DesktopLabel Label2
       AllowAutoDeactivate=   True
       Bold            =   False
@@ -131,7 +131,7 @@ Begin DesktopWindow Window1 Implements itfShareProgress
       Top             =   45
       Transparent     =   False
       Visible         =   True
-      Width           =   666
+      Width           =   600
    End
    Begin ccProjectPicker ccSourceProject
       AllowAutoDeactivate=   True
@@ -146,23 +146,23 @@ Begin DesktopWindow Window1 Implements itfShareProgress
       Height          =   40
       Index           =   -2147483648
       InitialParent   =   ""
-      Left            =   20
+      Left            =   632
       LockBottom      =   False
       LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
+      LockLeft        =   False
+      LockRight       =   True
       LockTop         =   True
       Scope           =   0
       TabIndex        =   7
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   108
+      Top             =   45
       Transparent     =   False
       Visible         =   True
-      Width           =   666
+      Width           =   600
    End
-   Begin DesktopListBox lb_libraries
+   Begin DesktopListBox lb_librariesInSource
       AllowAutoDeactivate=   True
       AllowAutoHideScrollbars=   True
       AllowExpandableRows=   False
@@ -185,11 +185,11 @@ Begin DesktopWindow Window1 Implements itfShareProgress
       HasHorizontalScrollbar=   False
       HasVerticalScrollbar=   True
       HeadingIndex    =   -1
-      Height          =   215
+      Height          =   246
       Index           =   -2147483648
       InitialValue    =   ""
       Italic          =   False
-      Left            =   20
+      Left            =   632
       LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
@@ -202,15 +202,94 @@ Begin DesktopWindow Window1 Implements itfShareProgress
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   201
+      Top             =   135
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      Width           =   666
+      Width           =   600
       _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
    Begin DesktopButton Button1
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Cancel          =   False
+      Caption         =   "Button"
+      Default         =   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   632
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      MacButtonStyle  =   0
+      Scope           =   0
+      TabIndex        =   9
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   97
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   80
+   End
+   Begin DesktopListBox lb_librariesInTarget
+      AllowAutoDeactivate=   True
+      AllowAutoHideScrollbars=   True
+      AllowExpandableRows=   False
+      AllowFocusRing  =   True
+      AllowResizableColumns=   False
+      AllowRowDragging=   False
+      AllowRowReordering=   False
+      Bold            =   False
+      ColumnCount     =   1
+      ColumnWidths    =   ""
+      DefaultRowHeight=   -1
+      DropIndicatorVisible=   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      GridLineStyle   =   0
+      HasBorder       =   True
+      HasHeader       =   True
+      HasHorizontalScrollbar=   False
+      HasVerticalScrollbar=   True
+      HeadingIndex    =   -1
+      Height          =   246
+      Index           =   -2147483648
+      InitialValue    =   ""
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   True
+      LockTop         =   True
+      RequiresSelection=   False
+      RowSelectionType=   0
+      Scope           =   0
+      TabIndex        =   11
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   135
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   600
+      _ScrollOffset   =   0
+      _ScrollWidth    =   -1
+   End
+   Begin DesktopButton Button2
       AllowAutoDeactivate=   True
       Bold            =   False
       Cancel          =   False
@@ -231,47 +310,15 @@ Begin DesktopWindow Window1 Implements itfShareProgress
       LockTop         =   True
       MacButtonStyle  =   0
       Scope           =   0
-      TabIndex        =   9
+      TabIndex        =   12
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   169
+      Top             =   97
       Transparent     =   False
       Underline       =   False
       Visible         =   True
       Width           =   80
-   End
-   Begin DesktopLabel Label1
-      AllowAutoDeactivate=   True
-      Bold            =   False
-      Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
-      FontUnit        =   0
-      Height          =   20
-      Index           =   -2147483648
-      Italic          =   False
-      Left            =   112
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      Multiline       =   False
-      Scope           =   2
-      Selectable      =   False
-      TabIndex        =   10
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Text            =   "Untitled"
-      TextAlignment   =   0
-      TextColor       =   &c000000
-      Tooltip         =   ""
-      Top             =   169
-      Transparent     =   False
-      Underline       =   False
-      Visible         =   True
-      Width           =   574
    End
 End
 #tag EndDesktopWindow
@@ -281,12 +328,31 @@ End
 		Sub Opening()
 		  
 		  
-		  ccSourceProject.Prepare("Select source", "Select the projet containing the libraries", clXojoProject.UsedAs.LibrarySource, self)
-		  ccTargetProject.Prepare("Select target", "Select the target project", clXojoProject.UsedAs.Destination, self)
+		  ccSourceProject.Prepare("Select source", "Select the projet containing the libraries", clXojoProject.UsedAs.LibrarySource, self, self, 0)
+		  ccTargetProject.Prepare("Select target", "Select the target project", clXojoProject.UsedAs.Destination, self, self, 1)
 		  
 		End Sub
 	#tag EndEvent
 
+
+	#tag Method, Flags = &h0
+		Sub CallBack(ControlerID as integer, ActionID as integer)
+		  
+		  select case Actionid
+		    
+		  case ccProjectPicker.ActionClear
+		    
+		  case ccProjectPicker.ActionErrorOnSelect
+		    
+		  case ccProjectPicker.ActionSelect
+		    
+		  case else
+		    
+		  end Select
+		  
+		  
+		End Sub
+	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub ShareStatus(MsgTime as string, MsgText as string)
@@ -301,6 +367,54 @@ End
 
 	#tag Method, Flags = &h0
 		Sub ShowExtraInfo(dct as Dictionary)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub ShowLibraryInfo(OutputListBox as DesktopListBox, project as clXojoProject)
+		  
+		  if project = nil then Return
+		  
+		  var m as FolderItem = project.ProjFolderItem
+		  var cc() as clXojoLibraryInfo = project.LibraryInformation
+		  
+		  
+		  OutputListBox.RemoveAllRows
+		  OutputListBox.ColumnCount = 6
+		  OutputListBox.HasHeader = true
+		  
+		  const ProjectColumn as integer = 1
+		  const ProjectIdColumn as integer = 2
+		  const ProjectNameColumn as integer  = 3
+		  const ProjectAuthorColumn  as integer  = 4
+		  const ProjectVersionColumn as integer  = 5 
+		  
+		  OutputListBox.HeaderAt(0) = "Select" 
+		  OutputListBox.HeaderAt(ProjectColumn) = "Project" 
+		  OutputListBox.HeaderAt(ProjectIdColumn) =  "ID"
+		  OutputListBox.HeaderAt( ProjectNameColumn) = "Name"
+		  OutputListBox.HeaderAt( ProjectAuthorColumn) = "Auhtor"
+		  OutputListBox.HeaderAt( ProjectVersionColumn) = "Version"
+		  
+		  OutputListBox.ColumnTypeAt(0) = DesktopListBox.CellTypes.CheckBox
+		  
+		  for each c as clXojoLibraryInfo in cc
+		    OutputListBox.AddRow("")
+		    
+		    OutputListBox.CellTextAt(OutputListBox.LastAddedRowIndex, ProjectColumn) = c.projName
+		    OutputListBox.CellTextAt(OutputListBox.LastAddedRowIndex, ProjectIdColumn) = c.Path
+		    OutputListBox.CellTextAt(OutputListBox.LastAddedRowIndex, ProjectNameColumn) = c.name
+		    OutputListBox.CellTextAt(OutputListBox.LastAddedRowIndex, ProjectAuthorColumn) = c.Author
+		    OutputListBox.CellTextAt(OutputListBox.LastAddedRowIndex, ProjectVersionColumn) = c.Version
+		    
+		    OutputListBox.RowTagAt(OutputListBox.LastAddedRowIndex) =c.ProjectAttributes
+		    
+		  next
+		  
+		  
+		  return
+		  
 		  
 		End Sub
 	#tag EndMethod
@@ -324,7 +438,7 @@ End
 
 #tag EndWindowCode
 
-#tag Events lb_libraries
+#tag Events lb_librariesInSource
 	#tag Event
 		Sub SelectionChanged()
 		  
@@ -362,50 +476,59 @@ End
 #tag Events Button1
 	#tag Event
 		Sub Pressed()
-		  // 
-		  // remove this button and move this code to a callback
-		  //
 		  
 		  if ccSourceProject.selectedProject = nil then Return
 		  
-		  var p as clXojoProject = ccSourceProject.selectedProject 
+		  ShowLibraryInfo(lb_librariesInSource, ccSourceProject.selectedProject )
 		  
-		  var m as FolderItem = p.ProjFolderItem
-		  var cc() as clXojoLibraryInfo = p.LibraryInformation
+		  return
 		  
 		  
-		  lb_libraries.RemoveAllRows
-		  lb_libraries.ColumnCount = 6
-		  lb_libraries.HasHeader = true
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events lb_librariesInTarget
+	#tag Event
+		Sub SelectionChanged()
 		  
-		  const ProjectColumn as integer = 1
-		  const ProjectIdColumn as integer = 2
-		  const ProjectNameColumn as integer  = 3
-		  const ProjectAuthorColumn  as integer  = 4
-		  const ProjectVersionColumn as integer  = 5 
+		  var currow as integer = me.SelectedRowIndex
 		  
-		  lb_libraries.HeaderAt(0) = "Select" 
-		  lb_libraries.HeaderAt(ProjectColumn) = "Project" 
-		  lb_libraries.HeaderAt(ProjectIdColumn) =  "ID"
-		  lb_libraries.HeaderAt( ProjectNameColumn) = "Name"
-		  lb_libraries.HeaderAt( ProjectAuthorColumn) = "Auhtor"
-		  lb_libraries.HeaderAt( ProjectVersionColumn) = "Version"
-		  
-		  lb_libraries.ColumnTypeAt(0) = DesktopListBox.CellTypes.CheckBox
-		  
-		  for each c as clXojoLibraryInfo in cc
-		    lb_libraries.AddRow("")
+		  if currow < 0 then 
+		    ShowExtraInfo(nil)
+		    Return
 		    
-		    lb_libraries.CellTextAt(lb_libraries.LastAddedRowIndex, ProjectColumn) = c.projName
-		    lb_libraries.CellTextAt(lb_libraries.LastAddedRowIndex, ProjectIdColumn) = c.Path
-		    lb_libraries.CellTextAt(lb_libraries.LastAddedRowIndex, ProjectNameColumn) = c.name
-		    lb_libraries.CellTextAt(lb_libraries.LastAddedRowIndex, ProjectAuthorColumn) = c.Author
-		    lb_libraries.CellTextAt(lb_libraries.LastAddedRowIndex, ProjectVersionColumn) = c.Version
-		    
-		    lb_libraries.RowTagAt(lb_libraries.LastAddedRowIndex) =c.ProjectAttributes
-		    
-		  next
+		  end if
 		  
+		  if currow > me.LastRowIndex then 
+		    ShowExtraInfo(nil)
+		    Return
+		    
+		  end if
+		  
+		  var r as variant = me.RowTagAt(currow)
+		  
+		  if r isa Dictionary then 
+		    ShowExtraInfo(Dictionary(r))
+		    
+		  else
+		    ShowExtraInfo(nil)
+		    
+		  end if
+		  
+		  return
+		  
+		  
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events Button2
+	#tag Event
+		Sub Pressed()
+		  
+		  if ccTargetProject.selectedProject = nil then Return
+		  
+		  ShowLibraryInfo(lb_librariesInTarget, ccTargetProject.selectedProject )
 		  
 		  return
 		  
