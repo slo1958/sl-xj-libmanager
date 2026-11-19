@@ -143,7 +143,7 @@ Protected Class clXojoProject
 		  var cnt as integer
 		  
 		  for each item as clXojoProjectItem in self. ProjectItems
-		     
+		    
 		    if  not item.AddedToTree then
 		      cnt = cnt + 1
 		      
@@ -317,7 +317,7 @@ Protected Class clXojoProject
 		      libInfo.Path = fldDesc.GetPath
 		      libInfo.ProjectAttributes = nil
 		      libInfo.Version = ""
-		       
+		      
 		      // Extract standard keys
 		      
 		      if retdct.HasKey("LibraryAuthor") then
@@ -507,6 +507,40 @@ Protected Class clXojoProject
 	#tag EndMethod
 
 
+	#tag Note, Name = XojoProjectFile
+		RBProjectVersion=2026.021
+		MinIDEVersion=20210300
+		OrigIDEVersion=20260201
+		Class=App;App.xojo_code;&h000000002A224FFF;&h0000000000000000;false
+		DesktopWindow=Window1;Window1.xojo_window;&h0000000002F35FFF;&h0000000000000000;false
+		MenuBar=MainMenuBar;MainMenuBar.xojo_menu;&h00000000044377FF;&h0000000000000000;false
+		BuildSteps=Build Automation;Build Automation.xojo_code;&h000000006E86EFFF;&h0000000000000000;false
+		Folder=UserInterface;UserInterface;&h000000005E95A7FF;&h0000000000000000;false
+		DesktopWindow=wnd_lib_source;UserInterface/wnd_lib_source.xojo_window;&h0000000023CC2FFF;&h000000005E95A7FF;false
+		Class=DesktopTaggedButton;UserInterface/DesktopTaggedButton.xojo_code;&h0000000023FADFFF;&h000000005E95A7FF;false
+		Folder=LibraryManagement;LibraryManagement;&h000000006232DFFF;&h0000000000000000;false
+		Class=clCodeLibray;LibraryManagement/clCodeLibray.xojo_code;&h000000005A7037FF;&h000000006232DFFF;false
+		Class=clLibDependency;LibraryManagement/clLibDependency.xojo_code;&h0000000070072FFF;&h000000006232DFFF;false
+		Class=clLibraryVersionInfo;LibraryManagement/clLibraryVersionInfo.xojo_code;&h0000000028A45FFF;&h000000006232DFFF;false
+		Folder=XojoProjectInfo;XojoProjectInfo;&h0000000070EFF7FF;&h0000000000000000;false
+		Class=clXojoProject;XojoProjectInfo/clXojoProject.xojo_code;&h0000000046E817FF;&h0000000070EFF7FF;false
+		Class=clXojoProjectItem;XojoProjectInfo/clXojoProjectItem.xojo_code;&h000000007A6BD7FF;&h0000000070EFF7FF;false
+		DesktopWindow=wnd_project_info;wnd_project_info.xojo_window;&h0000000021A687FF;&h0000000000000000;false
+		Module=mdHelpers;mdHelpers.xojo_code;&h00000000488207FF;&h0000000000000000;false
+		Folder=GitHubInterface;GitHubInterface;&h00000000699CCFFF;&h0000000000000000;false
+		Module=GitHubHelper;GitHubInterface/GitHubHelper.xojo_code;&h000000002996E7FF;&h00000000699CCFFF;false
+		DesktopWindow=wnd_tests;wnd_tests.xojo_window;&h000000002E67CFFF;&h0000000000000000;false
+		Interface=itfShareProgress;itfShareProgress.xojo_code;&h0000000068B31FFF;&h0000000000000000;false
+		DesktopWindow=ccProjectPicker;ccProjectPicker.xojo_window;&h000000004FC06FFF;&h0000000000000000;false
+		Class=clXojoLibraryInfo;XojoProjectInfo/clXojoLibraryInfo.xojo_code;&h0000000016FFDFFF;&h0000000070EFF7FF;false
+		DefaultWindow=Window1
+		AppMenuBar=MainMenuBar
+		MajorVersion=1
+		MinorVersion=0
+		
+	#tag EndNote
+
+
 	#tag Property, Flags = &h0
 		FolderOfInterest As String
 	#tag EndProperty
@@ -597,6 +631,14 @@ Protected Class clXojoProject
 			InitialValue=""
 			Type="String"
 			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Projmode"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="UsedAs"
+			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class

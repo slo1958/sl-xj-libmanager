@@ -102,6 +102,7 @@ Begin DesktopWindow Window1 Implements itfShareProgress
       Underline       =   False
       Visible         =   True
       Width           =   600
+      _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
    Begin ccProjectPicker ccTargetProject
@@ -112,9 +113,11 @@ Begin DesktopWindow Window1 Implements itfShareProgress
       Backdrop        =   0
       BackgroundColor =   &cFFFFFF
       Composited      =   False
+      DefaultXForText =   0
       Enabled         =   True
       HasBackgroundColor=   False
       Height          =   40
+      IdForCallback   =   0
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   20
@@ -123,10 +126,13 @@ Begin DesktopWindow Window1 Implements itfShareProgress
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
+      mode            =   ""
       Scope           =   0
       TabIndex        =   6
       TabPanelIndex   =   0
       TabStop         =   True
+      TextForButton   =   ""
+      TextForLabel    =   ""
       Tooltip         =   ""
       Top             =   97
       Transparent     =   False
@@ -141,9 +147,11 @@ Begin DesktopWindow Window1 Implements itfShareProgress
       Backdrop        =   0
       BackgroundColor =   &cFFFFFF
       Composited      =   False
+      DefaultXForText =   0
       Enabled         =   True
       HasBackgroundColor=   False
       Height          =   40
+      IdForCallback   =   0
       Index           =   -2147483648
       InitialParent   =   ""
       Left            =   20
@@ -152,10 +160,13 @@ Begin DesktopWindow Window1 Implements itfShareProgress
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
+      mode            =   ""
       Scope           =   0
       TabIndex        =   7
       TabPanelIndex   =   0
       TabStop         =   True
+      TextForButton   =   ""
+      TextForLabel    =   ""
       Tooltip         =   ""
       Top             =   336
       Transparent     =   False
