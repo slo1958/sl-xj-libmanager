@@ -16,6 +16,47 @@ Protected Module mdHelpers
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function getValue(Source as string, key as string) As string
+		  // #tag Constant, Name = LibraryName, Type = String, Dynamic = False, Default = \"NiceLibrary", Scope = Protected
+		  
+		  var idxKey as integer = Source.IndexOf(key)
+		  var idxEqual as integer = source.IndexOf(idxKey+1, "=")
+		  var idxComma as integer = source.IndexOf(idxEqual+1, ",")
+		  
+		  if idxKey < 0 or idxEqual < 0 or idxComma < 0 then return ""
+		  
+		  var ret as string =  source.Middle(idxEqual+1, idxComma - idxEqual-1).trim
+		  
+		  if ret.left(1) = "\" then ret = ret.Middle(1, 9999)
+		  
+		  if ret.left(1) = """" and ret.right(1) = """" then
+		    ret = ret.middle(1, ret.Length-2)
+		    
+		  end if
+		  
+		  Return ret
+		  
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function Hexa16(v as int64) As String
+		  
+		  var tmp as string 
+		  
+		  tmp = Hex(v)
+		  
+		  tmp = right("0000000000000000" + tmp, 16)
+		  
+		  Return "&h"+tmp
+		  
+		  
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function IsExistingFIle(fld as FolderItem) As Boolean
 		  if fld = nil then return false
 		  

@@ -56,6 +56,100 @@ Begin DesktopWindow Window1
       Visible         =   True
       Width           =   80
    End
+   Begin DesktopListBox ListBox1
+      AllowAutoDeactivate=   True
+      AllowAutoHideScrollbars=   True
+      AllowExpandableRows=   False
+      AllowFocusRing  =   True
+      AllowResizableColumns=   False
+      AllowRowDragging=   False
+      AllowRowReordering=   False
+      Bold            =   False
+      ColumnCount     =   1
+      ColumnWidths    =   ""
+      DefaultRowHeight=   -1
+      DropIndicatorVisible=   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      GridLineStyle   =   0
+      HasBorder       =   True
+      HasHeader       =   True
+      HasHorizontalScrollbar=   False
+      HasVerticalScrollbar=   True
+      HeadingIndex    =   -1
+      Height          =   156
+      Index           =   -2147483648
+      InitialValue    =   ""
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      RequiresSelection=   False
+      RowSelectionType=   0
+      Scope           =   0
+      TabIndex        =   1
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   60
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   560
+      _ScrollWidth    =   -1
+   End
+   Begin DesktopListBox ListBox2
+      AllowAutoDeactivate=   True
+      AllowAutoHideScrollbars=   True
+      AllowExpandableRows=   False
+      AllowFocusRing  =   True
+      AllowResizableColumns=   False
+      AllowRowDragging=   False
+      AllowRowReordering=   False
+      Bold            =   False
+      ColumnCount     =   1
+      ColumnWidths    =   ""
+      DefaultRowHeight=   -1
+      DropIndicatorVisible=   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      GridLineStyle   =   0
+      HasBorder       =   True
+      HasHeader       =   True
+      HasHorizontalScrollbar=   False
+      HasVerticalScrollbar=   True
+      HeadingIndex    =   -1
+      Height          =   152
+      Index           =   -2147483648
+      InitialValue    =   ""
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      RequiresSelection=   False
+      RowSelectionType=   0
+      Scope           =   0
+      TabIndex        =   2
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   228
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   560
+      _ScrollWidth    =   -1
+   End
 End
 #tag EndDesktopWindow
 
@@ -80,7 +174,59 @@ End
 		  
 		  self.project = prj
 		  
+		  var r() as clXojoProjectSourceLine = prj.FindLibraryHeads(prj.FindShareableFolder)
+		  
+		  
+		  ListBox1.RemoveAllRows
+		  
+		  for each s as clXojoProjectSourceLine in r
+		    Listbox1.AddRow(s.value)
+		     var d as Dictionary = prj.GetAllLibraryInformation(s.value, prj.FindShareableFolder())
+		    Listbox1.RowTagAt(Listbox1.LastAddedRowIndex) = d
+		    
+		    
+		  next
+		  
+		  var srcID() as int64 = prj.GetAllItemID()
+		  
+		  var dummyID as integer = 100000
+		  
+		  
+		  for each v as int64 in srcID
+		    prj.UpdateItemID(v, dummyID)
+		    
+		    dummyID = dummyID + 1000
+		    
+		  next
+		  
+		  prj.saveAs("TestProject33.xojo_project")
+		  
 		  return
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events ListBox1
+	#tag Event
+		Sub SelectionChanged()
+		  
+		  var idx as integer = me.SelectedRowIndex
+		  
+		  if idx < 0 then Return
+		  
+		  var r as variant = me.RowTagAt(idx)
+		  var d as Dictionary
+		  
+		  if r isa Dictionary then d = Dictionary(r)
+		  
+		  Listbox2.RemoveAllRows
+		  
+		  for each k as string in d.keys
+		    Listbox2.AddRow(k + "=" + d.Value(k))
+		    
+		  next
+		  
+		  return
+		  
 		End Sub
 	#tag EndEvent
 #tag EndEvents

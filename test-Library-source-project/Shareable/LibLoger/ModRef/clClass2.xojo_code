@@ -1,5 +1,17 @@
 #tag Class
 Protected Class clClass2
+	#tag Method, Flags = &h0
+		Sub Something()
+		  
+		End Sub
+	#tag EndMethod
+
+
+	#tag Property, Flags = &h0
+		SomeData As Integer
+	#tag EndProperty
+
+
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Name"

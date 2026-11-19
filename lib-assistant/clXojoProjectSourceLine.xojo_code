@@ -3,6 +3,8 @@ Protected Class clXojoProjectSourceLine
 	#tag Method, Flags = &h0
 		Sub AddItemToChildren(item as clXojoProjectSourceLine)
 		  
+		  if item  isa clXojoProjectTreeHead then Return
+		  
 		  self.Children.Add(item)
 		  
 		  Return
@@ -40,39 +42,73 @@ Protected Class clXojoProjectSourceLine
 		  
 		  self.classify()
 		  
+		  self.ExtractKeyValues()
+		  
+		  Return
 		  
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub ExtractKeyValues()
-		  
-		  if not self.isItemForTree then return
-		  
+		  //
 		  // item for tree should have at least three parameters:
 		  // the relative path to the source file
 		  // the item ID
 		  // the parent item ID
 		  //
 		  
-		  self.relativePath = self.parameters(0)
+		  self.relativePath = ""
 		  self.originalOwnID = -1
 		  self.originalParentID = -1
 		  
+		  if not self.isItemForTree then return
 		  
-		  if self.parameters.LastIndex < 1 then return -1
+		  if self.parameters.LastIndex >= 0 then self.relativePath = self.parameters(0)
 		  
-		  self.originalOwnID = self.parameters(1).ToInt64
-		   
+		  if self.parameters.LastIndex >= 1 then 
+		    self.originalOwnIDStr = self.parameters(1)
+		    self.originalOwnID = self.parameters(1).ToInt64
+		     self.updatedOwnID = self.originalOwnID
+		    
+		  end if
 		  
-		  if self.parameters.LastIndex < 2 then return -1
-		  
-		  self.originalParentID = self.parameters(2).ToInt64
+		  if self.parameters.LastIndex >= 2 then 
+		    self.originalParentIDStr = self.parameters(2)
+		    self.originalParentID = self.parameters(2).ToInt64
+		    self.updatedParentID = self.originalParentID
+		    
+		  end if
 		  
 		  Return
 		  
 		  
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function getSourceLine(doUpdate as Boolean) As string
+		  
+		  if not self.isItemForTree then
+		    return self.source
+		    
+		  end if
+		  
+		  
+		  if (originalOwnID = updatedOwnID) and (originalParentID = updatedParentID) then
+		    return self.source
+		    
+		  end if
+		  
+		  var tmp as string = self.source
+		  
+		  tmp = tmp.Replace(originalOwnIDStr, Hexa16(updatedOwnID))
+		  tmp = tmp.Replace(originalParentIDStr , Hexa16(updatedParentID))
+		  
+		  return tmp
+		  
+		  
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -137,6 +173,22 @@ Protected Class clXojoProjectSourceLine
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Sub UpdateItemID(oldItemID as int64, newItemID as int64)
+		  
+		  if self.originalOwnID = oldItemID then
+		    self.updatedOwnID = newItemID
+		    
+		  end if
+		  
+		  if self.originalParentID = oldItemID then
+		    self.updatedParentID = newItemID
+		    
+		  end if
+		  
+		End Sub
+	#tag EndMethod
+
 
 	#tag Property, Flags = &h0
 		Children() As clXojoProjectSourceLine
@@ -155,7 +207,15 @@ Protected Class clXojoProjectSourceLine
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
+		originalOwnIDStr As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
 		originalParentID As int64
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		originalParentIDStr As string
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -163,11 +223,19 @@ Protected Class clXojoProjectSourceLine
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		relativePath As Integer
+		relativePath As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
 		source As string
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		updatedOwnID As int64
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		updatedParentID As int64
 	#tag EndProperty
 
 	#tag Property, Flags = &h0

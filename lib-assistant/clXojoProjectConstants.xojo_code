@@ -24,6 +24,9 @@ Protected Class clXojoProjectConstants
 	#tag Constant, Name = DestinationText, Type = String, Dynamic = False, Default = \"UsedSourceLibraries", Scope = Public
 	#tag EndConstant
 
+	#tag Constant, Name = LibraryInfoSubstring, Type = String, Dynamic = False, Default = \"LibraryInfo", Scope = Public
+	#tag EndConstant
+
 	#tag Constant, Name = ShareableText, Type = String, Dynamic = False, Default = \"Shareable", Scope = Public
 	#tag EndConstant
 

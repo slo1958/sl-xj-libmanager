@@ -7,34 +7,17 @@ Inherits clXojoProjectSourceLine
 		  self.key = "HEAD"
 		  self.value = ""
 		  
+		  self.isItemForTree = True
+		  
+		  self.originalOwnID = 0
+		  self.originalParentID = 0
+		  self.updatedOwnID = 0
+		  self.updatedParentID = 0
+		  self.relativePath = ""
+		  
+		  
 		  
 		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function OwnID() As int64
-		  
-		  return 0
-		  
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function ParentID() As int64
-		  
-		  return -1
-		  
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function RelativePath() As string
-		  
-		  return ""
-		  
-		End Function
 	#tag EndMethod
 
 

@@ -3,28 +3,30 @@ Protected Class clXojoProject
 	#tag Method, Flags = &h0
 		Sub BuildTree()
 		  
-		  self.ItemID = new Dictionary
+		  self.itemIDDict = new Dictionary
 		  
 		  for each s as clXojoProjectSourceLine in self.SourceLines
 		    if s.isItemForTree() then
-		      var key as int64 = s.OwnID
+		      var key as int64 = s.OriginalOwnID
 		      
-		      self.ItemID.Value(key) = s
+		      self.itemIDDict.Value(key) = s
 		      
 		    end if
 		    
 		  next
 		  
 		  self.ItemTreeHead = new clXojoProjectTreeHead
-		  self.ItemID.Value(0) = self.ItemTreeHead
+		  self.itemIDDict.Value(0) = self.ItemTreeHead
 		  
-		  for each k as int64 in self.Itemid.Keys
-		    var s as clXojoProjectSourceLine = self.ItemID.Value(k)
-		    var v2 as int64 = s.ParentID
+		  for each k as int64 in self.itemIDDict.Keys
+		    var s as clXojoProjectSourceLine = self.itemIDDict.Value(k)
+		    var v2 as int64 = s.originalParentID
 		    
-		    var p as clXojoProjectSourceLine = self.ItemID.Lookup(v2, nil)
+		    var p as clXojoProjectSourceLine = self.itemIDDict.Lookup(v2, nil)
 		    
 		    if p <> nil then
+		      System.DebugLog("Adding " + s.key + "=" + s.value+" to " + p.key + " = " + p.value)
+		      
 		      p.AddItemToChildren(s)
 		      
 		    end if
@@ -46,9 +48,9 @@ Protected Class clXojoProject
 		  self.ProjectFolder = prmProjectFolder
 		  self.log = prmProgressLog
 		  
-		  self.projectFile = LocateProjectFile()
+		  self.sourceProjectFile = LocateProjectFile()
 		  
-		  ParseProjectFile(projectFile, Log)
+		  ParseProjectFile(sourceProjectFile, Log)
 		  
 		  BuildTree()
 		  
@@ -58,16 +60,243 @@ Protected Class clXojoProject
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function ExtractItemConstants(itemToProcess as clXojoProjectSourceLine) As Dictionary
+		  //
+		  // Extract the values of all constants from the item passed as parameter.
+		  // Normally used to extract the values defined in the library information module
+		  //
+		  
+		  var results as new Dictionary
+		  
+		  var path as string = itemToProcess.relativePath
+		  
+		  if path.Length = 0 then return results
+		  
+		  var fld as FolderItem = self.ProjectFolder
+		  
+		  var tmp() as string = path.Split("/")
+		  
+		  for each t as string in tmp
+		    
+		    if fld <> nil and fld.Child(t).Exists then
+		      fld = fld.Child(t)
+		      
+		    else
+		      System.DebugLog("Cannot find " + t + " under " + fld.NativePath)
+		      fld = nil
+		      
+		    end if
+		    
+		  next
+		  
+		  var src() as string = LoadTextByLine(fld)
+		  
+		  for each t as string in src
+		    //
+		    // #tag Constant, Name = LibraryName, Type = String, Dynamic = False, Default = \"NiceLibrary", Scope = Protected
+		    //
+		    
+		    if t.IndexOf("Constant") >0 and t.indexof("EndConstant") < 0 then 
+		      var v1 as string = getValue(t, "Name")
+		      var v2 as string = getValue(t, "Default")
+		      results.Value(v1) = v2
+		      
+		    end if
+		    
+		    
+		  next
+		  
+		  return results
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function FindFolder(name as string) As clXojoProjectSourceLine
+		  
+		  for each s as clXojoProjectSourceLine in SourceLines
+		    
+		    if s.isItemForTree then
+		      if s.key = clXojoProjectConstants.cstFolder then
+		        if s.value = name Then
+		          return s
+		          
+		        end if
+		        
+		      end if
+		      
+		    end if
+		    
+		    
+		  next
+		  
+		  Return nil
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function FindLibraryHeads(LibraryFolder as clXojoProjectSourceLine) As clXojoProjectSourceLine()
+		  
+		  var results() as clXojoProjectSourceLine
+		  
+		  var h as clXojoProjectSourceLine = LibraryFolder
+		  
+		  if h = nil then return results
+		  
+		  for each s as clXojoProjectSourceLine in h.Children
+		    if s.key = clXojoProjectConstants.cstFolder then
+		      results.Add(s)
+		      
+		      
+		    end if
+		    
+		    
+		  next
+		  
+		  return results
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function FindShareableFolder() As clXojoProjectSourceLine
+		  
+		  
+		  return self.FindFolder(clXojoProjectConstants.ShareableText)
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function FindUsedLibraryFolder() As clXojoProjectSourceLine
+		  
+		  
+		  return self.FindFolder(clXojoProjectConstants.DestinationText)
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetAllItemID() As int64()
+		  
+		  var results() as int64
+		  
+		  for each s as clXojoProjectSourceLine in self.SourceLines
+		    if results.IndexOf(s.originalOwnID) < 0 then results.Add(s.originalOwnID)
+		    
+		  next
+		  
+		  return results
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetAllLibraryInformation(libraryName as string, LibrariesTopFolder as clXojoProjectSourceLine) As Dictionary
+		  //
+		  // Returns all the information extracted from the library information module
+		  // 
+		  // Parameters
+		  // - name of the library
+		  // - top library folder (either shareable or used library)
+		  //
+		  // Returns
+		  //  dictionary  populated with all information retrieved from the module constant
+		  //
+		  
+		  var results as new Dictionary
+		  
+		  var libraries() as clXojoProjectSourceLine = FindLibraryHeads(LibrariesTopFolder)
+		  var library as clXojoProjectSourceLine = nil 
+		  var infomodule as clXojoProjectSourceLine = nil
+		  
+		  // Locate the requested library
+		  for each r as clXojoProjectSourceLine in libraries
+		    
+		    if r.value = libraryName then library = r
+		    
+		  next
+		  
+		  if library = nil then 
+		    system.DebugLog("Cannot find the library")
+		    return results
+		    
+		  end if
+		  
+		  // Locate the library info module under the discovered folder
+		  for each r as clXojoProjectSourceLine in library.Children
+		    if r.key = clXojoProjectConstants.cstModule and r.value.IndexOf(clXojoProjectConstants.LibraryInfoSubstring) >= 0 then
+		      infomodule = r
+		      
+		    end if
+		    
+		  next
+		  
+		  if infomodule = nil then 
+		    system.DebugLog("Cannot find the library information module")
+		    
+		    Return results
+		    
+		  end if
+		  
+		  results = ExtractItemConstants(infomodule)
+		  
+		  return results
+		  
+		  
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetLibraryInformation(libraryName as string, LibrariesTopFolder as clXojoProjectSourceLine) As clXojoLibraryInfo
+		  //
+		  // Returns the information extracted from the library information module
+		  // 
+		  // Parameters
+		  // - name of the library
+		  // - top library folder (either shareable or used library)
+		  //
+		  // Returns
+		  //  clXojoLibraryInfo object populated with information retrieved from the module or default values
+		  //
+		  
+		  var d as Dictionary = GetAllLibraryInformation(libraryName, LibrariesTopFolder)
+		  
+		  // - The module should contain constants describing the library:
+		  // - LibraryAuthor (string)
+		  // - LibraryName (string)
+		  // - LibraryVersion (string)
+		  // 
+		  // Those constants are presented to the user by the Assistant,and the following default values are used:
+		  // - LibraryAuthor defaults to 'Unknown'
+		  // - LibraryName defaults to the name of the folder
+		  // - LibraryVersion defaults to 'Unspecified'
+		  // 
+		  
+		  var results as new clXojoLibraryInfo
+		  
+		  results.Author = d.Lookup("LibraryAuthor", "Unknown")
+		  results.Name = d.Lookup("LibraryName", self.ProjectFolder.Name)
+		  results.Version = d.Lookup("LibraryVersion", "Unspecified")
+		  results.projName = self.ProjectFolder.Name
+		  
+		  return results
+		  
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h21
 		Private Function LocateProjectFile() As FolderItem
 		  
-		  self.projectFile = nil
+		  self.sourceProjectFile = nil
 		  
 		  for each fld as FolderItem in self.projectfolder.Children
 		    if fld.IsFolder then
 		      
 		    elseif fld.Extension = clXojoProjectConstants.XojoProjectFileExt then
-		      self.projectFile = fld
+		      self.sourceProjectFile = fld
 		      
 		    else
 		      
@@ -75,7 +304,7 @@ Protected Class clXojoProject
 		    
 		  next
 		  
-		  Return self.projectFile
+		  Return self.sourceProjectFile
 		End Function
 	#tag EndMethod
 
@@ -108,7 +337,6 @@ Protected Class clXojoProject
 		  
 		  var s() as string = LoadTextByLine(projectFile)
 		  
-		  
 		  for each line as string in s
 		    var n as new clXojoProjectSourceLine(line)
 		    
@@ -133,7 +361,38 @@ Protected Class clXojoProject
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub WriteToLog(msg as string)
+		Sub saveAs(destinationFileName as string)
+		  
+		  self.DestintationProjectFile = self.ProjectFolder.Child(destinationFileName)
+		  
+		  var tout as TextOutputStream = TextOutputStream.Create(self.DestintationProjectFile)
+		  
+		  for each s as clXojoProjectSourceLine in self.SourceLines
+		    tout.WriteLine(s.getSourceLine(true))
+		    
+		  next
+		  
+		  tout.close
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub UpdateItemID(oldItemID as int64, newItemID as int64)
+		  
+		  for each s as clXojoProjectSourceLine in self.SourceLines
+		    s.UpdateItemID(oldItemID, newItemID)
+		    
+		  next
+		  
+		  Return
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub WriteToLog(msg as string)
 		  
 		  if self.log = nil then return
 		  
@@ -144,20 +403,6 @@ Protected Class clXojoProject
 		End Sub
 	#tag EndMethod
 
-
-	#tag Note, Name = Untitled
-		
-		
-		BuildSteps
-		Class
-		DesktopWindow
-		Folder
-		Interface
-		MenuBar
-		Module
-		
-		
-	#tag EndNote
 
 	#tag Note, Name = XojoProjectFile
 		RBProjectVersion=2026.021
@@ -190,11 +435,17 @@ Protected Class clXojoProject
 		MajorVersion=1
 		MinorVersion=0
 		
+		&h0000000000000000
+		XX12345678901234567
 	#tag EndNote
 
 
 	#tag Property, Flags = &h0
-		ItemID As Dictionary
+		DestintationProjectFile As FolderItem
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		itemIDDict As Dictionary
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -206,15 +457,15 @@ Protected Class clXojoProject
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		projectFile As FolderItem
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
 		ProjectFolder As FolderItem
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
 		SourceLines() As clXojoProjectSourceLine
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		sourceProjectFile As FolderItem
 	#tag EndProperty
 
 
