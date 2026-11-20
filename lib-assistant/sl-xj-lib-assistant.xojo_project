@@ -22,6 +22,7 @@ Class=clXojoProjectTreeHead;XojoProjectHandling/clXojoProjectTreeHead.xojo_code;
 Class=clXojoProjectSourceLine;XojoProjectHandling/clXojoProjectSourceLine.xojo_code;&h0000000050095FFF;&h0000000063D827FF;false
 Class=clXojoProject;XojoProjectHandling/clXojoProject.xojo_code;&h000000001CAFE7FF;&h0000000063D827FF;false
 Class=clXojoProjectConstants;XojoProjectHandling/clXojoProjectConstants.xojo_code;&h000000000BF887FF;&h0000000063D827FF;false
+DesktopWindow=wnd_transfer;Windows/wnd_transfer.xojo_window;&h000000000D36BFFF;&h0000000045B76FFF;false
 DefaultWindow=wnd_welcome
 AppMenuBar=MainMenuBar
 MajorVersion=1

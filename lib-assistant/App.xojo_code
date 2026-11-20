@@ -39,6 +39,18 @@ Implements itfShareProgress
 	#tag EndMenuHandler
 
 	#tag MenuHandler
+		Function ActionsTransferlibraries() As Boolean Handles ActionsTransferlibraries.Action
+		  
+		  var w as new wnd_transfer
+		  
+		  w.show
+		  
+		  Return True
+		  
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
 		Function HelpSettings() As Boolean Handles HelpSettings.Action
 		  
 		  var w as new wnd_config

@@ -136,6 +136,14 @@ Begin Menu MainMenuBar
          AutoEnable = True
          Visible = True
       End
+      Begin DesktopMenuItem ActionsTransferlibraries
+         SpecialMenu = 0
+         Index = -2147483648
+         Text = "Transfer libraries"
+         AutoEnabled = True
+         AutoEnable = True
+         Visible = True
+      End
    End
    Begin DesktopMenuItem WindowMenu
       SpecialMenu = 0
