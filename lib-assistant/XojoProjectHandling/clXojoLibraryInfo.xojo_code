@@ -21,31 +21,48 @@ Protected Class clXojoLibraryInfo
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function GetLibraryInfoModuleTemplate(LibraryName as string, LibraryVersion as string, AuthorName as string) As string()
+		Sub Constructor(prmLibraryName as string, projectFolderName as string)
+		  
+		  self.Author = "Unknown"
+		  self.Name = CleanName(prmLibraryName)
+		  self.NameByUser = prmLibraryName.trim
+		  self.Version = "Unspecified"
+		  self.projName = projectFolderName
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function DefaultModuleName() As String
+		  
+		  return clXojoProjectConstants.LibraryInfoSubstring + "_" + self.Name
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetLibraryInfoModuleBody() As string()
 		  
 		  var results() as string
 		  
-		  var tempStr as String
-		  
-		  var tempLibName as string = LibraryName
+		  var template as string = "#tag Constant, Name = %0, Type = String, Dynamic = False, Default = \""%1"", Scope = Public"
 		  
 		  // TODO: clean up library name
 		  
 		  results.add("#tag Module")
-		  results.add(ReplacePlaceHolders("Module LibraryInfo_%0" , tempLibName))
+		  results.add(ReplacePlaceHolders("Module %0" , self.DefaultModuleName))
 		  
-		  tempStr = "#tag Constant, Name = %0, Type = String, Dynamic = False, Default = \""%1"", Scope = Public"
-		  
-		  results.add(ReplacePlaceholders(tempStr, cstLibraryName, LibraryName))
+		  results.add(ReplacePlaceholders(template, cstLibraryName, self.LibraryNameByUser()))
 		  results.add("#tag EndConstant")
 		  results.add("")
 		  
-		  results.add(ReplacePlaceholders(tempStr, cstLibraryVersion, LibraryVersion))
+		  results.add(ReplacePlaceholders(template, cstLibraryVersion, self.LibraryVersion))
 		  results.add("#tag EndConstant")
 		  results.add("")
 		  
 		  
-		  results.add(ReplacePlaceholders(tempStr, cstLibraryAuthor, AuthorName))
+		  results.add(ReplacePlaceholders(template, cstLibraryAuthor, self.LibraryAuthor))
 		  results.add("#tag EndConstant")
 		  results.add("")
 		  
@@ -58,17 +75,49 @@ Protected Class clXojoLibraryInfo
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function LibraryAuthor() As String
+		  
+		  return self.Author
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function LibraryName() As string
+		  
+		  Return self.Name
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function LibraryNameByUser() As string
+		  
+		  Return self.NameByUser
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function LibraryVersion() As string
+		  Return self.Version
+		End Function
+	#tag EndMethod
+
 
 	#tag Property, Flags = &h0
 		Author As string
 	#tag EndProperty
 
-	#tag Property, Flags = &h0
-		Name As string
+	#tag Property, Flags = &h21
+		Private Name As string
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private NameByUser As string
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		Path As string
+		PathO As string
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -144,7 +193,7 @@ Protected Class clXojoLibraryInfo
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="Path"
+			Name="PathO"
 			Visible=false
 			Group="Behavior"
 			InitialValue=""

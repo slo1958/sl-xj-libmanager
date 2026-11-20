@@ -34,9 +34,10 @@ Protected Class clXojoProjectSourceLine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor()
+		Sub Constructor(prmProjectFolder as folderitem)
 		  
 		  self.source = ""
+		  self.projectFolder = prmProjectFolder
 		  self.loadedFromProject = false
 		  
 		  self.isItemForTree = true
@@ -50,9 +51,12 @@ Protected Class clXojoProjectSourceLine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Constructor(sourceLine as string)
+		Sub Constructor(prmProjectFolder as folderitem, prmSourceLine as string)
 		  
-		  self.Source = sourceLine
+		  self.Source = prmSourceLine
+		  self.projectFolder = prmProjectFolder
+		  self.loadedFromProject = true
+		  
 		  
 		  self.ProcessLine()
 		  
@@ -62,11 +66,184 @@ Protected Class clXojoProjectSourceLine
 		  
 		  self.UpdateKeyValuesFromSource()
 		  
-		  self.loadedFromProject = true
 		  
 		  Return
 		  
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function CreateItemOnDisk(Body() as String) As Boolean
+		  
+		  var path as string = self.GetRelativePath()
+		  
+		  if path.Length = 0 then return false
+		  
+		  var fld as FolderItem = self.ProjectFolder
+		  
+		  var tmp() as string = path.Split("/")
+		  
+		  var tout as TextOutputStream = nil
+		  
+		  for each t as string in tmp
+		    
+		    if fld = nil then return false
+		    
+		    if t = tmp(tmp.LastIndex) then 
+		      // Time to create our text file
+		      tout = TextOutputStream.Create(fld.Child(t))
+		      
+		    elseif fld.Child(t).Exists then
+		      fld = fld.Child(t)
+		      
+		    else
+		      fld.Child(t).CreateFolder
+		      fld = fld.Child(t)
+		      System.DebugLog("CreateItemConstants created the folder " + fld.NativePath)
+		      
+		    end if
+		    
+		  next
+		  
+		  if tout = nil then return false
+		  
+		  for each s as string in Body
+		    tout.WriteLine(s)
+		    
+		  next
+		  
+		  tout.Close
+		  
+		  Return true
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function ExtractItemConstants() As Dictionary
+		  //
+		  // Extract the values of all constants from the item passed as parameter.
+		  // Normally used to extract the values defined in the library information module
+		  //
+		  // Parameters
+		  // - itemToProcess: line from project file 'pointing' to the module to be processed
+		  //
+		  // Returns 
+		  // - Dictionary with the constant name as key and the default value as value
+		  //
+		  
+		  var results as new Dictionary
+		  
+		  var path as string = self.GetRelativePath()
+		  
+		  if path.Length = 0 then return results
+		  
+		  var fld as FolderItem = self.ProjectFolder
+		  
+		  var tmp() as string = path.Split("/")
+		  
+		  for each t as string in tmp
+		    
+		    if fld <> nil and fld.Child(t).Exists then
+		      fld = fld.Child(t)
+		      
+		    else
+		      System.DebugLog("Cannot find " + t + " under " + fld.NativePath)
+		      fld = nil
+		      
+		    end if
+		    
+		  next
+		  
+		  var src() as string = LoadTextByLine(fld)
+		  
+		  for each t as string in src
+		    //
+		    // #tag Constant, Name = LibraryName, Type = String, Dynamic = False, Default = \"NiceLibrary", Scope = Protected
+		    //
+		    
+		    if t.IndexOf("Constant") >0 and t.indexof("EndConstant") < 0 then 
+		      var v1 as string = getValue(t, "Name")
+		      var v2 as string = getValue(t, "Default")
+		      results.Value(v1) = v2
+		      
+		    end if
+		    
+		    
+		  next
+		  
+		  return results
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function FullPath() As FolderItem
+		  
+		  var f as FolderItem = self.projectFolder
+		  
+		  var p() as string = self.relativePath.Split("/")
+		  
+		  for each s as string in p
+		    f = f.Child(s)
+		    
+		  next
+		  
+		  return f
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetloadedID() As int64
+		  Return self.loadedOwnID
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetloadedParentID() As int64
+		  Return self.loadedParentID
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetMatchingChildren(pKeyValue as string) As clXojoProjectSourceLine()
+		  var results() as clXojoProjectSourceLine
+		  
+		  for each item as clXojoProjectSourceLine in self.Children
+		    
+		    if item.isMatchingKey(pKeyValue) then
+		      results.Add(item)
+		      
+		    end if
+		    
+		  next
+		  
+		  return results
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetMatchingChildren(pKeyValue as string, pValue as string) As clXojoProjectSourceLine()
+		  var results() as clXojoProjectSourceLine
+		  
+		  for each item as clXojoProjectSourceLine in self.Children
+		    
+		    if  item.isMatchingKeyValue(pKeyValue, pValue) then
+		      results.Add(item)
+		      
+		    end if
+		    
+		  next
+		  
+		  return results
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetRelativePath() As String
+		  Return self.relativePath
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -84,15 +261,15 @@ Protected Class clXojoProjectSourceLine
 		    end if
 		    
 		    
-		    if (originalOwnID = updatedOwnID) and (originalParentID = updatedParentID) then
+		    if (loadedOwnID = updatedOwnID) and (loadedParentID = updatedParentID) then
 		      return self.source
 		      
 		    end if
 		    
 		    var tmp as string = self.source
 		    
-		    tmp = tmp.Replace(originalOwnIDStr, Hexa16(updatedOwnID))
-		    tmp = tmp.Replace(originalParentIDStr , Hexa16(updatedParentID))
+		    tmp = tmp.Replace(loadedOwnIDStr, Hexa16(updatedOwnID))
+		    tmp = tmp.Replace(loadedParentIDStr , Hexa16(updatedParentID))
 		    
 		    return tmp
 		    
@@ -188,33 +365,17 @@ Protected Class clXojoProjectSourceLine
 	#tag Method, Flags = &h21
 		Private Sub SetKeyValuesToDefault()
 		  
-		  self.originalOwnIDStr = ""
-		  self.originalOwnID = -1
+		  self.loadedOwnIDStr = ""
+		  self.loadedOwnID = -1
 		  self.updatedOwnID = -1
 		  
-		  self.originalParentIDStr = ""
-		  self.originalParentID = -1
+		  self.loadedParentIDStr = ""
+		  self.loadedParentID = -1
 		  self.updatedParentID = -1
 		  
 		  self.relativePath = ""
 		  
 		  Return
-		  
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub UpdateItemID(oldItemID as int64, newItemID as int64)
-		  
-		  if self.originalOwnID = oldItemID then
-		    self.updatedOwnID = newItemID
-		    
-		  end if
-		  
-		  if self.originalParentID = oldItemID then
-		    self.updatedParentID = newItemID
-		    
-		  end if
 		  
 		End Sub
 	#tag EndMethod
@@ -238,24 +399,24 @@ Protected Class clXojoProjectSourceLine
 		  //
 		  
 		  self.relativePath = ""
-		  self.originalOwnID = -1
-		  self.originalParentID = -1
+		  self.loadedOwnID = -1
+		  self.loadedParentID = -1
 		  
 		  if not self.isItemForTree then return
 		  
 		  if self.parameters.LastIndex >= 0 then self.relativePath = self.parameters(0)
 		  
 		  if self.parameters.LastIndex >= 1 then 
-		    self.originalOwnIDStr = self.parameters(1)
-		    self.originalOwnID = self.parameters(1).ToInt64
-		    self.updatedOwnID = self.originalOwnID
+		    self.loadedOwnIDStr = self.parameters(1)
+		    self.loadedOwnID = self.parameters(1).ToInt64
+		    self.updatedOwnID = self.loadedOwnID
 		    
 		  end if
 		  
 		  if self.parameters.LastIndex >= 2 then 
-		    self.originalParentIDStr = self.parameters(2)
-		    self.originalParentID = self.parameters(2).ToInt64
-		    self.updatedParentID = self.originalParentID
+		    self.loadedParentIDStr = self.parameters(2)
+		    self.loadedParentID = self.parameters(2).ToInt64
+		    self.updatedParentID = self.loadedParentID
 		    
 		  end if
 		  
@@ -266,11 +427,51 @@ Protected Class clXojoProjectSourceLine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub UpdateMatchingItemID(oldItemID as int64, newItemID as int64)
+		  
+		  if self.loadedOwnID = oldItemID then
+		    self.updatedOwnID = newItemID
+		    
+		  end if
+		  
+		  if self.loadedParentID = oldItemID then
+		    self.updatedParentID = newItemID
+		    
+		  end if
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub UpdateOwnID(newID as int64)
+		  self.updatedOwnID = newID
+		  
+		  Return
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub UpdateParentID(newID as int64)
+		  self.updatedParentID = newID
+		  
+		  Return
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub UpdateRelPath(prmRelPath as string)
 		  relativePath = prmRelPath
 		  
 		  Return
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function wasLoaded() As Boolean
+		  
+		  return self.loadedFromProject
+		  
+		End Function
 	#tag EndMethod
 
 
@@ -286,44 +487,48 @@ Protected Class clXojoProjectSourceLine
 		key As String
 	#tag EndProperty
 
-	#tag Property, Flags = &h0
-		loadedFromProject As Boolean
+	#tag Property, Flags = &h21
+		Private loadedFromProject As Boolean
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected loadedOwnID As int64
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private loadedOwnIDStr As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected loadedParentID As int64
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private loadedParentIDStr As string
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected parameters() As string
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		originalOwnID As int64
+		projectFolder As FolderItem
 	#tag EndProperty
 
-	#tag Property, Flags = &h0
-		originalOwnIDStr As String
+	#tag Property, Flags = &h1
+		Protected relativePath As String
 	#tag EndProperty
 
-	#tag Property, Flags = &h0
-		originalParentID As int64
+	#tag Property, Flags = &h1
+		Protected source As string
 	#tag EndProperty
 
-	#tag Property, Flags = &h0
-		originalParentIDStr As string
+	#tag Property, Flags = &h1
+		Protected updatedOwnID As int64
 	#tag EndProperty
 
-	#tag Property, Flags = &h0
-		parameters() As string
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		relativePath As String
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		source As string
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		updatedOwnID As int64
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		updatedParentID As int64
+	#tag Property, Flags = &h1
+		Protected updatedParentID As int64
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -405,7 +610,7 @@ Protected Class clXojoProjectSourceLine
 			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="originalOwnID"
+			Name="loadedOwnID"
 			Visible=false
 			Group="Behavior"
 			InitialValue=""
@@ -413,7 +618,7 @@ Protected Class clXojoProjectSourceLine
 			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="originalOwnIDStr"
+			Name="loadedOwnIDStr"
 			Visible=false
 			Group="Behavior"
 			InitialValue=""
@@ -421,7 +626,7 @@ Protected Class clXojoProjectSourceLine
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="originalParentID"
+			Name="loadedParentID"
 			Visible=false
 			Group="Behavior"
 			InitialValue=""
@@ -429,7 +634,7 @@ Protected Class clXojoProjectSourceLine
 			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="originalParentIDStr"
+			Name="loadedParentIDStr"
 			Visible=false
 			Group="Behavior"
 			InitialValue=""
@@ -445,11 +650,11 @@ Protected Class clXojoProjectSourceLine
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="updatedOwnID"
+			Name="loadedFromProject"
 			Visible=false
 			Group="Behavior"
 			InitialValue=""
-			Type="int64"
+			Type="Boolean"
 			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty

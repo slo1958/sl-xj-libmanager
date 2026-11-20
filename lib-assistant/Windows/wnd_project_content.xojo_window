@@ -1,5 +1,5 @@
 #tag DesktopWindow
-Begin DesktopWindow Window1
+Begin DesktopWindow wnd_project_content
    Backdrop        =   0
    BackgroundColor =   &cFFFFFF
    Composite       =   False
@@ -11,7 +11,7 @@ Begin DesktopWindow Window1
    HasMaximizeButton=   True
    HasMinimizeButton=   True
    HasTitleBar     =   True
-   Height          =   400
+   Height          =   468
    ImplicitInstance=   True
    MacProcID       =   0
    MaximumHeight   =   32000
@@ -21,42 +21,11 @@ Begin DesktopWindow Window1
    MinimumHeight   =   64
    MinimumWidth    =   64
    Resizeable      =   True
-   Title           =   "Untitled"
+   Title           =   "Libraries in project"
    Type            =   0
    Visible         =   True
-   Width           =   600
-   Begin DesktopButton Button1
-      AllowAutoDeactivate=   True
-      Bold            =   False
-      Cancel          =   False
-      Caption         =   "Button"
-      Default         =   False
-      Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
-      FontUnit        =   0
-      Height          =   20
-      Index           =   -2147483648
-      Italic          =   False
-      Left            =   20
-      LockBottom      =   False
-      LockedInPosition=   False
-      LockLeft        =   True
-      LockRight       =   False
-      LockTop         =   True
-      MacButtonStyle  =   0
-      Scope           =   0
-      TabIndex        =   0
-      TabPanelIndex   =   0
-      TabStop         =   True
-      Tooltip         =   ""
-      Top             =   20
-      Transparent     =   False
-      Underline       =   False
-      Visible         =   True
-      Width           =   80
-   End
-   Begin DesktopListBox ListBox1
+   Width           =   740
+   Begin DesktopListBox lb_libraries
       AllowAutoDeactivate=   True
       AllowAutoHideScrollbars=   True
       AllowExpandableRows=   False
@@ -79,7 +48,7 @@ Begin DesktopWindow Window1
       HasHorizontalScrollbar=   False
       HasVerticalScrollbar=   True
       HeadingIndex    =   -1
-      Height          =   156
+      Height          =   224
       Index           =   -2147483648
       InitialValue    =   ""
       Italic          =   False
@@ -100,11 +69,11 @@ Begin DesktopWindow Window1
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      Width           =   560
+      Width           =   700
       _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
-   Begin DesktopListBox ListBox2
+   Begin DesktopListBox lb_properties
       AllowAutoDeactivate=   True
       AllowAutoHideScrollbars=   True
       AllowExpandableRows=   False
@@ -144,18 +113,89 @@ Begin DesktopWindow Window1
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   228
+      Top             =   296
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      Width           =   560
+      Width           =   700
       _ScrollOffset   =   0
       _ScrollWidth    =   -1
+   End
+   Begin ccProjectPicker ccSourceProject
+      AllowAutoDeactivate=   True
+      AllowFocus      =   False
+      AllowFocusRing  =   False
+      AllowTabs       =   True
+      Backdrop        =   0
+      BackgroundColor =   &cFFFFFF
+      Composited      =   False
+      Enabled         =   True
+      HasBackgroundColor=   False
+      Height          =   40
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Scope           =   0
+      TabIndex        =   3
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   8
+      Transparent     =   False
+      Visible         =   True
+      Width           =   700
    End
 End
 #tag EndDesktopWindow
 
 #tag WindowCode
+	#tag Event
+		Sub Opening()
+		  ccSourceProject.Prepare("Select source" _
+		  , "Select the projet containing the libraries" _
+		  , app.GetConfiguration.XojoFolderBase _
+		  , app)
+		  
+		  lb_libraries.HeaderAt(0) = "Discovered libraries"
+		  
+		  lb_properties.ColumnCount = 2
+		  lb_properties.HeaderAt(0) = "Properties extracted from library information module"
+		  lb_properties.HeaderAt(1) = " "
+		  
+		  Return
+		  
+		End Sub
+	#tag EndEvent
+
+
+	#tag Method, Flags = &h0
+		Sub AnalyzeProject()
+		  
+		  var prj as clXojoProject = self.project
+		  
+		  var r() as clXojoProjectSourceLine = prj.FindLibraryHeads(prj.FindShareableFolder)
+		  
+		  lb_libraries.RemoveAllRows
+		  
+		  for each s as clXojoProjectSourceLine in r
+		    lb_libraries.AddRow(s.value)
+		    var d as Dictionary = prj.GetAllLibraryInformation(s.value, prj.FindShareableFolder())
+		    lb_libraries.RowTagAt(lb_libraries.LastAddedRowIndex) = d
+		    
+		    
+		  next
+		  
+		  
+		  return
+		End Sub
+	#tag EndMethod
+
+
 	#tag Property, Flags = &h21
 		Private project As clXojoProject
 	#tag EndProperty
@@ -163,51 +203,7 @@ End
 
 #tag EndWindowCode
 
-#tag Events Button1
-	#tag Event
-		Sub Pressed()
-		  var filename as string = "TestProject.xojo_project"
-		  
-		  var parentPath as string = "/Users/sergelouvet/LocalOnly/XojoDev/sl-xj-libmanager/test-Library-source-project"
-		  
-		  var fn as FolderItem = new FolderItem(parentPath)
-		  
-		  var prj as clXojoProject = new clXojoProject(fn, app)
-		  
-		  self.project = prj
-		  
-		  var r() as clXojoProjectSourceLine = prj.FindLibraryHeads(prj.FindShareableFolder)
-		  
-		  
-		  ListBox1.RemoveAllRows
-		  
-		  for each s as clXojoProjectSourceLine in r
-		    Listbox1.AddRow(s.value)
-		    var d as Dictionary = prj.GetAllLibraryInformation(s.value, prj.FindShareableFolder())
-		    Listbox1.RowTagAt(Listbox1.LastAddedRowIndex) = d
-		    
-		    
-		  next
-		  
-		  var srcID() as int64 = prj.GetAllItemID()
-		  
-		  var dummyID as integer = 100000
-		  
-		  
-		  for each v as int64 in srcID
-		    prj.UpdateItemID(v, dummyID)
-		    
-		    dummyID = dummyID + 1000
-		    
-		  next
-		  
-		  prj.saveAs("TestProject33.xojo_project")
-		  
-		  return
-		End Sub
-	#tag EndEvent
-#tag EndEvents
-#tag Events ListBox1
+#tag Events lb_libraries
 	#tag Event
 		Sub SelectionChanged()
 		  
@@ -220,14 +216,47 @@ End
 		  
 		  if r isa Dictionary then d = Dictionary(r)
 		  
-		  Listbox2.RemoveAllRows
+		  lb_properties.RemoveAllRows
 		  
 		  for each k as string in d.keys
-		    Listbox2.AddRow(k + "=" + d.Value(k))
+		    var newidx as integer 
+		    var newstd as Boolean = false
+		    
+		    lb_properties.addrow("")
+		    
+		    newidx = lb_properties.LastAddedRowIndex
+		    
+		    newstd = k = clXojoLibraryInfo.cstLibraryAuthor _
+		    or k = clXojoLibraryInfo.cstLibraryName _
+		    or k = clXojoLibraryInfo.cstLibraryVersion
+		    
+		    lb_properties.CellTextAt(newidx, 0) = k
+		    lb_properties.CellTextAt(newidx, 1) = d.Value(k)
+		    
+		    lb_properties.CellBoldAt(newidx, 1) = newstd
+		    
 		    
 		  next
 		  
 		  return
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events ccSourceProject
+	#tag Event
+		Sub TargetSelected()
+		  self.project = ccSourceProject.getSelectedProject
+		  
+		  AnalyzeProject
+		  
+		  return
+		  
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub ClearSelected()
+		  self.project = nil
 		  
 		End Sub
 	#tag EndEvent

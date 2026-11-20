@@ -1,6 +1,29 @@
 #tag Module
 Protected Module mdHelpers
 	#tag Method, Flags = &h0
+		Function CleanName(source as string) As string
+		  const chars as string = "_abcdefghijklmnopqrstuvwxyz"
+		  const numbers as string = "0123456789"
+		  
+		  var temp as string
+		  var isFirst as Boolean = true
+		  
+		  for each c as String in source.Characters
+		    if c = " " and temp.right(1) <> "_" then temp = temp + "_"
+		    if chars.IndexOf(c) >  -1 then temp = temp + c
+		    
+		    if not isFirst and numbers.IndexOf(c) > -1 then temp = temp + c
+		    
+		    isFirst = false
+		    
+		  next
+		  
+		  
+		  return temp
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function FixStr(c as string, n as integer) As string
 		  
 		  

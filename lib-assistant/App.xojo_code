@@ -5,6 +5,7 @@ Implements itfShareProgress
 	#tag Event
 		Sub Opening()
 		  
+		  
 		  self.Configuration = new clXojoSCAConfiguration(cstPrefFileName)
 		  
 		  call self.Configuration.Load()
@@ -14,6 +15,17 @@ Implements itfShareProgress
 		End Sub
 	#tag EndEvent
 
+
+	#tag MenuHandler
+		Function ActionsCheckproject() As Boolean Handles ActionsCheckproject.Action
+		  var w as new wnd_project_content
+		  
+		  w.show
+		  
+		  Return True
+		  
+		End Function
+	#tag EndMenuHandler
 
 	#tag MenuHandler
 		Function ActionsPreparealibraryproject() As Boolean Handles ActionsPreparealibraryproject.Action

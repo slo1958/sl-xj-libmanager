@@ -21,13 +21,13 @@ Begin DesktopWindow wnd_prepare_library
    MinimumHeight   =   64
    MinimumWidth    =   64
    Resizeable      =   True
-   Title           =   "Untitled"
+   Title           =   "Add required assets to a project"
    Type            =   0
    Visible         =   True
    Width           =   740
-   Begin DesktopLabel Label1
+   Begin DesktopLabel Lbl_info_1
       AllowAutoDeactivate=   True
-      Bold            =   False
+      Bold            =   True
       Enabled         =   True
       FontName        =   "System"
       FontSize        =   0.0
@@ -81,7 +81,7 @@ Begin DesktopWindow wnd_prepare_library
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   68
+      Top             =   52
       Transparent     =   False
       Visible         =   True
       Width           =   700
@@ -112,7 +112,7 @@ Begin DesktopWindow wnd_prepare_library
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   153
+      Top             =   181
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -152,7 +152,7 @@ Begin DesktopWindow wnd_prepare_library
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   153
+      Top             =   181
       Transparent     =   False
       Underline       =   False
       ValidationMask  =   ""
@@ -185,7 +185,7 @@ Begin DesktopWindow wnd_prepare_library
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   196
+      Top             =   224
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -225,7 +225,7 @@ Begin DesktopWindow wnd_prepare_library
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   196
+      Top             =   224
       Transparent     =   False
       Underline       =   False
       ValidationMask  =   ""
@@ -258,7 +258,7 @@ Begin DesktopWindow wnd_prepare_library
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   241
+      Top             =   269
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -298,20 +298,20 @@ Begin DesktopWindow wnd_prepare_library
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   241
+      Top             =   269
       Transparent     =   False
       Underline       =   False
       ValidationMask  =   ""
       Visible         =   True
       Width           =   285
    End
-   Begin DesktopButton Button1
+   Begin DesktopButton btn_update
       AllowAutoDeactivate=   True
       Bold            =   False
       Cancel          =   False
       Caption         =   "Update project"
       Default         =   False
-      Enabled         =   True
+      Enabled         =   False
       FontName        =   "System"
       FontSize        =   0.0
       FontUnit        =   0
@@ -336,10 +336,9 @@ Begin DesktopWindow wnd_prepare_library
       Visible         =   True
       Width           =   146
    End
-   Begin DesktopCheckBox CheckBox1
+   Begin DesktopLabel lbl_status
       AllowAutoDeactivate=   True
       Bold            =   False
-      Caption         =   "Backup original"
       Enabled         =   True
       FontName        =   "System"
       FontSize        =   0.0
@@ -353,17 +352,53 @@ Begin DesktopWindow wnd_prepare_library
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      Scope           =   2
-      TabIndex        =   9
+      Multiline       =   False
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   10
       TabPanelIndex   =   0
       TabStop         =   True
+      Text            =   "Untitled"
+      TextAlignment   =   0
+      TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   432
+      Top             =   344
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      VisualState     =   0
-      Width           =   178
+      Width           =   700
+   End
+   Begin DesktopLabel Lbl_info_2
+      AllowAutoDeactivate=   True
+      Bold            =   True
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Multiline       =   False
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   11
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   "This function helps you add the required assets to a Xojo project you want to use as a library"
+      TextAlignment   =   0
+      TextColor       =   &c000000
+      Tooltip         =   ""
+      Top             =   130
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   700
    End
 End
 #tag EndDesktopWindow
@@ -376,12 +411,93 @@ End
 		  , app.GetConfiguration.XojoFolderBase _
 		  , app)
 		  
+		  
+		  
+		  Lbl_info_1.text = "This function helps you add the required assets to a Xojo project you want to use as a library."
+		  Lbl_info_2.text = "Those information are used to populate the library information module."
 		End Sub
 	#tag EndEvent
 
 
+	#tag Method, Flags = &h0
+		Sub CheckReadyToUpdate()
+		  //
+		  // Check if we have a project defined and a proper name for the library
+		  // If ok then enable the 'update' button
+		  //
+		  var temp as string = CleanName( tf_lib_name.text.Trim)
+		  
+		  if temp.Length = 0 then btn_update.Enabled = false
+		  
+		  if ProjectInfo = nil then btn_update.Enabled = False
+		  
+		  btn_update.Enabled = true
+		  
+		  Return
+		  
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+
+	#tag Property, Flags = &h0
+		ProjectInfo As clXojoProject = nil
+	#tag EndProperty
+
+
 #tag EndWindowCode
 
+#tag Events ccSourceProject
+	#tag Event
+		Sub TargetSelected()
+		  ProjectInfo = ccSourceProject.getSelectedProject()
+		  CheckReadyToUpdate
+		End Sub
+	#tag EndEvent
+	#tag Event
+		Sub ClearSelected()
+		  ProjectInfo = nil
+		  CheckReadyToUpdate
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events tf_lib_name
+	#tag Event
+		Sub TextChanged()
+		  CheckReadyToUpdate()      
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events btn_update
+	#tag Event
+		Sub Pressed()
+		  
+		  var libInfo as new clXojoLibraryInfo(tf_lib_name.Text.Trim, "")
+		  
+		  libInfo.Author = tf_lib_author.text.Trim
+		  libInfo.Version = tf_lib_version.Text.Trim
+		  
+		  
+		  // This will update the project definition in memory and create required assets on disk
+		  var res as string =  ProjectInfo.AddAssetsForLibrary(libInfo, true)
+		  
+		  lbl_status.Text = res
+		  
+		  if res = ProjectInfo.cstOperationOK then
+		    ProjectInfo.Save()
+		    
+		    ProjectInfo.ReloadProject()
+		    
+		    lbl_status.Text = "Assets have been added to the project. You can now move the relevant project items in the new folder."
+		  end if
+		  
+		  
+		  Return
+		End Sub
+	#tag EndEvent
+#tag EndEvents
 #tag ViewBehavior
 	#tag ViewProperty
 		Name="Name"

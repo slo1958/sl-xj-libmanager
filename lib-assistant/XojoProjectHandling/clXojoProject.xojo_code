@@ -1,33 +1,155 @@
 #tag Class
 Protected Class clXojoProject
 	#tag Method, Flags = &h0
-		Sub AddAssetsForLibrary(info as clXojoLibraryInfo)
+		Function AddAssetsForLibrary(info as clXojoLibraryInfo, createOnDisk as Boolean) As string
 		  
 		  //  Folder=Shareable;Shareable;&h00000000455A6FFF;&h0000000000000000;false
 		  //  Folder=Library1;Shareable/Library1;&h0000000040A95FFF;&h00000000455A6FFF;false
 		  //  Module=LibraryInfo;Shareable/Library1/LibraryInfo.xojo_code;&h0000000052EA47FF;&h0000000040A95FFF;false
 		  
-		  
 		  // 
 		  // Add the Shareable folder if missing
 		  //
 		  
-		  var Sharehead as clXojoProjectSourceLine = self.FindShareableFolder
+		  
+		  var ShareHead as clXojoProjectSourceLine = self.FindShareableFolder
+		  var ShareHeadID as int64 = -1
+		  var ShareHeadRelPath as String
+		  var ShareHeadFld as FolderItem = nil
+		  
+		  var LibraryHead as clXojoProjectSourceLine = nil 
+		  var LibraryHeadID as int64 = -1
+		  var LibraryHeadRelPath as String
+		  var LibraryHeadFld As  FolderItem = nil
+		  
+		  var infoModule as clXojoProjectSourceLine = nil
+		  var infoModuleID as int64
+		  var infoModuleRelPath as string 
+		  var infoModuleFld as FolderItem = nil
+		  
+		  ShareHeadRelPath= clXojoProjectConstants.ShareableText 
+		  LibraryHeadRelPath   = clXojoProjectConstants.ShareableText + "/" + info.LibraryName()
+		  infoModuleRelPath  = clXojoProjectConstants.ShareableText + "/" + info.LibraryName() + "/" + info.DefaultModuleName + ".xojo_code"
+		  
 		  
 		  if Sharehead = nil then
 		    // Need to add the folder
 		    
-		    Sharehead = new clXojoProjectSourceLine("")
+		    ShareHeadID = GetNewID()
+		    Sharehead = new clXojoProjectSourceLine(self.ProjectFolder)
 		    Sharehead.UpdateKeyValue(clXojoProjectConstants.cstFolder, clXojoProjectConstants.ShareableText)
-		    Sharehead.UpdateRelPath(clXojoProjectConstants.ShareableText)
+		    Sharehead.UpdateRelPath(ShareHeadRelPath)
+		    Sharehead.UpdateOwnID(ShareHeadID)
+		    Sharehead.UpdateParentID(0)
 		    
+		    Self.SourceLines.Add(Sharehead)
 		    
+		    if createOnDisk then
+		      ShareHeadFld = Sharehead.FullPath
+		      ShareHeadFld.CreateFolder
+		      self.CreatedAssets.Add(ShareHeadFld)
+		      
+		    end if
 		    
+		  else
+		    ShareHeadID = Sharehead.GetloadedID
+		    ShareHeadFld = Sharehead.FullPath
 		    
 		  end if
 		  
 		  
-		End Sub
+		  //
+		  // Check if the Shareable folder contains a folder for the library
+		  //
+		  
+		  var candidates() as clXojoProjectSourceLine 
+		  
+		  candidates = Sharehead.GetMatchingChildren( clXojoProjectConstants.cstFolder, info.LibraryName())
+		  
+		  if candidates.Count = 0 then 
+		    LibraryHeadID = GetNewID()
+		    LibraryHead = new clXojoProjectSourceLine(self.ProjectFolder)
+		    LibraryHead.UpdateKeyValue(clXojoProjectConstants.cstFolder, info.LibraryName())
+		    LibraryHead.UpdateRelPath(LibraryHeadRelPath)
+		    LibraryHead.UpdateOwnID(LibraryHeadID)
+		    LibraryHead.UpdateParentID(ShareHeadID)
+		    
+		    if createOnDisk then
+		      LibraryHeadFld = LibraryHead.FullPath
+		      LibraryHeadFld.CreateFolder
+		      self.CreatedAssets.Add(LibraryHeadFld)
+		      
+		    end if
+		    
+		    Sharehead.AddItemToChildren(LibraryHead)
+		    Self.SourceLines.Add(LibraryHead)
+		    
+		    
+		  elseif candidates.Count = 1 then
+		    LibraryHead = candidates(0)
+		    LibraryHeadID = LibraryHead.GetloadedID
+		    
+		    LibraryHeadFld = LibraryHead.FullPath
+		    
+		  else
+		    
+		  end if
+		  
+		  //
+		  // Check if we have a module for the constants
+		  //
+		  
+		  if LibraryHead.wasLoaded then
+		    
+		    if createOnDisk then
+		      infoModule = new clXojoProjectSourceLine(self.ProjectFolder)
+		      
+		      infoModule.UpdateRelPath(infoModuleRelPath)
+		      
+		      var fld as FolderItem = infoModule.FullPath
+		      
+		      if fld.Exists then 
+		        // we are done here, the information module already exists, must be updated by the user
+		        return "Information module already defined."
+		        
+		      end if
+		      
+		      
+		    end if
+		    
+		  else
+		    infoModuleID = GetNewID()
+		    infoModule = new clXojoProjectSourceLine(self.ProjectFolder)
+		    infoModule.UpdateKeyValue(clXojoProjectConstants.cstModule, info.DefaultModuleName)
+		    infoModule.UpdateRelPath(infoModuleRelPath)
+		    infoModule.UpdateOwnID(infoModuleID)
+		    infoModule.UpdateParentID(LibraryHeadID)
+		    
+		    LibraryHead.AddItemToChildren(infoModule)
+		    Self.SourceLines.Add(infoModule)
+		    
+		    if createOnDisk then
+		      infoModuleFld = infoModule.FullPath
+		      
+		      call infoModule.CreateItemOnDisk(info.GetLibraryInfoModuleBody)
+		      
+		      self.CreatedAssets.Add(infoModuleFld)
+		      
+		    end if
+		    
+		    return cstOperationOK
+		    
+		  end if
+		  
+		  
+		  
+		  
+		  
+		  Return "Other error"
+		  
+		  
+		  
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -37,7 +159,7 @@ Protected Class clXojoProject
 		  
 		  for each s as clXojoProjectSourceLine in self.SourceLines
 		    if s.isItemForTree() then
-		      var key as int64 = s.OriginalOwnID
+		      var key as int64 = s.GetloadedID()
 		      
 		      self.LoadedItemIDDict.Value(key) = s
 		      
@@ -50,7 +172,7 @@ Protected Class clXojoProject
 		  
 		  for each k as int64 in self.LoadedItemIDDict.Keys
 		    var s as clXojoProjectSourceLine = self.LoadedItemIDDict.Value(k)
-		    var v2 as int64 = s.originalParentID
+		    var v2 as int64 = s.GetloadedParentID()
 		    
 		    var p as clXojoProjectSourceLine = self.LoadedItemIDDict.Lookup(v2, nil)
 		    
@@ -88,58 +210,6 @@ Protected Class clXojoProject
 		  
 		  Return
 		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function ExtractItemConstants(itemToProcess as clXojoProjectSourceLine) As Dictionary
-		  //
-		  // Extract the values of all constants from the item passed as parameter.
-		  // Normally used to extract the values defined in the library information module
-		  //
-		  
-		  var results as new Dictionary
-		  
-		  var path as string = itemToProcess.relativePath
-		  
-		  if path.Length = 0 then return results
-		  
-		  var fld as FolderItem = self.ProjectFolder
-		  
-		  var tmp() as string = path.Split("/")
-		  
-		  for each t as string in tmp
-		    
-		    if fld <> nil and fld.Child(t).Exists then
-		      fld = fld.Child(t)
-		      
-		    else
-		      System.DebugLog("Cannot find " + t + " under " + fld.NativePath)
-		      fld = nil
-		      
-		    end if
-		    
-		  next
-		  
-		  var src() as string = LoadTextByLine(fld)
-		  
-		  for each t as string in src
-		    //
-		    // #tag Constant, Name = LibraryName, Type = String, Dynamic = False, Default = \"NiceLibrary", Scope = Protected
-		    //
-		    
-		    if t.IndexOf("Constant") >0 and t.indexof("EndConstant") < 0 then 
-		      var v1 as string = getValue(t, "Name")
-		      var v2 as string = getValue(t, "Default")
-		      results.Value(v1) = v2
-		      
-		    end if
-		    
-		    
-		  next
-		  
-		  return results
-		  
-		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -213,7 +283,7 @@ Protected Class clXojoProject
 		  var results() as int64
 		  
 		  for each s as clXojoProjectSourceLine in self.SourceLines
-		    if results.IndexOf(s.originalOwnID) < 0 then results.Add(s.originalOwnID)
+		    if results.IndexOf(s.GetloadedID()) < 0 then results.Add(s.GetloadedID())
 		    
 		  next
 		  
@@ -270,7 +340,7 @@ Protected Class clXojoProject
 		    
 		  end if
 		  
-		  results = ExtractItemConstants(infomodule)
+		  results = infoModule.ExtractItemConstants
 		  
 		  return results
 		  
@@ -309,6 +379,34 @@ Protected Class clXojoProject
 		  
 		  return results
 		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetNewID() As int64
+		  
+		  var isUnique as Boolean = false
+		  
+		  var alloc as int64
+		  
+		  
+		  while not isUnique
+		    
+		    isUnique = true
+		    alloc = Random.UUID(false).ToInt64
+		    
+		    // Already used in project 
+		    if self.LoadedItemIDDict.HasKey(alloc) then isUnique = false
+		    
+		    // Already allocated
+		    if allocatedItemID.IndexOf(alloc) >= 0  then isUnique = false
+		    
+		  wend
+		  
+		  self.allocatedItemID.Add(alloc)
+		  
+		  return alloc
+		   
 		End Function
 	#tag EndMethod
 
@@ -363,7 +461,7 @@ Protected Class clXojoProject
 		  var s() as string = LoadTextByLine(projectFile)
 		  
 		  for each line as string in s
-		    var n as new clXojoProjectSourceLine(line)
+		    var n as new clXojoProjectSourceLine(self.ProjectFolder, line)
 		    
 		    Self.SourceLines.Add(n)
 		    
@@ -386,7 +484,39 @@ Protected Class clXojoProject
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub saveAs(destinationFileName as string)
+		Sub ReloadProject()
+		  self.allocatedItemID.RemoveAll
+		  self.DestintationProjectFile = nil
+		  self.ItemTreeHead = nil
+		  self.LoadedItemIDDict = new Dictionary
+		  self.SourceLines.RemoveAll
+		  self.CreatedAssets.RemoveAll
+		  
+		  self.sourceProjectFile = LocateProjectFile()
+		  
+		  ParseProjectFile(sourceProjectFile, Log)
+		  
+		  BuildTree()
+		  
+		  ParseTree()
+		  
+		  Return
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Save()
+		  
+		  
+		  self.SaveAs(self.sourceProjectFile.Name)
+		  
+		  Return
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub SaveAs(destinationFileName as string)
 		  
 		  self.DestintationProjectFile = self.ProjectFolder.Child(destinationFileName)
 		  
@@ -404,10 +534,10 @@ Protected Class clXojoProject
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub UpdateItemID(oldItemID as int64, newItemID as int64)
+		Sub UpdateMatchingItemID(oldItemID as int64, newItemID as int64)
 		  
 		  for each s as clXojoProjectSourceLine in self.SourceLines
-		    s.UpdateItemID(oldItemID, newItemID)
+		    s.UpdateMatchingItemID(oldItemID, newItemID)
 		    
 		  next
 		  
@@ -505,7 +635,11 @@ Protected Class clXojoProject
 
 
 	#tag Property, Flags = &h0
-		allocatedItemID As Integer
+		allocatedItemID() As Integer
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		CreatedAssets() As FolderItem
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -535,6 +669,10 @@ Protected Class clXojoProject
 	#tag Property, Flags = &h0
 		sourceProjectFile As FolderItem
 	#tag EndProperty
+
+
+	#tag Constant, Name = cstOperationOK, Type = String, Dynamic = False, Default = \"OK", Scope = Public
+	#tag EndConstant
 
 
 	#tag ViewBehavior

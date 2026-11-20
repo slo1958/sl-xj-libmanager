@@ -120,6 +120,22 @@ Begin Menu MainMenuBar
          AutoEnable = True
          Visible = True
       End
+      Begin DesktopMenuItem ActionsCheckproject
+         SpecialMenu = 0
+         Index = -2147483648
+         Text = "Check library project"
+         AutoEnabled = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin DesktopMenuItem UntitledSeparator
+         SpecialMenu = 0
+         Index = -2147483648
+         Text = "-"
+         AutoEnabled = True
+         AutoEnable = True
+         Visible = True
+      End
    End
    Begin DesktopMenuItem WindowMenu
       SpecialMenu = 0
@@ -148,6 +164,22 @@ Begin Menu MainMenuBar
          SpecialMenu = 0
          Index = -2147483648
          Text = "Settings"
+         AutoEnabled = True
+         AutoEnable = True
+         Visible = True
+      End
+   End
+   Begin DesktopMenuItem TestsMenu
+      SpecialMenu = 0
+      Index = -2147483648
+      Text = "Tests"
+      AutoEnabled = True
+      AutoEnable = True
+      Visible = True
+      Begin DesktopMenuItem TestsTest01
+         SpecialMenu = 0
+         Index = -2147483648
+         Text = "Test01"
          AutoEnabled = True
          AutoEnable = True
          Visible = True
