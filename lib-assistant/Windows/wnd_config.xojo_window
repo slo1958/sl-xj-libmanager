@@ -183,7 +183,7 @@ Begin DesktopWindow wnd_config
          TabIndex        =   2
          TabPanelIndex   =   1
          TabStop         =   True
-         Text            =   "Folder to store your Xojo projects"
+         Text            =   "Folder where you store your Xojo projects"
          TextAlignment   =   0
          TextColor       =   &c000000
          Tooltip         =   ""
@@ -191,7 +191,7 @@ Begin DesktopWindow wnd_config
          Transparent     =   False
          Underline       =   False
          Visible         =   True
-         Width           =   232
+         Width           =   437
       End
       Begin DesktopLabel Label2
          AllowAutoDeactivate=   True
@@ -239,7 +239,7 @@ Begin DesktopWindow wnd_config
          ColumnWidths    =   ""
          DefaultRowHeight=   -1
          DropIndicatorVisible=   False
-         Enabled         =   True
+         Enabled         =   False
          FontName        =   "System"
          FontSize        =   0.0
          FontUnit        =   0

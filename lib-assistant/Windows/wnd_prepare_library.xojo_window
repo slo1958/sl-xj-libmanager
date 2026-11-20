@@ -433,7 +433,6 @@ End
 		  
 		  if ProjectInfo = nil then res = False
 		  
-		  
 		  btn_update.Enabled = res
 		  
 		  Return
