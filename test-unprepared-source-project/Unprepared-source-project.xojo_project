@@ -64,3 +64,6 @@ PlistEntries={"root":""}
 AppCategory=
 AppSpecificPassword=
 MacUICompatibilityMode=False
+Folder=Shareable;Shareable;&h000000000000004E;&h0000000000000000;false
+Folder=Mylibrary;Shareable/Mylibrary;&h0000000000000041;&h000000000000004E;false
+Module=LibraryInfo_Mylibrary;Shareable/Mylibrary/LibraryInfo_Mylibrary.xojo_code;&h0000000000000165;&h0000000000000041;false

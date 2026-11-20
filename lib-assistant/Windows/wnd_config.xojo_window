@@ -25,7 +25,7 @@ Begin DesktopWindow wnd_config
    Type            =   0
    Visible         =   True
    Width           =   617
-   Begin DesktopButton Button2
+   Begin DesktopButton btn_save
       AllowAutoDeactivate=   True
       Bold            =   False
       Cancel          =   False
@@ -83,7 +83,7 @@ Begin DesktopWindow wnd_config
       Top             =   20
       Transparent     =   False
       Underline       =   False
-      Value           =   0
+      Value           =   1
       Visible         =   True
       Width           =   577
       Begin DesktopButton Button1
@@ -100,7 +100,7 @@ Begin DesktopWindow wnd_config
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          Italic          =   False
-         Left            =   383
+         Left            =   497
          LockBottom      =   False
          LockedInPosition=   False
          LockLeft        =   True
@@ -158,7 +158,7 @@ Begin DesktopWindow wnd_config
          Underline       =   False
          ValidationMask  =   ""
          Visible         =   True
-         Width           =   331
+         Width           =   437
       End
       Begin DesktopLabel Label1
          AllowAutoDeactivate=   True
@@ -249,7 +249,7 @@ Begin DesktopWindow wnd_config
          HasHorizontalScrollbar=   False
          HasVerticalScrollbar=   True
          HeadingIndex    =   -1
-         Height          =   200
+         Height          =   155
          Index           =   -2147483648
          InitialParent   =   "TabPanel1"
          InitialValue    =   ""
@@ -274,6 +274,81 @@ Begin DesktopWindow wnd_config
          Width           =   331
          _ScrollWidth    =   -1
       End
+      Begin DesktopLabel Label3
+         AllowAutoDeactivate=   True
+         Bold            =   False
+         Enabled         =   True
+         FontName        =   "System"
+         FontSize        =   0.0
+         FontUnit        =   0
+         Height          =   22
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   False
+         Left            =   47
+         LockBottom      =   False
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   False
+         LockTop         =   True
+         Multiline       =   False
+         Scope           =   0
+         Selectable      =   False
+         TabIndex        =   2
+         TabPanelIndex   =   2
+         TabStop         =   True
+         Text            =   "Default author"
+         TextAlignment   =   0
+         TextColor       =   &c000000
+         Tooltip         =   ""
+         Top             =   259
+         Transparent     =   False
+         Underline       =   False
+         Visible         =   True
+         Width           =   331
+      End
+      Begin DesktopTextField tf_default_author
+         AllowAutoDeactivate=   True
+         AllowFocusRing  =   True
+         AllowSpellChecking=   False
+         AllowTabs       =   False
+         BackgroundColor =   &cFFFFFF
+         Bold            =   False
+         Enabled         =   True
+         FontName        =   "System"
+         FontSize        =   0.0
+         FontUnit        =   0
+         Format          =   ""
+         HasBorder       =   True
+         Height          =   22
+         Hint            =   ""
+         Index           =   -2147483648
+         InitialParent   =   "TabPanel1"
+         Italic          =   False
+         Left            =   47
+         LockBottom      =   False
+         LockedInPosition=   False
+         LockLeft        =   True
+         LockRight       =   False
+         LockTop         =   True
+         MaximumCharactersAllowed=   0
+         Password        =   False
+         ReadOnly        =   False
+         Scope           =   0
+         TabIndex        =   3
+         TabPanelIndex   =   2
+         TabStop         =   True
+         Text            =   ""
+         TextAlignment   =   0
+         TextColor       =   &c000000
+         Tooltip         =   ""
+         Top             =   293
+         Transparent     =   False
+         Underline       =   False
+         ValidationMask  =   ""
+         Visible         =   True
+         Width           =   324
+      End
    End
 End
 #tag EndDesktopWindow
@@ -286,6 +361,7 @@ End
 		  
 		  
 		  tf_basepath.Text  = cfg.XojoFolderBase
+		  tf_default_author.Text = cfg.DefaultAuthor
 		  
 		  
 		End Sub
@@ -299,7 +375,7 @@ End
 
 #tag EndWindowCode
 
-#tag Events Button2
+#tag Events btn_save
 	#tag Event
 		Sub Pressed()
 		  
@@ -321,6 +397,21 @@ End
 		  
 		  tf_basepath.Text = f.NativePath
 		  self.cfg.XojoFolderBase = f.NativePath
+		  
+		  Return
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events tf_default_author
+	#tag Event
+		Sub TextChanged()
+		  
+		  var temp as string = tf_default_author.text.trim
+		  
+		  if temp = cfg.DefaultAuthor then Return
+		  
+		  cfg.DefaultAuthor = temp
 		  
 		  Return
 		  

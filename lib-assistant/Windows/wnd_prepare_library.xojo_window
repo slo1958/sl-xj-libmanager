@@ -412,6 +412,7 @@ End
 		  , app)
 		  
 		  
+		  tf_lib_author.text = app.GetConfiguration.DefaultAuthor
 		  
 		  Lbl_info_1.text = "This function helps you add the required assets to a Xojo project you want to use as a library."
 		  Lbl_info_2.text = "Those information are used to populate the library information module."
@@ -426,12 +427,14 @@ End
 		  // If ok then enable the 'update' button
 		  //
 		  var temp as string = CleanName( tf_lib_name.text.Trim)
+		  var res as Boolean  = true
 		  
-		  if temp.Length = 0 then btn_update.Enabled = false
+		  if temp.Length = 0 then res = false
 		  
-		  if ProjectInfo = nil then btn_update.Enabled = False
+		  if ProjectInfo = nil then res = False
 		  
-		  btn_update.Enabled = true
+		  
+		  btn_update.Enabled = res
 		  
 		  Return
 		  

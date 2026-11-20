@@ -100,6 +100,7 @@ Protected Class clXojoSCAConfiguration
 		  // save the main parameters
 		  
 		  src.WriteLine(cstKeyXojoBaseFolder + "=" + self.XojoFolderBase)
+		  src.WriteLine(cstKeyDefaultAuthor + "=" + self.DefaultAuthor)
 		  
 		  src.Close
 		  
@@ -112,7 +113,7 @@ Protected Class clXojoSCAConfiguration
 		Sub UpdateFrom(src as clXojoSCAConfiguration)
 		  
 		  self.XojoFolderBase = src.XojoFolderBase
-		  
+		  self.DefaultAuthor = src.DefaultAuthor
 		  
 		End Sub
 	#tag EndMethod
@@ -135,6 +136,9 @@ Protected Class clXojoSCAConfiguration
 		      self.mXojoFolderBase = value
 		      
 		      
+		    case cstKeyDefaultAuthor
+		      self.DefaultAuthor = value
+		      
 		    case else
 		      
 		    end Select
@@ -147,6 +151,10 @@ Protected Class clXojoSCAConfiguration
 		End Sub
 	#tag EndMethod
 
+
+	#tag Property, Flags = &h0
+		DefaultAuthor As string
+	#tag EndProperty
 
 	#tag Property, Flags = &h21
 		Private mXojoFolderBase As string
@@ -174,6 +182,9 @@ Protected Class clXojoSCAConfiguration
 		XojoFolderBase As string
 	#tag EndComputedProperty
 
+
+	#tag Constant, Name = cstKeyDefaultAuthor, Type = String, Dynamic = False, Default = \"DefaultAuthor", Scope = Public
+	#tag EndConstant
 
 	#tag Constant, Name = cstKeyXojoBaseFolder, Type = String, Dynamic = False, Default = \"XojoBaseFolder", Scope = Public
 	#tag EndConstant
