@@ -101,6 +101,7 @@ Begin DesktopWindow Window1
       Underline       =   False
       Visible         =   True
       Width           =   560
+      _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
    Begin DesktopListBox ListBox2
@@ -148,6 +149,7 @@ Begin DesktopWindow Window1
       Underline       =   False
       Visible         =   True
       Width           =   560
+      _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
 End
@@ -181,7 +183,7 @@ End
 		  
 		  for each s as clXojoProjectSourceLine in r
 		    Listbox1.AddRow(s.value)
-		     var d as Dictionary = prj.GetAllLibraryInformation(s.value, prj.FindShareableFolder())
+		    var d as Dictionary = prj.GetAllLibraryInformation(s.value, prj.FindShareableFolder())
 		    Listbox1.RowTagAt(Listbox1.LastAddedRowIndex) = d
 		    
 		    

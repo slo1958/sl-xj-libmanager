@@ -105,6 +105,22 @@ Begin Menu MainMenuBar
          Visible = True
       End
    End
+   Begin DesktopMenuItem ActionsMenu
+      SpecialMenu = 0
+      Index = -2147483648
+      Text = "Actions"
+      AutoEnabled = True
+      AutoEnable = True
+      Visible = True
+      Begin DesktopMenuItem ActionsPreparealibraryproject
+         SpecialMenu = 0
+         Index = -2147483648
+         Text = "Prepare a library project"
+         AutoEnabled = True
+         AutoEnable = True
+         Visible = True
+      End
+   End
    Begin DesktopMenuItem WindowMenu
       SpecialMenu = 0
       Index = -2147483648
@@ -120,6 +136,22 @@ Begin Menu MainMenuBar
       AutoEnabled = True
       AutoEnable = True
       Visible = True
+      Begin DesktopApplicationMenuItem HelpAbout
+         SpecialMenu = 0
+         Index = -2147483648
+         Text = "About..."
+         AutoEnabled = True
+         AutoEnable = True
+         Visible = True
+      End
+      Begin DesktopApplicationMenuItem HelpSettings
+         SpecialMenu = 0
+         Index = -2147483648
+         Text = "Settings"
+         AutoEnabled = True
+         AutoEnable = True
+         Visible = True
+      End
    End
 End
 #tag EndMenu

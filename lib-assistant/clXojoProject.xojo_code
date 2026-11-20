@@ -1,28 +1,58 @@
 #tag Class
 Protected Class clXojoProject
 	#tag Method, Flags = &h0
+		Sub AddAssetsForLibrary(info as clXojoLibraryInfo)
+		  
+		  //  Folder=Shareable;Shareable;&h00000000455A6FFF;&h0000000000000000;false
+		  //  Folder=Library1;Shareable/Library1;&h0000000040A95FFF;&h00000000455A6FFF;false
+		  //  Module=LibraryInfo;Shareable/Library1/LibraryInfo.xojo_code;&h0000000052EA47FF;&h0000000040A95FFF;false
+		  
+		  
+		  // 
+		  // Add the Shareable folder if missing
+		  //
+		  
+		  var Sharehead as clXojoProjectSourceLine = self.FindShareableFolder
+		  
+		  if Sharehead = nil then
+		    // Need to add the folder
+		    
+		    Sharehead = new clXojoProjectSourceLine("")
+		    Sharehead.UpdateKeyValue(clXojoProjectConstants.cstFolder, clXojoProjectConstants.ShareableText)
+		    Sharehead.UpdateRelPath(clXojoProjectConstants.ShareableText)
+		    
+		    
+		    
+		    
+		  end if
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub BuildTree()
 		  
-		  self.itemIDDict = new Dictionary
+		  self.LoadedItemIDDict = new Dictionary
 		  
 		  for each s as clXojoProjectSourceLine in self.SourceLines
 		    if s.isItemForTree() then
 		      var key as int64 = s.OriginalOwnID
 		      
-		      self.itemIDDict.Value(key) = s
+		      self.LoadedItemIDDict.Value(key) = s
 		      
 		    end if
 		    
 		  next
 		  
 		  self.ItemTreeHead = new clXojoProjectTreeHead
-		  self.itemIDDict.Value(0) = self.ItemTreeHead
+		  self.LoadedItemIDDict.Value(0) = self.ItemTreeHead
 		  
-		  for each k as int64 in self.itemIDDict.Keys
-		    var s as clXojoProjectSourceLine = self.itemIDDict.Value(k)
+		  for each k as int64 in self.LoadedItemIDDict.Keys
+		    var s as clXojoProjectSourceLine = self.LoadedItemIDDict.Value(k)
 		    var v2 as int64 = s.originalParentID
 		    
-		    var p as clXojoProjectSourceLine = self.itemIDDict.Lookup(v2, nil)
+		    var p as clXojoProjectSourceLine = self.LoadedItemIDDict.Lookup(v2, nil)
 		    
 		    if p <> nil then
 		      System.DebugLog("Adding " + s.key + "=" + s.value+" to " + p.key + " = " + p.value)
@@ -275,12 +305,7 @@ Protected Class clXojoProject
 		  // - LibraryVersion defaults to 'Unspecified'
 		  // 
 		  
-		  var results as new clXojoLibraryInfo
-		  
-		  results.Author = d.Lookup("LibraryAuthor", "Unknown")
-		  results.Name = d.Lookup("LibraryName", self.ProjectFolder.Name)
-		  results.Version = d.Lookup("LibraryVersion", "Unspecified")
-		  results.projName = self.ProjectFolder.Name
+		  var results as new clXojoLibraryInfo(d, self.ProjectFolder.Name)
 		  
 		  return results
 		  
@@ -404,6 +429,41 @@ Protected Class clXojoProject
 	#tag EndMethod
 
 
+	#tag Note, Name = Project With lib assets
+		
+		Type=Desktop
+		RBProjectVersion=2026.021
+		MinIDEVersion=20210300
+		OrigIDEVersion=20260201
+		DesktopWindow=Window2;Window2.xojo_window;&h000000007723DFFF;&h0000000000000000;false
+		Class=App;App.xojo_code;&h000000003B23C7FF;&h0000000000000000;false
+		DesktopWindow=Window1;Window1.xojo_window;&h00000000161367FF;&h0000000000000000;false
+		MenuBar=MainMenuBar;MainMenuBar.xojo_menu;&h000000003FDE07FF;&h0000000000000000;false
+		BuildSteps=Build Automation;Build Automation.xojo_code;&h00000000714877FF;&h0000000000000000;false
+		Folder=Shareable;Shareable;&h00000000455A6FFF;&h0000000000000000;false
+		Folder=Library1;Shareable/Library1;&h0000000040A95FFF;&h00000000455A6FFF;false
+		Module=mdBase;Shareable/Library1/mdBase.xojo_code;&h00000000694717FF;&h0000000040A95FFF;false
+		Class=clClass1;Shareable/Library1/clClass1.xojo_code;&h000000000BA74FFF;&h0000000040A95FFF;false
+		Class=clClass2;Shareable/Library1/clClass2.xojo_code;&h000000002033A7FF;&h0000000040A95FFF;false
+		DesktopWindow=Container1;Shareable/Library1/Container1.xojo_window;&h0000000018E94FFF;&h0000000040A95FFF;false
+		Module=LibraryInfo;Shareable/Library1/LibraryInfo.xojo_code;&h0000000052EA47FF;&h0000000040A95FFF;false
+		Folder=LibLoger;Shareable/LibLoger;&h0000000053617FFF;&h00000000455A6FFF;false
+		Module=ModRef;Shareable/LibLoger/ModRef.xojo_code;&h000000002918D7FF;&h0000000053617FFF;false
+		Class=clLoger;Shareable/LibLoger/clLoger.xojo_code;&h000000005A8C2FFF;&h0000000053617FFF;false
+		Module=LibraryInfo_log;Shareable/LibLoger/LibraryInfo_log.xojo_code;&h00000000376107FF;&h0000000053617FFF;false
+		Class=clClass2;Shareable/LibLoger/ModRef/clClass2.xojo_code;&h0000000078E94FFF;&h000000002918D7FF;false
+		Class=clClass3;Shareable/Library1/clClass3.xojo_code;&h000000006D2347FF;&h0000000040A95FFF;false
+		DefaultWindow=Window1
+		AppMenuBar=MainMenuBar
+		
+		
+		
+		Folder=Shareable;Shareable;&h00000000455A6FFF;&h0000000000000000;false
+		Folder=Library1;Shareable/Library1;&h0000000040A95FFF;&h00000000455A6FFF;false
+		Module=LibraryInfo;Shareable/Library1/LibraryInfo.xojo_code;&h0000000052EA47FF;&h0000000040A95FFF;false
+		
+	#tag EndNote
+
 	#tag Note, Name = XojoProjectFile
 		RBProjectVersion=2026.021
 		MinIDEVersion=20210300
@@ -437,19 +497,27 @@ Protected Class clXojoProject
 		
 		&h0000000000000000
 		XX12345678901234567
+		
+		
+		
+		Folder=XojoProjectInfo;XojoProjectInfo;&h0000000070EFF7FF;&h0000000000000000;false
 	#tag EndNote
 
+
+	#tag Property, Flags = &h0
+		allocatedItemID As Integer
+	#tag EndProperty
 
 	#tag Property, Flags = &h0
 		DestintationProjectFile As FolderItem
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		itemIDDict As Dictionary
+		ItemTreeHead As clXojoProjectSourceLine
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		ItemTreeHead As clXojoProjectSourceLine
+		LoadedItemIDDict As Dictionary
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -507,14 +575,6 @@ Protected Class clXojoProject
 			Visible=true
 			Group="Position"
 			InitialValue="0"
-			Type="Integer"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="ProjectFolder"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
 			Type="Integer"
 			EditorType=""
 		#tag EndViewProperty

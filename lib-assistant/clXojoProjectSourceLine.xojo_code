@@ -34,6 +34,22 @@ Protected Class clXojoProjectSourceLine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub Constructor()
+		  
+		  self.source = ""
+		  self.loadedFromProject = false
+		  
+		  self.isItemForTree = true
+		  
+		  self.SetKeyValuesToDefault()
+		  
+		  Return
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub Constructor(sourceLine as string)
 		  
 		  self.Source = sourceLine
@@ -42,46 +58,13 @@ Protected Class clXojoProjectSourceLine
 		  
 		  self.classify()
 		  
-		  self.ExtractKeyValues()
+		  self.SetKeyValuesToDefault()
+		  
+		  self.UpdateKeyValuesFromSource()
+		  
+		  self.loadedFromProject = true
 		  
 		  Return
-		  
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub ExtractKeyValues()
-		  //
-		  // item for tree should have at least three parameters:
-		  // the relative path to the source file
-		  // the item ID
-		  // the parent item ID
-		  //
-		  
-		  self.relativePath = ""
-		  self.originalOwnID = -1
-		  self.originalParentID = -1
-		  
-		  if not self.isItemForTree then return
-		  
-		  if self.parameters.LastIndex >= 0 then self.relativePath = self.parameters(0)
-		  
-		  if self.parameters.LastIndex >= 1 then 
-		    self.originalOwnIDStr = self.parameters(1)
-		    self.originalOwnID = self.parameters(1).ToInt64
-		     self.updatedOwnID = self.originalOwnID
-		    
-		  end if
-		  
-		  if self.parameters.LastIndex >= 2 then 
-		    self.originalParentIDStr = self.parameters(2)
-		    self.originalParentID = self.parameters(2).ToInt64
-		    self.updatedParentID = self.originalParentID
-		    
-		  end if
-		  
-		  Return
-		  
 		  
 		End Sub
 	#tag EndMethod
@@ -89,23 +72,52 @@ Protected Class clXojoProjectSourceLine
 	#tag Method, Flags = &h0
 		Function getSourceLine(doUpdate as Boolean) As string
 		  
-		  if not self.isItemForTree then
-		    return self.source
+		  if self.loadedFromProject then
+		    //
+		    // here we write a line loaded from a Xojo project file
+		    // A correct layout is available
+		    // We may have to update the ownID and the parentID
+		    //
+		    if not self.isItemForTree then
+		      return self.source
+		      
+		    end if
+		    
+		    
+		    if (originalOwnID = updatedOwnID) and (originalParentID = updatedParentID) then
+		      return self.source
+		      
+		    end if
+		    
+		    var tmp as string = self.source
+		    
+		    tmp = tmp.Replace(originalOwnIDStr, Hexa16(updatedOwnID))
+		    tmp = tmp.Replace(originalParentIDStr , Hexa16(updatedParentID))
+		    
+		    return tmp
+		    
+		  else
+		    // 
+		    // Here we create a line from scratch
+		    //
+		    
+		    if not self.isItemForTree then return "" // Unsupported
+		    
+		    //
+		    // Here, we should have a key, a value, a valid relative path, valid ownID, valid parentID
+		    //
+		    var lineitems() as string
+		    
+		    lineitems.Add(key + "=" + value)
+		    lineitems.Add(relativePath)
+		    lineitems.Add(Hexa16(updatedOwnID))
+		    lineitems.Add(Hexa16(updatedParentID))
+		    lineitems.Add("false") // all those items have a 'false' mark at the end
+		    
+		    Return String.FromArray(lineitems, ";")
 		    
 		  end if
 		  
-		  
-		  if (originalOwnID = updatedOwnID) and (originalParentID = updatedParentID) then
-		    return self.source
-		    
-		  end if
-		  
-		  var tmp as string = self.source
-		  
-		  tmp = tmp.Replace(originalOwnIDStr, Hexa16(updatedOwnID))
-		  tmp = tmp.Replace(originalParentIDStr , Hexa16(updatedParentID))
-		  
-		  return tmp
 		  
 		  
 		End Function
@@ -173,6 +185,24 @@ Protected Class clXojoProjectSourceLine
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h21
+		Private Sub SetKeyValuesToDefault()
+		  
+		  self.originalOwnIDStr = ""
+		  self.originalOwnID = -1
+		  self.updatedOwnID = -1
+		  
+		  self.originalParentIDStr = ""
+		  self.originalParentID = -1
+		  self.updatedParentID = -1
+		  
+		  self.relativePath = ""
+		  
+		  Return
+		  
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub UpdateItemID(oldItemID as int64, newItemID as int64)
 		  
@@ -189,6 +219,60 @@ Protected Class clXojoProjectSourceLine
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Sub UpdateKeyValue(prmKey as string, prmValue as string)
+		  key = prmKey
+		  value = prmValue
+		  
+		  Return
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h21
+		Private Sub UpdateKeyValuesFromSource()
+		  //
+		  // item for tree should have at least three parameters:
+		  // the relative path to the source file
+		  // the item ID
+		  // the parent item ID
+		  //
+		  
+		  self.relativePath = ""
+		  self.originalOwnID = -1
+		  self.originalParentID = -1
+		  
+		  if not self.isItemForTree then return
+		  
+		  if self.parameters.LastIndex >= 0 then self.relativePath = self.parameters(0)
+		  
+		  if self.parameters.LastIndex >= 1 then 
+		    self.originalOwnIDStr = self.parameters(1)
+		    self.originalOwnID = self.parameters(1).ToInt64
+		    self.updatedOwnID = self.originalOwnID
+		    
+		  end if
+		  
+		  if self.parameters.LastIndex >= 2 then 
+		    self.originalParentIDStr = self.parameters(2)
+		    self.originalParentID = self.parameters(2).ToInt64
+		    self.updatedParentID = self.originalParentID
+		    
+		  end if
+		  
+		  Return
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub UpdateRelPath(prmRelPath as string)
+		  relativePath = prmRelPath
+		  
+		  Return
+		End Sub
+	#tag EndMethod
+
 
 	#tag Property, Flags = &h0
 		Children() As clXojoProjectSourceLine
@@ -200,6 +284,10 @@ Protected Class clXojoProjectSourceLine
 
 	#tag Property, Flags = &h0
 		key As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		loadedFromProject As Boolean
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -298,7 +386,7 @@ Protected Class clXojoProjectSourceLine
 			Group="Behavior"
 			InitialValue=""
 			Type="String"
-			EditorType=""
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="value"
@@ -306,7 +394,7 @@ Protected Class clXojoProjectSourceLine
 			Group="Behavior"
 			InitialValue=""
 			Type="string"
-			EditorType=""
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="isItemForTree"
@@ -314,6 +402,62 @@ Protected Class clXojoProjectSourceLine
 			Group="Behavior"
 			InitialValue=""
 			Type="Boolean"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="originalOwnID"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="int64"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="originalOwnIDStr"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="originalParentID"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="int64"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="originalParentIDStr"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="string"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="relativePath"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="String"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="updatedOwnID"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="int64"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="updatedParentID"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="int64"
 			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior

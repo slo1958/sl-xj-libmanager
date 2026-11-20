@@ -104,6 +104,21 @@ Protected Module mdHelpers
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function ReplacePlaceholders(template as string, paramarray v as string) As string
+		  
+		  var results as string = template
+		  
+		  for i as integer = 0 to v.LastIndex
+		    results = results.ReplaceAll("%" + i.ToString, v(i))
+		    
+		  next
+		  
+		  Return results
+		  
+		End Function
+	#tag EndMethod
+
 
 	#tag ViewBehavior
 		#tag ViewProperty

@@ -125,14 +125,49 @@ End
 
 #tag WindowCode
 	#tag Method, Flags = &h0
-		Sub Prepare(ButtonLabel as string, Message as string, log as itfShareProgress)
+		Function getSelectedProject() As clXojoProject
+		  return self.selectedProject
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Prepare(ButtonLabel as string, Message as string, baseFolder as string, log as itfShareProgress)
 		  self.DefaultXForText = lbl_Target.left
 		  self.TextForButton = ButtonLabel
 		  self.TextForLabel = Message
 		  self.LogWriter = log
 		  
+		  var defaultFolder as FolderItem
+		  
+		  #If Not TargetLinux Then
+		    defaultFolder = SpecialFolder.Documents
+		    
+		  #Else ' open Home directory on linux
+		    defaultFolder= SpecialFolder.Home
+		    
+		  #EndIf
+		  
+		  try
+		    var f as FolderItem = new FolderItem(baseFolder)
+		    
+		    if f.Exists and f.IsFolder then
+		      parentPath = f
+		      
+		    else
+		      parentPath = defaultFolder
+		      
+		    end if
+		    
+		  Catch
+		    parentPath = defaultFolder
+		    
+		  end try
+		  
 		  btn_selectTarget.Caption = ButtonLabel
 		  UpdateTargetSelectionUI(nil)
+		  
+		  
 		  
 		  
 		End Sub
@@ -146,13 +181,7 @@ End
 		  dlg.Title = "Title Property"
 		  dlg.PromptText = "Select the folder containing the project"
 		  
-		  #If Not TargetLinux Then
-		    dlg.InitialFolder = SpecialFolder.Documents
-		    
-		  #Else ' open Home directory on linux
-		    dlg.InitialFolder = SpecialFolder.Home
-		    
-		  #EndIf
+		  dlg.InitialFolder = self.parentPath
 		  
 		  Var f As FolderItem = dlg.ShowModal
 		  
@@ -161,7 +190,6 @@ End
 		  var p as new clXojoProject(f, LogWriter)
 		  
 		  return p
-		  
 		  
 		  
 		End Function
@@ -175,14 +203,16 @@ End
 		    lbl_Target.text = self.TextForLabel
 		    btn_selectTarget.Visible = true
 		    btn_ClearTarget.Visible = false
+		    
 		    self.selectedProject = nil
 		    
 		  else
-		    self.lbl_Target.text = SelectedTarget.ProjectFolder.Name
-		    self.selectedProject = SelectedTarget
+		    lbl_Target.text = SelectedTarget.ProjectFolder.Name
 		    btn_selectTarget.Visible = false
 		    btn_ClearTarget.Visible = true
 		    self.lbl_Target.left = btn_selectTarget.Left+1
+		    
+		    self.selectedProject = SelectedTarget
 		    
 		  end if
 		  
@@ -208,28 +238,32 @@ End
 	#tag EndHook
 
 
-	#tag Property, Flags = &h0
-		DefaultXForText As Integer
+	#tag Property, Flags = &h21
+		Private DefaultXForText As Integer
 	#tag EndProperty
 
-	#tag Property, Flags = &h0
-		IdForCallback As Integer
+	#tag Property, Flags = &h21
+		Private IdForCallback As Integer
 	#tag EndProperty
 
-	#tag Property, Flags = &h0
-		LogWriter As itfShareProgress
+	#tag Property, Flags = &h21
+		Private LogWriter As itfShareProgress
 	#tag EndProperty
 
-	#tag Property, Flags = &h0
-		selectedProject As clXojoProject
+	#tag Property, Flags = &h21
+		Private parentPath As FolderItem
 	#tag EndProperty
 
-	#tag Property, Flags = &h0
-		TextForButton As String
+	#tag Property, Flags = &h21
+		Private selectedProject As clXojoProject
 	#tag EndProperty
 
-	#tag Property, Flags = &h0
-		TextForLabel As String
+	#tag Property, Flags = &h21
+		Private TextForButton As String
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private TextForLabel As String
 	#tag EndProperty
 
 
@@ -478,38 +512,6 @@ End
 		Group="Window Behavior"
 		InitialValue="False"
 		Type="Boolean"
-		EditorType=""
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="TextForButton"
-		Visible=false
-		Group="Behavior"
-		InitialValue=""
-		Type="String"
-		EditorType="MultiLineEditor"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="TextForLabel"
-		Visible=false
-		Group="Behavior"
-		InitialValue=""
-		Type="String"
-		EditorType="MultiLineEditor"
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="DefaultXForText"
-		Visible=false
-		Group="Behavior"
-		InitialValue=""
-		Type="Integer"
-		EditorType=""
-	#tag EndViewProperty
-	#tag ViewProperty
-		Name="IdForCallback"
-		Visible=false
-		Group="Behavior"
-		InitialValue=""
-		Type="Integer"
 		EditorType=""
 	#tag EndViewProperty
 #tag EndViewBehavior

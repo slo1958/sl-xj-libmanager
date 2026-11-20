@@ -1,15 +1,15 @@
 #tag Module
 Protected Module LibraryInfo
-	#tag Constant, Name = CreativeAddition, Type = String, Dynamic = False, Default = \"to-test-attributes", Scope = Protected
+	#tag Constant, Name = CreativeAddition, Type = String, Dynamic = False, Default = \"to-test-attributes", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = LibraryAuthor, Type = String, Dynamic = False, Default = \"MySelf", Scope = Protected
+	#tag Constant, Name = LibraryAuthor, Type = String, Dynamic = False, Default = \"MySelf", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = LibraryName, Type = String, Dynamic = False, Default = \"NiceLibrary", Scope = Protected
+	#tag Constant, Name = LibraryName, Type = String, Dynamic = False, Default = \"NiceLibrary", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = SomethingElse, Type = String, Dynamic = False, Default = \"No idea", Scope = Protected
+	#tag Constant, Name = SomethingElse, Type = String, Dynamic = False, Default = \"No idea", Scope = Public
 	#tag EndConstant
 
 

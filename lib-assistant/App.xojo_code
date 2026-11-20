@@ -2,6 +2,50 @@
 Protected Class App
 Inherits DesktopApplication
 Implements itfShareProgress
+	#tag Event
+		Sub Opening()
+		  
+		  self.Configuration = new clXojoSCAConfiguration(cstPrefFileName)
+		  
+		  call self.Configuration.Load()
+		  
+		  
+		  
+		End Sub
+	#tag EndEvent
+
+
+	#tag MenuHandler
+		Function ActionsPreparealibraryproject() As Boolean Handles ActionsPreparealibraryproject.Action
+		  var w as new wnd_prepare_library
+		  
+		  w.show
+		  
+		  Return True
+		  
+		End Function
+	#tag EndMenuHandler
+
+	#tag MenuHandler
+		Function HelpSettings() As Boolean Handles HelpSettings.Action
+		  
+		  var w as new wnd_config
+		  w.Show
+		  
+		  Return True
+		  
+		End Function
+	#tag EndMenuHandler
+
+
+	#tag Method, Flags = &h0
+		Function GetConfiguration() As clXojoSCAConfiguration
+		  
+		  return self.Configuration
+		  
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h0
 		Sub ShareStatus(MsgTime as string, MsgText as string)
 		  // Part of the itfShareProgress interface.
@@ -11,6 +55,14 @@ Implements itfShareProgress
 		End Sub
 	#tag EndMethod
 
+
+	#tag Property, Flags = &h21
+		Private Configuration As clXojoSCAConfiguration
+	#tag EndProperty
+
+
+	#tag Constant, Name = cstPrefFileName, Type = String, Dynamic = False, Default = \"XSCLibraryAssistant.txt", Scope = Public
+	#tag EndConstant
 
 	#tag Constant, Name = kEditClear, Type = String, Dynamic = False, Default = \"&Delete", Scope = Public
 		#Tag Instance, Platform = Windows, Language = Default, Definition  = \"&Delete"
