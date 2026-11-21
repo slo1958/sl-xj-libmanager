@@ -173,6 +173,17 @@ End
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Sub Reset()
+		  
+		  UpdateTargetSelectionUI(nil)
+		  
+		  ClearSelected()
+		  
+		  
+		End Sub
+	#tag EndMethod
+
 	#tag Method, Flags = &h21
 		Private Function SelectProject() As clXojoProject
 		  Var dlg As New SelectFolderDialog

@@ -326,7 +326,7 @@ Begin DesktopWindow wnd_transfer
       FontUnit        =   0
       GridLineStyle   =   0
       HasBorder       =   True
-      HasHeader       =   True
+      HasHeader       =   False
       HasHorizontalScrollbar=   False
       HasVerticalScrollbar=   True
       HeadingIndex    =   -1
@@ -472,14 +472,14 @@ Begin DesktopWindow wnd_transfer
       TabIndex        =   12
       TabPanelIndex   =   0
       TabStop         =   True
-      Text            =   "Untitled"
+      Text            =   "-"
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
       Top             =   587
       Transparent     =   False
       Underline       =   False
-      Visible         =   False
+      Visible         =   True
       Width           =   357
    End
 End
@@ -492,6 +492,14 @@ End
 		  , "Select the projet containing the libraries" _
 		  , app.GetConfiguration.XojoFolderBase _
 		  , app)
+		  
+		  
+		  ccDestinationProject.Prepare("Select destination" _
+		  , "Select the projet requiring the libraries" _
+		  , app.GetConfiguration.XojoFolderBase _
+		  , app)
+		  
+		  
 		  
 		  lb_src_libraries.ColumnCount = 5
 		  
@@ -525,6 +533,18 @@ End
 		Sub CheckReadyToTransfer()
 		  
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function DuplicateOk() As Boolean
+		  
+		  if SourceProject = nil then return true
+		  if DestinationProject = nil then return true
+		  
+		  return not (SourceProject.ProjectFolder.NativePath = DestinationProject.ProjectFolder.NativePath)
+		  
+		  
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -600,7 +620,18 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub Untitled()
+		Sub ResetCheckboxes()
+		  
+		  
+		  
+		  for each lb as DesktopListBox in array( lb_src_libraries , lb_dst_libraries)
+		    for i as integer = 0 to  lb.LastRowIndex
+		      lb.CellCheckBoxValueAt(i, 4) = false
+		      
+		      
+		    next
+		    
+		  next
 		  
 		End Sub
 	#tag EndMethod
@@ -652,12 +683,12 @@ End
 		  
 		  lb = lb_src_libraries 
 		  
-		  
 		  for i as integer = 0 to  lb.LastRowIndex
 		    var chk as Boolean = lb.CellCheckBoxValueAt(i, 4)
 		    var nam as String = lb.CellTextAt(i,0)
 		    
 		    if chk then 
+		      lb_actions.AddRow("Transfer " + nam)
 		      LibraryToMove.Add(nam)
 		      
 		    end if
@@ -690,6 +721,8 @@ End
 		    
 		  end if
 		  
+		  ResetCheckboxes
+		  
 		  lb_actions.RemoveAllRows
 		  
 		  LibraryToMove.RemoveAll
@@ -697,6 +730,20 @@ End
 		  ExtractDestinationInfo
 		  
 		  return
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub UpdateUI()
+		  
+		  if SourceProject = nil then lb_src_libraries.RemoveAllRows
+		  if DestinationProject = nil then lb_dst_libraries.RemoveAllRows
+		  
+		  
+		  lb_actions.RemoveAllRows
+		  lb_res.Text = "" 
 		  
 		  
 		End Sub
@@ -727,14 +774,26 @@ End
 		Sub TargetSelected()
 		  SourceProject = ccSourceProject.getSelectedProject()
 		  
-		  ExtractSourceInfo
+		  if DuplicateOk() then
+		    ExtractSourceInfo
+		    
+		  else
+		    ccSourceProject.Reset
+		    
+		  end if
 		  
 		  Return
+		  
+		  
+		  
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Sub ClearSelected()
 		  SourceProject = nil
+		  
+		  UpdateUI
+		  
 		  CheckReadyToTransfer
 		  
 		End Sub
@@ -753,7 +812,13 @@ End
 		Sub TargetSelected()
 		  DestinationProject = ccDestinationProject.getSelectedProject()
 		  
-		  ExtractDestinationInfo
+		  if DuplicateOk() then
+		    ExtractDestinationInfo
+		    
+		  else
+		    ccDestinationProject.Reset
+		    
+		  end if
 		  
 		  Return
 		End Sub
@@ -761,6 +826,9 @@ End
 	#tag Event
 		Sub ClearSelected()
 		  DestinationProject = nil
+		  
+		  UpdateUI
+		  
 		  CheckReadyToTransfer
 		  
 		End Sub
