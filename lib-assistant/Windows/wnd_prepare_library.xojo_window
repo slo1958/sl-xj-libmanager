@@ -400,6 +400,38 @@ Begin DesktopWindow wnd_prepare_library
       Visible         =   True
       Width           =   700
    End
+   Begin DesktopLabel Label6
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   30
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   200
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Multiline       =   True
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   12
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   "If the project is open in the IDE, make sure you save all changes before proceeding."
+      TextAlignment   =   3
+      TextColor       =   &c000000
+      Tooltip         =   ""
+      Top             =   104
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   520
+   End
 End
 #tag EndDesktopWindow
 

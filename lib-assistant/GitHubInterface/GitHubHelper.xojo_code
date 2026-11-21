@@ -43,6 +43,48 @@ Protected Module GitHubHelper
 	#tag EndMethod
 
 
+	#tag Note, Name = Untitled
+		
+		//
+		// For a GitHub repo, there's a zip at https://github.com/<user>/<repo>/archive/<branch>.zip, 
+		// so you can download it with:
+		// wget https://github.com/<user>/<repo>/archive/<branch>.zip
+		//
+		//
+		// GH_USER=REPLACE_WITH_USER \
+		// GH_REPO=REPLACE_WITH_REPO \
+		// GH_BRANCH=REPLACE_WITH_BRANCH \
+		// wget https://github.com/${GH_USER}/${GH_REPO}/archive/refs/tags/${GH_BRANCH}.zip \
+		// -O "${GH_REPO}-${GH_BRANCH}.zip" && \ 
+		// unzip ./"${GH_REPO}-${GH_BRANCH}.zip" && \
+		// rm ./"${GH_REPO}-${GH_BRANCH}.zip"
+		
+		
+		
+		var GH_RepoOwner as string = "slo1958"
+		var GH_RepoName as string = "sl-xj-lib-loging"
+		var GH_RepoBranch as string = "BaseVersion2026"
+		
+		
+		var repo_url as string = "https://github.com/${GH_USER}/${GH_REPO}/archive/refs/tags/${GH_BRANCH}.zip"
+		
+		repo_url = repo_url.ReplaceAll("${GH_USER}", GH_RepoOwner)
+		repo_url = repo_url.ReplaceAll("${GH_REPO}", GH_RepoName)
+		repo_url = repo_url.ReplaceAll("${GH_BRANCH}", GH_RepoBranch)
+		
+		repo_url = "https://github.com/slo1958/sl-xj-lib-loging/tags"
+		repo_url = "https://github.com/slo1958/sl-xj-lib-data/tags"
+		
+		System.DebugLog(repo_url)
+		
+		URLConnection1.Send("GET",repo_url)
+		
+		
+		
+		
+	#tag EndNote
+
+
 	#tag ViewBehavior
 		#tag ViewProperty
 			Name="Name"
