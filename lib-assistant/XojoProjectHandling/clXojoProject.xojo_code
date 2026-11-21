@@ -38,14 +38,14 @@ Protected Class clXojoProject
 		    ShareHeadID = GetNewID()
 		    Sharehead = new clXojoProjectSourceLine(self.ProjectFolder)
 		    Sharehead.UpdateKeyValue(clXojoProjectConstants.cstFolder, clXojoProjectConstants.ShareableText)
-		    Sharehead.UpdateRelPath(ShareHeadRelPath)
+		    Sharehead.UpdateRelativePath(ShareHeadRelPath)
 		    Sharehead.UpdateOwnID(ShareHeadID)
 		    Sharehead.UpdateParentID(0)
 		    
 		    Self.SourceLines.Add(Sharehead)
 		    
 		    if createOnDisk then
-		      ShareHeadFld = Sharehead.FullPath
+		      ShareHeadFld = Sharehead.UpdatedFullPath
 		      ShareHeadFld.CreateFolder
 		      self.CreatedAssets.Add(ShareHeadFld)
 		      
@@ -70,12 +70,12 @@ Protected Class clXojoProject
 		    LibraryHeadID = GetNewID()
 		    LibraryHead = new clXojoProjectSourceLine(self.ProjectFolder)
 		    LibraryHead.UpdateKeyValue(clXojoProjectConstants.cstFolder, info.LibraryName())
-		    LibraryHead.UpdateRelPath(LibraryHeadRelPath)
+		    LibraryHead.UpdateRelativePath(LibraryHeadRelPath)
 		    LibraryHead.UpdateOwnID(LibraryHeadID)
 		    LibraryHead.UpdateParentID(ShareHeadID)
 		    
 		    if createOnDisk then
-		      LibraryHeadFld = LibraryHead.FullPath
+		      LibraryHeadFld = LibraryHead.UpdatedFullPath
 		      LibraryHeadFld.CreateFolder
 		      self.CreatedAssets.Add(LibraryHeadFld)
 		      
@@ -104,9 +104,9 @@ Protected Class clXojoProject
 		    if createOnDisk then
 		      infoModule = new clXojoProjectSourceLine(self.ProjectFolder)
 		      
-		      infoModule.UpdateRelPath(infoModuleRelPath)
+		      infoModule.UpdateRelativePath(infoModuleRelPath)
 		      
-		      var fld as FolderItem = infoModule.FullPath
+		      var fld as FolderItem = infoModule.UpdatedFullPath
 		      
 		      if fld.Exists then 
 		        // we are done here, the information module already exists, must be updated by the user
@@ -121,7 +121,7 @@ Protected Class clXojoProject
 		    infoModuleID = GetNewID()
 		    infoModule = new clXojoProjectSourceLine(self.ProjectFolder)
 		    infoModule.UpdateKeyValue(clXojoProjectConstants.cstModule, info.DefaultModuleName)
-		    infoModule.UpdateRelPath(infoModuleRelPath)
+		    infoModule.UpdateRelativePath(infoModuleRelPath)
 		    infoModule.UpdateOwnID(infoModuleID)
 		    infoModule.UpdateParentID(LibraryHeadID)
 		    
@@ -129,7 +129,7 @@ Protected Class clXojoProject
 		    Self.SourceLines.Add(infoModule)
 		    
 		    if createOnDisk then
-		      infoModuleFld = infoModule.FullPath
+		      infoModuleFld = infoModule.UpdatedFullPath
 		      
 		      call infoModule.CreateItemOnDisk(info.GetLibraryInfoModuleBody)
 		      
@@ -406,7 +406,7 @@ Protected Class clXojoProject
 		  self.allocatedItemID.Add(alloc)
 		  
 		  return alloc
-		   
+		  
 		End Function
 	#tag EndMethod
 

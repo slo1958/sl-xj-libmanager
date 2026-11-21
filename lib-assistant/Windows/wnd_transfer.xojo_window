@@ -99,6 +99,7 @@ Begin DesktopWindow wnd_transfer
       Underline       =   False
       Visible         =   True
       Width           =   700
+      _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
    Begin DesktopLabel Label1

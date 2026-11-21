@@ -60,7 +60,7 @@ Protected Class clXojoProjectSourceLine
 		  
 		  self.ProcessLine()
 		  
-		  self.classify()
+		  self.Classify()
 		  
 		  self.SetKeyValuesToDefault()
 		  
@@ -75,21 +75,18 @@ Protected Class clXojoProjectSourceLine
 	#tag Method, Flags = &h0
 		Function CreateItemOnDisk(Body() as String) As Boolean
 		  
-		  var path as string = self.GetRelativePath()
-		  
-		  if path.Length = 0 then return false
 		  
 		  var fld as FolderItem = self.ProjectFolder
 		  
-		  var tmp() as string = path.Split("/")
+		  var lastElement as String = self.updatedRelativePathElements(self.updatedRelativePathElements.LastIndex)
 		  
 		  var tout as TextOutputStream = nil
 		  
-		  for each t as string in tmp
+		  for each t as string in self.updatedRelativePathElements
 		    
 		    if fld = nil then return false
 		    
-		    if t = tmp(tmp.LastIndex) then 
+		    if t = lastElement then 
 		      // Time to create our text file
 		      tout = TextOutputStream.Create(fld.Child(t))
 		      
@@ -182,9 +179,7 @@ Protected Class clXojoProjectSourceLine
 		  
 		  var f as FolderItem = self.projectFolder
 		  
-		  var p() as string = self.relativePath.Split("/")
-		  
-		  for each s as string in p
+		  for each s as string in self.relativePathElements
 		    f = f.Child(s)
 		    
 		  next
@@ -242,12 +237,13 @@ Protected Class clXojoProjectSourceLine
 
 	#tag Method, Flags = &h0
 		Function GetRelativePath() As String
-		  Return self.relativePath
+		  return String.FromArray(self.relativePathElements, "/")
+		  
 		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function getSourceLine(doUpdate as Boolean) As string
+		Function GetSourceLine(doUpdate as Boolean) As string
 		  
 		  if self.loadedFromProject then
 		    //
@@ -286,7 +282,7 @@ Protected Class clXojoProjectSourceLine
 		    var lineitems() as string
 		    
 		    lineitems.Add(key + "=" + value)
-		    lineitems.Add(relativePath)
+		    lineitems.Add(GetUpdatedRelativePath)
 		    lineitems.Add(Hexa16(updatedOwnID))
 		    lineitems.Add(Hexa16(updatedParentID))
 		    lineitems.Add("false") // all those items have a 'false' mark at the end
@@ -296,6 +292,13 @@ Protected Class clXojoProjectSourceLine
 		  end if
 		  
 		  
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetUpdatedRelativePath() As String
+		  return String.FromArray(self.updatedRelativePathElements, "/")
 		  
 		End Function
 	#tag EndMethod
@@ -373,11 +376,39 @@ Protected Class clXojoProjectSourceLine
 		  self.loadedParentID = -1
 		  self.updatedParentID = -1
 		  
-		  self.relativePath = ""
+		  self.relativePathElements.RemoveAll
+		  self.updatedRelativePathElements.RemoveAll
 		  
 		  Return
 		  
 		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub SetRelativePath(prmRelativePath as string)
+		  
+		  self.relativePathElements = prmRelativePath.Split("/")
+		  self.updatedRelativePathElements = prmRelativePath.Split("/")
+		  
+		  return
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function UpdatedFullPath() As FolderItem
+		  
+		  var f as FolderItem = self.projectFolder
+		  
+		  for each s as string in self.updatedRelativePathElements
+		    f = f.Child(s)
+		    
+		  next
+		  
+		  return f
+		  
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
@@ -398,13 +429,13 @@ Protected Class clXojoProjectSourceLine
 		  // the parent item ID
 		  //
 		  
-		  self.relativePath = ""
+		  self.relativePathElements.RemoveAll
 		  self.loadedOwnID = -1
 		  self.loadedParentID = -1
 		  
 		  if not self.isItemForTree then return
 		  
-		  if self.parameters.LastIndex >= 0 then self.relativePath = self.parameters(0)
+		  if self.parameters.LastIndex >= 0 then self.SetRelativePath(self.parameters(0))
 		  
 		  if self.parameters.LastIndex >= 1 then 
 		    self.loadedOwnIDStr = self.parameters(1)
@@ -459,8 +490,9 @@ Protected Class clXojoProjectSourceLine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub UpdateRelPath(prmRelPath as string)
-		  relativePath = prmRelPath
+		Sub UpdateRelativePath(prmRelPath as string)
+		  
+		  self.updatedRelativePathElements = prmRelPath.Split("/")
 		  
 		  Return
 		End Sub
@@ -516,7 +548,7 @@ Protected Class clXojoProjectSourceLine
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
-		Protected relativePath As String
+		Protected relativePathElements() As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h1
@@ -529,6 +561,10 @@ Protected Class clXojoProjectSourceLine
 
 	#tag Property, Flags = &h1
 		Protected updatedParentID As int64
+	#tag EndProperty
+
+	#tag Property, Flags = &h1
+		Protected updatedRelativePathElements() As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -578,14 +614,6 @@ Protected Class clXojoProjectSourceLine
 			EditorType=""
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="source"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="string"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="key"
 			Visible=false
 			Group="Behavior"
@@ -607,62 +635,6 @@ Protected Class clXojoProjectSourceLine
 			Group="Behavior"
 			InitialValue=""
 			Type="Boolean"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="loadedOwnID"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="int64"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="loadedOwnIDStr"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="loadedParentID"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="int64"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="loadedParentIDStr"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="string"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="relativePath"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="String"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="loadedFromProject"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="Boolean"
-			EditorType=""
-		#tag EndViewProperty
-		#tag ViewProperty
-			Name="updatedParentID"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="int64"
 			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior
