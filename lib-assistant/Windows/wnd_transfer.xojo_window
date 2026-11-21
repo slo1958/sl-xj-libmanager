@@ -11,7 +11,7 @@ Begin DesktopWindow wnd_transfer
    HasMaximizeButton=   True
    HasMinimizeButton=   True
    HasTitleBar     =   True
-   Height          =   638
+   Height          =   800
    ImplicitInstance=   True
    MacProcID       =   0
    MaximumHeight   =   32000
@@ -77,7 +77,7 @@ Begin DesktopWindow wnd_transfer
       HasHorizontalScrollbar=   False
       HasVerticalScrollbar=   True
       HeadingIndex    =   -1
-      Height          =   180
+      Height          =   140
       Index           =   -2147483648
       InitialValue    =   ""
       Italic          =   False
@@ -160,7 +160,7 @@ Begin DesktopWindow wnd_transfer
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   335
+      Top             =   295
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -190,7 +190,7 @@ Begin DesktopWindow wnd_transfer
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   355
+      Top             =   315
       Transparent     =   False
       Visible         =   True
       Width           =   700
@@ -218,7 +218,7 @@ Begin DesktopWindow wnd_transfer
       HasHorizontalScrollbar=   False
       HasVerticalScrollbar=   True
       HeadingIndex    =   -1
-      Height          =   180
+      Height          =   140
       Index           =   -2147483648
       InitialValue    =   ""
       Italic          =   False
@@ -235,7 +235,7 @@ Begin DesktopWindow wnd_transfer
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   435
+      Top             =   395
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -269,7 +269,7 @@ Begin DesktopWindow wnd_transfer
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   105
+      Top             =   103
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -301,10 +301,152 @@ Begin DesktopWindow wnd_transfer
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   415
+      Top             =   373
       Transparent     =   False
       Underline       =   False
       Visible         =   True
+      Width           =   700
+   End
+   Begin DesktopListBox lb_actions
+      AllowAutoDeactivate=   True
+      AllowAutoHideScrollbars=   True
+      AllowExpandableRows=   False
+      AllowFocusRing  =   True
+      AllowResizableColumns=   False
+      AllowRowDragging=   False
+      AllowRowReordering=   False
+      Bold            =   False
+      ColumnCount     =   1
+      ColumnWidths    =   ""
+      DefaultRowHeight=   -1
+      DropIndicatorVisible=   False
+      Enabled         =   True
+      FontName        =   "tahoma"
+      FontSize        =   12.0
+      FontUnit        =   0
+      GridLineStyle   =   0
+      HasBorder       =   True
+      HasHeader       =   True
+      HasHorizontalScrollbar=   False
+      HasVerticalScrollbar=   True
+      HeadingIndex    =   -1
+      Height          =   193
+      Index           =   -2147483648
+      InitialValue    =   ""
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      RequiresSelection=   False
+      RowSelectionType=   0
+      Scope           =   0
+      TabIndex        =   8
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   587
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   574
+      _ScrollWidth    =   -1
+   End
+   Begin DesktopLabel Label5
+      AllowAutoDeactivate=   True
+      Bold            =   True
+      Enabled         =   True
+      FontName        =   "Tahoma"
+      FontSize        =   14.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Multiline       =   False
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   9
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   "Actions"
+      TextAlignment   =   0
+      TextColor       =   &c000000
+      Tooltip         =   ""
+      Top             =   563
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   700
+   End
+   Begin DesktopButton Button1
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Cancel          =   False
+      Caption         =   "Proceed"
+      Default         =   False
+      Enabled         =   True
+      FontName        =   "tahoma"
+      FontSize        =   12.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   640
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      MacButtonStyle  =   0
+      Scope           =   0
+      TabIndex        =   10
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   760
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   80
+   End
+   Begin DesktopLabel lb_pub_info
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Multiline       =   False
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   11
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   "Untitled"
+      TextAlignment   =   0
+      TextColor       =   &c000000
+      Tooltip         =   ""
+      Top             =   538
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   False
       Width           =   700
    End
 End
@@ -326,7 +468,7 @@ End
 		  lb_src_libraries.HeaderAt(3) = "Author"
 		  lb_src_libraries.HeaderAt(4) = "Transfer"
 		  
-		  lb_src_libraries.ColumnTypeAt(4) = DesktopListBox.CellTypes.CheckBox
+		  //lb_src_libraries.ColumnTypeAt(4) = DesktopListBox.CellTypes.CheckBox
 		  
 		  
 		  lb_dst_libraries.ColumnCount = 5
@@ -337,7 +479,7 @@ End
 		  lb_dst_libraries.HeaderAt(3) = "Author"
 		  lb_dst_libraries.HeaderAt(4) = "Remove"
 		  
-		  lb_dst_libraries.ColumnTypeAt(4) = DesktopListBox.CellTypes.CheckBox
+		  //lb_dst_libraries.ColumnTypeAt(4) = DesktopListBox.CellTypes.CheckBox
 		  
 		  
 		  Return
@@ -354,49 +496,186 @@ End
 
 	#tag Method, Flags = &h0
 		Sub ExtractDestinationInfo()
-		  ExtractInfo(DestinationProject, lb_dst_libraries)
+		  var res as boolean = ExtractInfo(DestinationProject,  array( _
+		  DestinationProject.FindUsedLibraryFolder _
+		  , DestinationProject.FindShareableFolder _
+		  ), lb_dst_libraries)
+		  
+		  
+		  lb_pub_info.Visible = not res
+		  
+		  if res then Return
+		  
+		  lb_pub_info.Text = "Publish means the project also has published libraries, which cannot be deleted here."
 		  
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub ExtractInfo(prj as clXojoProject, lb_out as DesktopListBox)
+		Function ExtractInfo(prj as clXojoProject, libraryHeads() as clXojoProjectSourceLine, lb_out as DesktopListBox) As Boolean
 		  
 		  // TODO: update to show used libraries instead of published libraries in destination
 		  
 		  var rowidx as integer
-		  
-		  var r() as clXojoProjectSourceLine = prj.FindLibraryHeads(prj.FindShareableFolder)
-		  
+		  var txt as string = ""
 		  
 		  lb_out.RemoveAllRows
 		  
-		  for each s as clXojoProjectSourceLine in r
-		    var d as Dictionary = prj.GetAllLibraryInformation(s.value, prj.FindShareableFolder())
-		    
-		    lb_out.AddRow("")
-		    rowidx = lb_out.LastAddedRowIndex
-		    
-		    lb_out.CellTextAt(rowidx, 0) = s.value
-		    
-		    lb_out.CellTextAt(rowidx, 1) = d.Lookup(clXojoLibraryInfo.cstLibraryName, "")
-		    lb_out.CellTextAt(rowidx, 2) = d.Lookup(clXojoLibraryInfo.cstLibraryVersion, "")
-		    lb_out.CellTextAt(rowidx, 3) = d.Lookup(clXojoLibraryInfo.cstLibraryAuthor, "")
+		  for each libraryHead as clXojoProjectSourceLine in libraryHeads
+		    var r() as clXojoProjectSourceLine = prj.FindLibraryHeads(libraryHead)
 		    
 		    
+		    for each sourceItem as clXojoProjectSourceLine in r
+		      var d as Dictionary = prj.GetAllLibraryInformation(sourceItem.value, libraryHead)
+		      
+		      lb_out.AddRow("")
+		      rowidx = lb_out.LastAddedRowIndex
+		      
+		      lb_out.RowTagAt(rowidx) = sourceItem
+		      
+		      lb_out.CellTextAt(rowidx, 0) = sourceItem.value
+		      
+		      lb_out.CellTextAt(rowidx, 1) = d.Lookup(clXojoLibraryInfo.cstLibraryName, "")
+		      lb_out.CellTextAt(rowidx, 2) = d.Lookup(clXojoLibraryInfo.cstLibraryVersion, "")
+		      lb_out.CellTextAt(rowidx, 3) = d.Lookup(clXojoLibraryInfo.cstLibraryAuthor, "")
+		      
+		      if txt = "" then
+		        lb_out.CellTypeAt(rowidx, 4) = DesktopListBox.CellTypes.CheckBox
+		        
+		      else
+		        lb_out.CellTextAt(rowidx, 4) = txt
+		        
+		      end if
+		      
+		    next
+		    
+		    txt = "published"
 		    
 		  next
 		  
+		  return txt = ""
 		  
-		  return
-		  
-		End Sub
+		End Function
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub ExtractSourceInfo()
 		  
-		  ExtractInfo(SourceProject, lb_src_libraries)
+		  call ExtractInfo(SourceProject,   array(SourceProject.FindShareableFolder),   lb_src_libraries)
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Untitled()
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub UpdateActions()
+		  
+		  lb_actions.RemoveAllRows
+		  
+		  var lb as DesktopListBox 
+		  
+		  
+		  // Identify libraries to remove
+		  
+		  lb = lb_dst_libraries
+		  
+		  self.RemoveFromDestination.RemoveAll
+		  
+		  
+		  for i as integer = 0 to  lb.LastRowIndex
+		    var chk as Boolean = lb.CellCheckBoxValueAt(i, 4)
+		    var nam as String = lb.CellTextAt(i,0)
+		    
+		    
+		    if chk then 
+		      lb_actions.AddRow("Remove " + nam)
+		      
+		      var head as clXojoProjectSourceLine = clXojoProjectSourceLine(lb.RowTagAt(i))
+		      
+		      var results() as pair = SourceProject.NavigateSubTree(head, 0)
+		      
+		      for each p as pair in results
+		        var h as clXojoProjectSourceLine = clXojoProjectSourceLine(p.right)
+		        
+		        self.RemoveFromDestination.Add(h)
+		        
+		        
+		      next
+		      
+		      
+		    end if
+		    
+		  next
+		  
+		  
+		  // Identify libraries to transfer
+		  
+		  lb = lb_src_libraries 
+		  
+		  self.MoveFromSourceToDestination.RemoveAll
+		  
+		  for i as integer = 0 to  lb.LastRowIndex
+		    var chk as Boolean = lb.CellCheckBoxValueAt(i, 4)
+		    var nam as String = lb.CellTextAt(i,0)
+		    
+		    if chk then 
+		      lb_actions.AddRow("Transfer " + nam)
+		      
+		      var head as clXojoProjectSourceLine = clXojoProjectSourceLine(lb.RowTagAt(i))
+		      
+		      var results() as pair = SourceProject.NavigateSubTree(head, 0)
+		      
+		      for each p as pair in results
+		        var h as clXojoProjectSourceLine = clXojoProjectSourceLine(p.right)
+		        
+		        self.MoveFromSourceToDestination.Add(h)
+		        
+		        
+		      next
+		      
+		    end if
+		    
+		  next
+		  
+		  
+		  
+		  
+		  Return
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub updateDestinationProject()
+		  
+		  var parentIDInSourceProject as int64 = SourceProject.FindShareableFolder().GetloadedID
+		  
+		  DestinationProject.AddAssetsForImportedLibraries(true)
+		  
+		  var res as string = DestinationProject.ImportItems(MoveFromSourceToDestination, parentIDInSourceProject, true)
+		  
+		  if res = DestinationProject.cstOperationOK then
+		    DestinationProject.Save()
+		    
+		    DestinationProject.ReloadProject()
+		    
+		  else
+		    DestinationProject.ReloadProject()
+		    
+		  end if
+		  
+		  lb_actions.RemoveAllRows
+		  
+		  MoveFromSourceToDestination.RemoveAll
+		  
+		  ExtractDestinationInfo
+		  
+		  return
+		  
 		  
 		End Sub
 	#tag EndMethod
@@ -404,6 +683,14 @@ End
 
 	#tag Property, Flags = &h0
 		DestinationProject As clXojoProject = nil
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		MoveFromSourceToDestination() As clXojoProjectSourceLine
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		RemoveFromDestination() As clXojoProjectSourceLine
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -431,6 +718,14 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
+#tag Events lb_src_libraries
+	#tag Event
+		Sub CellAction(row As Integer, column As Integer)
+		  UpdateActions
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
 #tag Events ccDestinationProject
 	#tag Event
 		Sub TargetSelected()
@@ -446,6 +741,21 @@ End
 		  DestinationProject = nil
 		  CheckReadyToTransfer
 		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events lb_dst_libraries
+	#tag Event
+		Sub CellAction(row As Integer, column As Integer)
+		  UpdateActions
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events Button1
+	#tag Event
+		Sub Pressed()
+		  if MoveFromSourceToDestination.Count > 0 then updateDestinationProject
 		End Sub
 	#tag EndEvent
 #tag EndEvents

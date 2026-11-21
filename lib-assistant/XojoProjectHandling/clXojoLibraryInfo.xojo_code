@@ -8,12 +8,14 @@ Protected Class clXojoLibraryInfo
 		    self.Name = Source.Lookup(cstLibraryName, projectFolderName)
 		    self.Version = source.Lookup(cstLibraryVersion, "Unspecified")
 		    self.projName = projectFolderName
+		    self.Requirements = source.Lookup(cstLibraryRequirement,"")
 		    
 		  else
 		    self.Author = "Unknown"
 		    self.Name = projectFolderName
 		    self.Version = "Unspecified"
 		    self.projName = projectFolderName
+		    self.Requirements = source.Lookup(cstLibraryRequirement,"")
 		    
 		  end if
 		  
@@ -28,6 +30,7 @@ Protected Class clXojoLibraryInfo
 		  self.NameByUser = prmLibraryName.trim
 		  self.Version = "Unspecified"
 		  self.projName = projectFolderName
+		  self.Requirements = ""
 		  
 		  
 		End Sub
@@ -66,6 +69,11 @@ Protected Class clXojoLibraryInfo
 		  results.add("#tag EndConstant")
 		  results.add("")
 		  
+		  results.Add(ReplacePlaceholders(template, cstLibraryRequirement, self.LibraryRequirements))
+		  results.add("#tag EndConstant")
+		  results.add("")
+		  
+		  
 		  results.add("End Module")
 		  results.Add("#tag EndModule")
 		  
@@ -98,6 +106,14 @@ Protected Class clXojoLibraryInfo
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function LibraryRequirements() As String
+		  
+		  return self.Requirements
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function LibraryVersion() As string
 		  Return self.Version
 		End Function
@@ -106,6 +122,10 @@ Protected Class clXojoLibraryInfo
 
 	#tag Property, Flags = &h0
 		Author As string
+	#tag EndProperty
+
+	#tag Property, Flags = &h21
+		Private mRequirements As string
 	#tag EndProperty
 
 	#tag Property, Flags = &h21
@@ -129,6 +149,34 @@ Protected Class clXojoLibraryInfo
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
+		Required() As string
+	#tag EndProperty
+
+	#tag ComputedProperty, Flags = &h0
+		#tag Getter
+			Get
+			  Return mRequirements
+			End Get
+		#tag EndGetter
+		#tag Setter
+			Set
+			  mRequirements = value
+			  
+			  if value.Trim.Length = 0 then
+			    self.Required.RemoveAll
+			    
+			  else
+			    self.Required = value.Split(",")
+			    
+			  end if
+			  
+			  Return
+			End Set
+		#tag EndSetter
+		Requirements As string
+	#tag EndComputedProperty
+
+	#tag Property, Flags = &h0
 		Version As string
 	#tag EndProperty
 
@@ -137,6 +185,9 @@ Protected Class clXojoLibraryInfo
 	#tag EndConstant
 
 	#tag Constant, Name = cstLibraryName, Type = String, Dynamic = False, Default = \"LibraryName", Scope = Public
+	#tag EndConstant
+
+	#tag Constant, Name = cstLibraryRequirement, Type = String, Dynamic = False, Default = \"Requires", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = cstLibraryVersion, Type = String, Dynamic = False, Default = \"LibraryVersion", Scope = Public

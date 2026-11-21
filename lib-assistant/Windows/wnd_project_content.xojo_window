@@ -11,7 +11,7 @@ Begin DesktopWindow wnd_project_content
    HasMaximizeButton=   True
    HasMinimizeButton=   True
    HasTitleBar     =   True
-   Height          =   468
+   Height          =   600
    ImplicitInstance=   True
    MacProcID       =   0
    MaximumHeight   =   32000
@@ -48,7 +48,7 @@ Begin DesktopWindow wnd_project_content
       HasHorizontalScrollbar=   False
       HasVerticalScrollbar=   True
       HeadingIndex    =   -1
-      Height          =   224
+      Height          =   220
       Index           =   -2147483648
       InitialValue    =   ""
       Italic          =   False
@@ -113,11 +113,11 @@ Begin DesktopWindow wnd_project_content
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   296
+      Top             =   340
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      Width           =   700
+      Width           =   320
       _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
@@ -150,6 +150,86 @@ Begin DesktopWindow wnd_project_content
       Visible         =   True
       Width           =   700
    End
+   Begin DesktopLabel Label1
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   40
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Multiline       =   True
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   4
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   "Untitled"
+      TextAlignment   =   0
+      TextColor       =   &c000000
+      Tooltip         =   ""
+      Top             =   290
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   320
+   End
+   Begin DesktopListBox lb_structure
+      AllowAutoDeactivate=   True
+      AllowAutoHideScrollbars=   True
+      AllowExpandableRows=   False
+      AllowFocusRing  =   True
+      AllowResizableColumns=   False
+      AllowRowDragging=   False
+      AllowRowReordering=   False
+      Bold            =   False
+      ColumnCount     =   1
+      ColumnWidths    =   ""
+      DefaultRowHeight=   -1
+      DropIndicatorVisible=   False
+      Enabled         =   True
+      FontName        =   "Tahoma"
+      FontSize        =   12.0
+      FontUnit        =   0
+      GridLineStyle   =   0
+      HasBorder       =   True
+      HasHeader       =   True
+      HasHorizontalScrollbar=   False
+      HasVerticalScrollbar=   True
+      HeadingIndex    =   -1
+      Height          =   152
+      Index           =   -2147483648
+      InitialValue    =   ""
+      Italic          =   False
+      Left            =   360
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      RequiresSelection=   False
+      RowSelectionType=   0
+      Scope           =   0
+      TabIndex        =   5
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   340
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   360
+      _ScrollOffset   =   0
+      _ScrollWidth    =   -1
+   End
 End
 #tag EndDesktopWindow
 
@@ -161,11 +241,16 @@ End
 		  , app.GetConfiguration.XojoFolderBase _
 		  , app)
 		  
-		  lb_libraries.HeaderAt(0) = "Discovered libraries"
+		  lb_libraries.ColumnCount = 2
+		  lb_libraries.HeaderAt(0) = "Usage"
+		  lb_libraries.HeaderAt(1) = "Discovered libraries"
 		  
 		  lb_properties.ColumnCount = 2
-		  lb_properties.HeaderAt(0) = "Properties extracted from library information module"
+		  lb_properties.HeaderAt(0) = "Properties"
 		  lb_properties.HeaderAt(1) = " "
+		  
+		  lb_structure.ColumnCount = 1
+		  lb_structure.HeaderAt(0) = "Structure"
 		  
 		  Return
 		  
@@ -176,20 +261,41 @@ End
 	#tag Method, Flags = &h0
 		Sub AnalyzeProject()
 		  
-		  var prj as clXojoProject = self.project
+		  var SectionHead() as clXojoProjectSourceLine
+		  var UserLabel() as string
 		  
-		  var r() as clXojoProjectSourceLine = prj.FindLibraryHeads(prj.FindShareableFolder)
+		  var prj as clXojoProject = self.project
 		  
 		  lb_libraries.RemoveAllRows
 		  
-		  for each s as clXojoProjectSourceLine in r
-		    lb_libraries.AddRow(s.value)
-		    var d as Dictionary = prj.GetAllLibraryInformation(s.value, prj.FindShareableFolder())
-		    lb_libraries.RowTagAt(lb_libraries.LastAddedRowIndex) = d
+		  
+		  SectionHead.Add(prj.FindShareableFolder)
+		  UserLabel.Add("Publishes")
+		  
+		  SectionHead.Add(prj.FindUsedLibraryFolder)
+		  UserLabel.Add("Uses")
+		  
+		  
+		  
+		  for i as integer = 0 to 1
 		    
+		    var LibraryHeads() as clXojoProjectSourceLine = prj.FindLibraryHeads(SectionHead(i))
+		    
+		    for each LibraryHead as clXojoProjectSourceLine in LibraryHeads
+		      var libraryName as String = LibraryHead.Value
+		      
+		      lb_libraries.AddRow("")
+		      var idx as integer = lb_libraries.LastAddedRowIndex
+		      
+		      lb_libraries.CellTextAt(idx, 0) = UserLabel(i)
+		      lb_libraries.CellTextAt(idx, 1)  = libraryName
+		      
+		      lb_libraries.CellTagAt(idx, 0) =  LibraryHead
+		      // lb_libraries.CellTagAt(idx, 1) =
+		      
+		    next
 		    
 		  next
-		  
 		  
 		  return
 		End Sub
@@ -211,34 +317,63 @@ End
 		  
 		  if idx < 0 then Return
 		  
-		  var r as variant = me.RowTagAt(idx)
-		  var d as Dictionary
+		  var r as variant = me.CellTagAt(idx, 0)
 		  
-		  if r isa Dictionary then d = Dictionary(r)
+		  var head as clXojoProjectSourceLine = nil
+		  var name as string = lb_libraries.CellTextAt(idx, 1) 
+		  
+		  if r isa clXojoProjectSourceLine then head = clXojoProjectSourceLine(r)
 		  
 		  lb_properties.RemoveAllRows
 		  
-		  for each k as string in d.keys
-		    var newidx as integer 
-		    var newstd as Boolean = false
+		  if head <> nil then 
 		    
-		    lb_properties.addrow("")
+		    var d as Dictionary = project.GetAllLibraryInformation(head)
 		    
-		    newidx = lb_properties.LastAddedRowIndex
+		    for each k as string in d.keys
+		      var newidx as integer 
+		      var newstd as Boolean = false
+		      
+		      lb_properties.addrow("")
+		      
+		      newidx = lb_properties.LastAddedRowIndex
+		      
+		      newstd = k = clXojoLibraryInfo.cstLibraryAuthor _
+		      or k = clXojoLibraryInfo.cstLibraryName _
+		      or k = clXojoLibraryInfo.cstLibraryVersion
+		      
+		      lb_properties.CellTextAt(newidx, 0) = k
+		      lb_properties.CellTextAt(newidx, 1) = d.Value(k)
+		      
+		      lb_properties.CellBoldAt(newidx, 1) = newstd
+		      
+		      
+		    next
 		    
-		    newstd = k = clXojoLibraryInfo.cstLibraryAuthor _
-		    or k = clXojoLibraryInfo.cstLibraryName _
-		    or k = clXojoLibraryInfo.cstLibraryVersion
-		    
-		    lb_properties.CellTextAt(newidx, 0) = k
-		    lb_properties.CellTextAt(newidx, 1) = d.Value(k)
-		    
-		    lb_properties.CellBoldAt(newidx, 1) = newstd
-		    
-		    
-		  next
+		  end if
 		  
-		  return
+		  
+		  lb_structure.RemoveAllRows
+		  
+		  if head <> nil then 
+		    var results() as pair = project.NavigateSubTree(head, 0)
+		    
+		    for each p as pair in results
+		      var h as clXojoProjectSourceLine = clXojoProjectSourceLine(p.right)
+		      
+		      var msg as string = FixStr("-", p.left*2) + h.key + "  " + h.value
+		      
+		      lb_structure.AddRow (msg)
+		      
+		    next
+		    
+		  end if
+		  
+		  Return
+		  
+		  // 
+		  // var d as Dictionary = prj.GetAllLibraryInformation(libraryName, h(i))
+		  // lb_libraries.RowTagAt(lb_libraries.LastAddedRowIndex) = d
 		  
 		End Sub
 	#tag EndEvent
@@ -257,6 +392,20 @@ End
 	#tag Event
 		Sub ClearSelected()
 		  self.project = nil
+		  
+		  lb_libraries.RemoveAllRows
+		  lb_properties.RemoveAllRows
+		  lb_structure.RemoveAllRows
+		  
+		  Return
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events Label1
+	#tag Event
+		Sub Opening()
+		  me.Text = "This list contains all constants defined in the library information module."
 		  
 		End Sub
 	#tag EndEvent

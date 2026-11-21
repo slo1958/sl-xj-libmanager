@@ -51,6 +51,59 @@ Protected Class clXojoProjectSourceLine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub Constructor(prmProjectFolder as FolderItem, prmSource as clXojoProjectSourceLine)
+		  
+		  
+		  self.loadedFromProject = false
+		  
+		  self.isItemForTree = prmSource.isItemForTree
+		  self.key = prmSource.key
+		  
+		  self.loadedOwnID = prmSource.loadedOwnID
+		  self.loadedOwnIDStr = prmSource.loadedOwnIDStr
+		  
+		  self.loadedParentID = prmSource.loadedParentID
+		  self.loadedParentIDStr = prmSource.loadedParentIDStr
+		  
+		  self.parameters.RemoveAll
+		  for each p as string in prmSource.parameters
+		    self.parameters.add(p)
+		    
+		  next
+		  
+		  self.projectFolder = prmProjectFolder
+		  
+		  self.relativePathElements.RemoveAll
+		  for each p as string in prmSource.relativePathElements
+		    self.relativePathElements.Add(p)
+		    
+		  next
+		  
+		  self.source = prmSource.source
+		  
+		  self.updatedOwnID = prmSource.updatedOwnID
+		   
+		  self.updatedParentID = prmSource.updatedParentID
+		  
+		  self.updatedRelativePathElements.RemoveAll
+		  for each p as string in prmSource.updatedRelativePathElements
+		    self.updatedRelativePathElements.Add(p)
+		    
+		  next
+		  
+		  self.value = prmSource.value
+		  
+		  Return
+		  
+		  
+		  
+		  
+		  self.SetKeyValuesToDefault()
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub Constructor(prmProjectFolder as folderitem, prmSourceLine as string)
 		  
 		  self.Source = prmSourceLine
@@ -68,6 +121,51 @@ Protected Class clXojoProjectSourceLine
 		  
 		  
 		  Return
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub CopyFIle(SourceProjectFolder as FolderItem, TargetProjectFolder as FolderItem)
+		  
+		  var copyFromFolder as FolderItem
+		  var copyToFolder as FolderItem
+		  
+		  if SourceProjectFolder = nil and TargetProjectFolder = nil then Return
+		  
+		  if SourceProjectFolder = nil then
+		    copyFromFolder = self.projectFolder
+		    
+		  else
+		    copyFromFolder = SourceProjectFolder
+		    
+		  end if
+		  
+		  
+		  if TargetProjectFolder = nil then
+		    copyToFolder = self.projectFolder
+		    
+		  else
+		    copyToFolder = TargetProjectFolder
+		    
+		  end if
+		  
+		  
+		  var fldin as FolderItem = self.FullPath(copyFromFolder)
+		  var tin as TextInputStream = TextInputStream.Open(fldin)
+		  
+		  var fldout as FolderItem = self.UpdatedFullPath(copyToFolder, true)
+		  var tout as TextOutputStream = TextOutputStream.Create(fldout)
+		  
+		  System.DebugLog("Transfering " + self.FullPath(copyFromFolder).NativePath  + " to "  + self.UpdatedFullPath(copyToFolder, false).NativePath)
+		  
+		  while not tin.EndOfFile
+		    tout.WriteLine(tin.ReadLine)
+		    
+		  wend
+		  
+		  tin.Close
+		  tout.Close
 		  
 		End Sub
 	#tag EndMethod
@@ -175,10 +273,17 @@ Protected Class clXojoProjectSourceLine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function FullPath() As FolderItem
+		Function FullPath(alternateProjectFolder as FolderItem = nil) As FolderItem
 		  
-		  var f as FolderItem = self.projectFolder
+		  var f as FolderItem 
 		  
+		  if alternateProjectFolder = nil then
+		    f = self.projectFolder
+		  else
+		    f = alternateProjectFolder
+		    
+		  end if
+		   
 		  for each s as string in self.relativePathElements
 		    f = f.Child(s)
 		    
@@ -238,6 +343,22 @@ Protected Class clXojoProjectSourceLine
 	#tag Method, Flags = &h0
 		Function GetRelativePath() As String
 		  return String.FromArray(self.relativePathElements, "/")
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetRelativePathElements() As String()
+		  
+		  var results() as string
+		  
+		  for each s as string in self.relativePathElements
+		    results.Add(s)
+		    
+		  next
+		  
+		  return results
+		  
 		  
 		End Function
 	#tag EndMethod
@@ -397,12 +518,27 @@ Protected Class clXojoProjectSourceLine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function UpdatedFullPath() As FolderItem
+		Function UpdatedFullPath(alternateProjectFolder as FolderItem, createMissingFolder as boolean) As FolderItem
 		  
-		  var f as FolderItem = self.projectFolder
+		  var f as FolderItem 
+		  
+		  if alternateProjectFolder = nil then
+		    f = self.projectFolder
+		  else
+		    f = alternateProjectFolder
+		    
+		  end if
+		  
+		  var slast as string = self.UpdatedRelativePathElements(UpdatedRelativePathElements.LastIndex)
 		  
 		  for each s as string in self.updatedRelativePathElements
+		    
 		    f = f.Child(s)
+		    
+		    if not f.Exists and s <> slast and createMissingFolder then
+		      f.CreateFolder
+		      
+		    end if
 		    
 		  next
 		  
@@ -458,17 +594,47 @@ Protected Class clXojoProjectSourceLine
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub UpdateMatchingItemID(oldItemID as int64, newItemID as int64)
+		Sub UpdateMatchingItemID(oldItemID as int64, newItemID as int64, traceUpdates as boolean = false)
 		  
 		  if self.loadedOwnID = oldItemID then
+		    if traceUpdates then System.DebugLog("OwnID from " + self.loadedOwnID.ToString + " to " + newItemID.ToString)
 		    self.updatedOwnID = newItemID
 		    
 		  end if
 		  
 		  if self.loadedParentID = oldItemID then
+		    if traceUpdates then System.DebugLog("ParentID from " + self.loadedParentID.ToString + " to " + newItemID.ToString)
 		    self.updatedParentID = newItemID
 		    
 		  end if
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub UpdateMatchingPathElements(oldPath() as string, newPath() as string)
+		  
+		  if oldPath.Count <> newPath.count then
+		    System.DebugLog("In " + CurrentMethodName + " array not same size.")
+		    Return
+		    
+		  end if
+		  
+		  if oldPath.Count > self.updatedRelativePathElements.Count then
+		    system.DebugLog("In " + CurrentMethodName + " new path too long")
+		    Return
+		    
+		  end if
+		  
+		  for i as integer = 0 to oldPath.LastIndex
+		    if self.updatedRelativePathElements(i) = oldPath(i) then 
+		      self.updatedRelativePathElements(i) = newPath(i)
+		      
+		    end if
+		    
+		  next
+		  
+		  
 		  
 		End Sub
 	#tag EndMethod
