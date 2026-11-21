@@ -351,7 +351,8 @@ Begin DesktopWindow wnd_transfer
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      Width           =   574
+      Width           =   316
+      _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
    Begin DesktopLabel Label5
@@ -448,6 +449,38 @@ Begin DesktopWindow wnd_transfer
       Underline       =   False
       Visible         =   False
       Width           =   700
+   End
+   Begin DesktopLabel lb_res
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Enabled         =   True
+      FontName        =   "System"
+      FontSize        =   0.0
+      FontUnit        =   0
+      Height          =   85
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   355
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Multiline       =   True
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   12
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   "Untitled"
+      TextAlignment   =   0
+      TextColor       =   &c000000
+      Tooltip         =   ""
+      Top             =   587
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   False
+      Width           =   357
    End
 End
 #tag EndDesktopWindow
@@ -615,34 +648,21 @@ End
 		  
 		  // Identify libraries to transfer
 		  
+		  LibraryToMove.RemoveAll
+		  
 		  lb = lb_src_libraries 
 		  
-		  self.MoveFromSourceToDestination.RemoveAll
 		  
 		  for i as integer = 0 to  lb.LastRowIndex
 		    var chk as Boolean = lb.CellCheckBoxValueAt(i, 4)
 		    var nam as String = lb.CellTextAt(i,0)
 		    
 		    if chk then 
-		      lb_actions.AddRow("Transfer " + nam)
-		      
-		      var head as clXojoProjectSourceLine = clXojoProjectSourceLine(lb.RowTagAt(i))
-		      
-		      var results() as pair = SourceProject.NavigateSubTree(head, 0)
-		      
-		      for each p as pair in results
-		        var h as clXojoProjectSourceLine = clXojoProjectSourceLine(p.right)
-		        
-		        self.MoveFromSourceToDestination.Add(h)
-		        
-		        
-		      next
+		      LibraryToMove.Add(nam)
 		      
 		    end if
 		    
 		  next
-		  
-		  
 		  
 		  
 		  Return
@@ -650,13 +670,15 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub updateDestinationProject()
+		Sub UpdateDestinationProject()
 		  
 		  var parentIDInSourceProject as int64 = SourceProject.FindShareableFolder().GetloadedID
 		  
 		  DestinationProject.AddAssetsForImportedLibraries(true)
 		  
-		  var res as string = DestinationProject.ImportItems(MoveFromSourceToDestination, parentIDInSourceProject, true)
+		  var res as string = DestinationProject.ImportLibraries(SourceProject, LibraryToMove, true)
+		  
+		  lb_res.text = res
 		  
 		  if res = DestinationProject.cstOperationOK then
 		    DestinationProject.Save()
@@ -670,7 +692,7 @@ End
 		  
 		  lb_actions.RemoveAllRows
 		  
-		  MoveFromSourceToDestination.RemoveAll
+		  LibraryToMove.RemoveAll
 		  
 		  ExtractDestinationInfo
 		  
@@ -686,7 +708,7 @@ End
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		MoveFromSourceToDestination() As clXojoProjectSourceLine
+		LibraryToMove() As String
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -755,7 +777,7 @@ End
 #tag Events Button1
 	#tag Event
 		Sub Pressed()
-		  if MoveFromSourceToDestination.Count > 0 then updateDestinationProject
+		  if LibraryToMove.Count > 0 then updateDestinationProject
 		End Sub
 	#tag EndEvent
 #tag EndEvents

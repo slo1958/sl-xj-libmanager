@@ -2,6 +2,10 @@
 Protected Class clXojoProject
 	#tag Method, Flags = &h0
 		Sub AddAssetsForImportedLibraries(createOnDisk as Boolean)
+		  //
+		  // This method creates the top folder for used libraries
+		  //
+		  
 		  
 		  var UsedHead as clXojoProjectSourceLine = self.FindUsedLibraryFolder
 		  var UsedHeadID as int64 = -1
@@ -20,6 +24,12 @@ Protected Class clXojoProject
 
 	#tag Method, Flags = &h0
 		Function AddAssetsForPublishedLibraries(info as clXojoLibraryInfo, createOnDisk as Boolean) As string
+		  //
+		  // This method creates
+		  // - the top folder for shareable libraries
+		  // - the top folder of the library, under shareable
+		  // - the library information module
+		  //
 		  
 		  //  Folder=Shareable;Shareable;&h00000000455A6FFF;&h0000000000000000;false
 		  //  Folder=Library1;Shareable/Library1;&h0000000040A95FFF;&h00000000455A6FFF;false
@@ -144,8 +154,11 @@ Protected Class clXojoProject
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function AddTopAsset(Head as clXojoProjectSourceLine, relativePath as string, createOnDisk as Boolean) As int64
+	#tag Method, Flags = &h21
+		Private Function AddTopAsset(Head as clXojoProjectSourceLine, relativePath as string, createOnDisk as Boolean) As int64
+		  //
+		  // This method creates a top folder, either for shareable libraries or used libraries
+		  //
 		  
 		  var TopHead as clXojoProjectSourceLine = Head
 		  var TopHeadID as int64 = -1
@@ -186,6 +199,11 @@ Protected Class clXojoProject
 
 	#tag Method, Flags = &h0
 		Sub BuildTree()
+		  //
+		  // This method scans the lines loaded from the Xojo project file and creates links between entries
+		  // to replicate the project hierarchy
+		  //
+		  
 		  
 		  self.LoadedItemIDDict = new Dictionary
 		  
@@ -248,7 +266,7 @@ Protected Class clXojoProject
 		Function FindLibraryHeads(LibraryFolder as clXojoProjectSourceLine) As clXojoProjectSourceLine()
 		  //
 		  // Libraries are folders under the top folder
-		  // The top folder is either 'Shareable' or 'UsedLibraries'
+		  // The library folder is either 'Shareable' or 'UsedLibraries'
 		  //
 		  var results() as clXojoProjectSourceLine
 		  
@@ -318,6 +336,9 @@ Protected Class clXojoProject
 
 	#tag Method, Flags = &h0
 		Function GetAllItemID() As int64()
+		  //
+		  // Build a list of itemID used in the loaded project
+		  //
 		  
 		  var results() as int64
 		  
@@ -335,10 +356,10 @@ Protected Class clXojoProject
 		Function GetAllLibraryInformation(LibraryHead as clXojoProjectSourceLine) As Dictionary
 		  //
 		  // Returns all the information extracted from the library information module
+		  // The list is not limited to the constant expected by the assistant
 		  // 
 		  // Parameters
-		  // - name of the library
-		  // - top library folder (either shareable or used library)
+		  // - head of the library
 		  //
 		  // Returns
 		  //  dictionary  populated with all information retrieved from the module constant
@@ -378,7 +399,8 @@ Protected Class clXojoProject
 	#tag Method, Flags = &h0
 		Function GetAllLibraryInformation(libraryName as string, LibrariesTopFolder as clXojoProjectSourceLine) As Dictionary
 		  //
-		  // Returns all the information extracted from the library information module
+		  // Returns all the information extracted from the library information module.
+		  // The list is not limited to the constant expected by the assistant
 		  // 
 		  // Parameters
 		  // - name of the library
@@ -416,6 +438,7 @@ Protected Class clXojoProject
 		Function GetLibraryInformation(libraryName as string, LibrariesTopFolder as clXojoProjectSourceLine) As clXojoLibraryInfo
 		  //
 		  // Returns the information extracted from the library information module
+		  // Since the results are returned in a clXojoLibraryInfo object, the list is  limited to the constant expected by the assistant
 		  // 
 		  // Parameters
 		  // - name of the library
@@ -448,6 +471,9 @@ Protected Class clXojoProject
 
 	#tag Method, Flags = &h0
 		Function GetNewID() As int64
+		  //
+		  // Generates a new unique id that is not used in the current project
+		  //
 		  
 		  var isUnique as Boolean = false
 		  
@@ -474,9 +500,13 @@ Protected Class clXojoProject
 		End Function
 	#tag EndMethod
 
-	#tag Method, Flags = &h0
-		Function ImportItems(sourceItems() as clXojoProjectSourceLine, sourceParentID as int64, createOnDisk as Boolean) As string
-		  
+	#tag Method, Flags = &h21
+		Private Function ImportItems(sourceItems() as clXojoProjectSourceLine, sourceParentID as int64, createOnDisk as Boolean) As string
+		  //
+		  //
+		  // Imports the source line items passed as parameters
+		  // 
+		  //
 		  var tempItems() as clXojoProjectSourceLine
 		  var topItems() as clXojoProjectSourceLine
 		  
@@ -526,7 +556,7 @@ Protected Class clXojoProject
 		    
 		  next
 		  
-		   // 
+		  // 
 		  // Adjust rel path
 		  //
 		  var srcPath() as string
@@ -589,8 +619,78 @@ Protected Class clXojoProject
 		End Function
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Function ImportLibraries(SourceProject as clXojoProject, Libraries() as string, createOnDisk as Boolean) As string
+		  //
+		  // Imports the libraries from the source project into the current project
+		  //
+		  //
+		  var libOK as Boolean = true
+		  
+		  var topItems() as clXojoProjectSourceLine
+		  var imported() as string
+		  
+		  var issues() as string
+		  
+		  //
+		  // Check if any library is already in the project
+		  //
+		  
+		  
+		  topItems.Add(FindShareableFolder())
+		  topItems.Add(FindUsedLibraryFolder())
+		  
+		  for each topItem as clXojoProjectSourceLine in topItems
+		    if topItem <> nil then
+		      for each item as clXojoProjectSourceLine in topItem.Children
+		        if item.key = clXojoProjectConstants.cstFolder and Libraries.IndexOf(item.value) >= 0 then
+		          libOk = false
+		          issues.Add("Library " + item.value + " already present in the destination")
+		          
+		        end if
+		        
+		      next
+		    end if
+		    
+		  next
+		  
+		  if not libOK then return String.FromArray(issues, chr(9))
+		  
+		  
+		  var projectLinesToTransfer() as clXojoProjectSourceLine
+		  
+		  var availLibraries() as clXojoProjectSourceLine = SourceProject.FindLibraryHeads(SourceProject.FindShareableFolder())
+		  
+		  for each availLibrary as clXojoProjectSourceLine in availLibraries
+		    if libraries.IndexOf(availLibrary.value) >=0 then
+		      var results() as pair = SourceProject.NavigateSubTree(availLibrary, 0)
+		      
+		      for each p as pair in results
+		        var projectLine as clXojoProjectSourceLine = clXojoProjectSourceLine(p.right)
+		        
+		        projectLinesToTransfer.Add(projectLine)
+		        
+		      next
+		      
+		    end if
+		    
+		  next
+		  
+		  if projectLinesToTransfer.Count = 0 then Return "Nothing to move"
+		  
+		  var parentIDInSourceProject as int64 = SourceProject.FindShareableFolder().GetloadedID
+		  
+		  var res as string = self.ImportItems(projectLinesToTransfer, parentIDInSourceProject, true)
+		  
+		  Return res
+		End Function
+	#tag EndMethod
+
 	#tag Method, Flags = &h21
 		Private Function LocateProjectFile() As FolderItem
+		  //
+		  // Scan the project folder in order to find the project file
+		  //
 		  
 		  self.sourceProjectFile = nil
 		  
@@ -611,20 +711,21 @@ Protected Class clXojoProject
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function LocateTreeNode(NodeID as int64) As clXojoProjectSourceLine
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Function NavigateSubTree(h as clXojoProjectSourceLine, lvl as integer) As pair()
+		Function NavigateSubTree(head as clXojoProjectSourceLine, lvl as integer) As pair()
+		  //
+		  // Iterate thru each sourcelines in the tree under the head passed as parameter
+		  //
+		  // Returns the results as a list of pair
+		  // the left part of the pair is the level
+		  // the right part of the pair is the source line
+		  //
 		  
 		  var results() as pair
 		  
-		  results.add(lvl:h)
+		  results.add(lvl:head)
 		  
-		  for each s as clXojoProjectSourceLine in h.Children
-		    var subtree() as pair = NavigateSubTree(s, lvl + 1)
+		  for each srcline as clXojoProjectSourceLine in head.Children
+		    var subtree() as pair = NavigateSubTree(srcline, lvl + 1)
 		    
 		    for each p as pair in subtree
 		      results.Add(p)
@@ -638,7 +739,10 @@ Protected Class clXojoProject
 
 	#tag Method, Flags = &h21
 		Private Sub ParseProjectFile(projectFile as FolderItem, progressLog as itfShareProgress)
-		  
+		  //
+		  // Load the project file and create one clXojoProjectSourceLine object for each source line
+		  // Not limited to libraries
+		  //
 		  if not IsExistingFIle(projectFile) then Return
 		  
 		  var s() as string = LoadTextByLine(projectFile)
@@ -657,6 +761,11 @@ Protected Class clXojoProject
 
 	#tag Method, Flags = &h0
 		Sub ReloadProject()
+		  //
+		  // Reset and reload the project from disk
+		  // This is done after updating and saving the project, in order to check any issues from the stored project / 
+		  // 
+		  
 		  self.allocatedItemID.RemoveAll
 		  self.DestintationProjectFile = nil
 		  self.ItemTreeHead = nil
@@ -678,13 +787,17 @@ Protected Class clXojoProject
 
 	#tag Method, Flags = &h0
 		Sub RemoveListedItems(itemsToRemove as clXojoProjectSourceLine)
+		  // TODO
 		  
 		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub Save()
-		  
+		  //
+		  // Save the project file
+		  // Any other changes on disk (adding elements, removing elements) must be done before
+		  //
 		  
 		  self.SaveAs(self.sourceProjectFile.Name)
 		  
@@ -695,6 +808,10 @@ Protected Class clXojoProject
 
 	#tag Method, Flags = &h0
 		Sub SaveAs(destinationFileName as string)
+		  //
+		  // Save the project file under a different folder
+		  // Any other changes on disk (adding elements, removing elements) must be done before
+		  //
 		  
 		  self.DestintationProjectFile = self.ProjectFolder.Child(destinationFileName)
 		  
@@ -713,6 +830,9 @@ Protected Class clXojoProject
 
 	#tag Method, Flags = &h0
 		Sub ShowTree()
+		  //
+		  // Print the generate tree to debuglog
+		  //
 		  
 		  var results() as pair = NavigateSubTree(self.ItemTreeHead, 0)
 		  
@@ -732,6 +852,9 @@ Protected Class clXojoProject
 
 	#tag Method, Flags = &h0
 		Sub UpdateMatchingItemID(oldItemID as int64, newItemID as int64)
+		  //
+		  // Scan all sourceline to update the ItemID
+		  //
 		  
 		  for each s as clXojoProjectSourceLine in self.SourceLines
 		    s.UpdateMatchingItemID(oldItemID, newItemID)

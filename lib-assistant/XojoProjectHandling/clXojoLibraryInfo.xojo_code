@@ -46,7 +46,11 @@ Protected Class clXojoLibraryInfo
 
 	#tag Method, Flags = &h0
 		Function GetLibraryInfoModuleBody() As string()
-		  
+		  //
+		  // Creates the library information module source code
+		  //
+		  // Returns an array  of string
+		  //
 		  var results() as string
 		  
 		  var template as string = "#tag Constant, Name = %0, Type = String, Dynamic = False, Default = \""%1"", Scope = Public"
@@ -134,10 +138,6 @@ Protected Class clXojoLibraryInfo
 
 	#tag Property, Flags = &h21
 		Private NameByUser As string
-	#tag EndProperty
-
-	#tag Property, Flags = &h0
-		PathO As string
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
@@ -244,14 +244,6 @@ Protected Class clXojoLibraryInfo
 			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="PathO"
-			Visible=false
-			Group="Behavior"
-			InitialValue=""
-			Type="string"
-			EditorType="MultiLineEditor"
-		#tag EndViewProperty
-		#tag ViewProperty
 			Name="projName"
 			Visible=false
 			Group="Behavior"
@@ -261,6 +253,14 @@ Protected Class clXojoLibraryInfo
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="Version"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="string"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="Requirements"
 			Visible=false
 			Group="Behavior"
 			InitialValue=""
