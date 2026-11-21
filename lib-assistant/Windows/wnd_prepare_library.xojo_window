@@ -483,7 +483,7 @@ End
 		  
 		  
 		  // This will update the project definition in memory and create required assets on disk
-		  var res as string =  ProjectInfo.AddAssetsForLibrary(libInfo, true)
+		  var res as string =  ProjectInfo.AddAssetsForPublishedLibraries(libInfo, true)
 		  
 		  lbl_status.Text = res
 		  

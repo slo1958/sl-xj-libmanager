@@ -362,6 +362,7 @@ End
 	#tag Method, Flags = &h0
 		Sub ExtractInfo(prj as clXojoProject, lb_out as DesktopListBox)
 		  
+		  // TODO: update to show used libraries instead of published libraries in destination
 		  
 		  var rowidx as integer
 		  

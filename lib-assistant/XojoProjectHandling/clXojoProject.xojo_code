@@ -1,7 +1,24 @@
 #tag Class
 Protected Class clXojoProject
 	#tag Method, Flags = &h0
-		Function AddAssetsForLibrary(info as clXojoLibraryInfo, createOnDisk as Boolean) As string
+		Sub AddAssetsForImportedLibraries(createOnDisk as Boolean)
+		  
+		  var UsedHead as clXojoProjectSourceLine = self.FindUsedLibraryFolder
+		  var UsedHeadID as int64 = -1
+		  
+		  
+		  UsedHeadID = AddTopAsset(ShareHead , clXojoProjectConstants.ShareableText, createOnDisk )
+		  // reload if created
+		  if UsedHead = nil then UsedHead  = self.FindUsedLibraryFolder
+		  
+		  
+		  Return
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function AddAssetsForPublishedLibraries(info as clXojoLibraryInfo, createOnDisk as Boolean) As string
 		  
 		  //  Folder=Shareable;Shareable;&h00000000455A6FFF;&h0000000000000000;false
 		  //  Folder=Library1;Shareable/Library1;&h0000000040A95FFF;&h00000000455A6FFF;false
@@ -14,8 +31,6 @@ Protected Class clXojoProject
 		  
 		  var ShareHead as clXojoProjectSourceLine = self.FindShareableFolder
 		  var ShareHeadID as int64 = -1
-		  var ShareHeadRelPath as String
-		  var ShareHeadFld as FolderItem = nil
 		  
 		  var LibraryHead as clXojoProjectSourceLine = nil 
 		  var LibraryHeadID as int64 = -1
@@ -27,35 +42,14 @@ Protected Class clXojoProject
 		  var infoModuleRelPath as string 
 		  var infoModuleFld as FolderItem = nil
 		  
-		  ShareHeadRelPath= clXojoProjectConstants.ShareableText 
+		   
 		  LibraryHeadRelPath   = clXojoProjectConstants.ShareableText + "/" + info.LibraryName()
 		  infoModuleRelPath  = clXojoProjectConstants.ShareableText + "/" + info.LibraryName() + "/" + info.DefaultModuleName + ".xojo_code"
 		  
 		  
-		  if Sharehead = nil then
-		    // Need to add the folder
-		    
-		    ShareHeadID = GetNewID()
-		    Sharehead = new clXojoProjectSourceLine(self.ProjectFolder)
-		    Sharehead.UpdateKeyValue(clXojoProjectConstants.cstFolder, clXojoProjectConstants.ShareableText)
-		    Sharehead.UpdateRelativePath(ShareHeadRelPath)
-		    Sharehead.UpdateOwnID(ShareHeadID)
-		    Sharehead.UpdateParentID(0)
-		    
-		    Self.SourceLines.Add(Sharehead)
-		    
-		    if createOnDisk then
-		      ShareHeadFld = Sharehead.UpdatedFullPath
-		      ShareHeadFld.CreateFolder
-		      self.CreatedAssets.Add(ShareHeadFld)
-		      
-		    end if
-		    
-		  else
-		    ShareHeadID = Sharehead.GetloadedID
-		    ShareHeadFld = Sharehead.FullPath
-		    
-		  end if
+		  ShareHeadID = AddTopAsset(ShareHead , clXojoProjectConstants.ShareableText, createOnDisk )
+		  // reload if created
+		  if ShareHead = nil then ShareHead  = self.FindShareableFolder
 		  
 		  
 		  //
@@ -148,6 +142,44 @@ Protected Class clXojoProject
 		  Return "Other error"
 		  
 		  
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function AddTopAsset(Head as clXojoProjectSourceLine, relativePath as string, createOnDisk as Boolean) As int64
+		  
+		  var TopHead as clXojoProjectSourceLine = Head
+		  var TopHeadID as int64 = -1
+		  var TopHeadRelPath as String
+		  var TopHeadFld as FolderItem = nil
+		  
+		  if TopHead = nil then
+		    // Need to add the folder
+		    
+		    TopHeadID = GetNewID()
+		    TopHead = new clXojoProjectSourceLine(self.ProjectFolder)
+		    TopHead.UpdateKeyValue(clXojoProjectConstants.cstFolder, clXojoProjectConstants.ShareableText)
+		    TopHead.UpdateRelativePath(relativePath)
+		    TopHead.UpdateOwnID(TopHeadID)
+		    TopHead.UpdateParentID(0)
+		    
+		    Self.SourceLines.Add(TopHead)
+		    
+		    if createOnDisk then
+		      TopHeadFld = TopHead.UpdatedFullPath
+		      TopHeadFld.CreateFolder
+		      self.CreatedAssets.Add(TopHeadFld)
+		      
+		    end if
+		    
+		  else
+		    TopHeadID = TopHead.GetloadedID
+		    TopHeadFld = TopHead.FullPath
+		    
+		  end if
+		  
+		  Return TopHeadID
 		  
 		End Function
 	#tag EndMethod
