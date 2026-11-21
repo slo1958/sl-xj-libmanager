@@ -6,6 +6,7 @@ Protected Class clXojoSCAConfiguration
 		  var results as new clXojoSCAConfiguration("")
 		  
 		  results.XojoFolderBase = self.XojoFolderBase
+		  results.DefaultAuthor = self.DefaultAuthor
 		  
 		  Return results
 		  
@@ -236,7 +237,23 @@ Protected Class clXojoSCAConfiguration
 			Visible=false
 			Group="Behavior"
 			InitialValue=""
-			Type="Integer"
+			Type="string"
+			EditorType="MultiLineEditor"
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="DefaultAuthor"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="string"
+			EditorType=""
+		#tag EndViewProperty
+		#tag ViewProperty
+			Name="XojoFolderBase"
+			Visible=false
+			Group="Behavior"
+			InitialValue=""
+			Type="string"
 			EditorType=""
 		#tag EndViewProperty
 	#tag EndViewBehavior

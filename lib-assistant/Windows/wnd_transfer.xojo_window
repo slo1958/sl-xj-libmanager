@@ -11,7 +11,7 @@ Begin DesktopWindow wnd_transfer
    HasMaximizeButton=   True
    HasMinimizeButton=   True
    HasTitleBar     =   True
-   Height          =   536
+   Height          =   638
    ImplicitInstance=   True
    MacProcID       =   0
    MaximumHeight   =   32000
@@ -49,12 +49,12 @@ Begin DesktopWindow wnd_transfer
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   52
+      Top             =   45
       Transparent     =   False
       Visible         =   True
       Width           =   700
    End
-   Begin DesktopListBox lb_libraries
+   Begin DesktopListBox lb_src_libraries
       AllowAutoDeactivate=   True
       AllowAutoHideScrollbars=   True
       AllowExpandableRows=   False
@@ -68,8 +68,8 @@ Begin DesktopWindow wnd_transfer
       DefaultRowHeight=   -1
       DropIndicatorVisible=   False
       Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
+      FontName        =   "Tahoma"
+      FontSize        =   12.0
       FontUnit        =   0
       GridLineStyle   =   0
       HasBorder       =   True
@@ -77,7 +77,7 @@ Begin DesktopWindow wnd_transfer
       HasHorizontalScrollbar=   False
       HasVerticalScrollbar=   True
       HeadingIndex    =   -1
-      Height          =   200
+      Height          =   180
       Index           =   -2147483648
       InitialValue    =   ""
       Italic          =   False
@@ -94,7 +94,7 @@ Begin DesktopWindow wnd_transfer
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   111
+      Top             =   125
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -104,10 +104,10 @@ Begin DesktopWindow wnd_transfer
    End
    Begin DesktopLabel Label1
       AllowAutoDeactivate=   True
-      Bold            =   False
+      Bold            =   True
       Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
+      FontName        =   "Tahoma"
+      FontSize        =   14.0
       FontUnit        =   0
       Height          =   20
       Index           =   -2147483648
@@ -136,10 +136,10 @@ Begin DesktopWindow wnd_transfer
    End
    Begin DesktopLabel Label2
       AllowAutoDeactivate=   True
-      Bold            =   False
+      Bold            =   True
       Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
+      FontName        =   "Tahoma"
+      FontSize        =   14.0
       FontUnit        =   0
       Height          =   20
       Index           =   -2147483648
@@ -160,13 +160,13 @@ Begin DesktopWindow wnd_transfer
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   339
+      Top             =   335
       Transparent     =   False
       Underline       =   False
       Visible         =   True
       Width           =   700
    End
-   Begin ccProjectPicker ccdestinationProject
+   Begin ccProjectPicker ccDestinationProject
       AllowAutoDeactivate=   True
       AllowFocus      =   False
       AllowFocusRing  =   False
@@ -190,8 +190,120 @@ Begin DesktopWindow wnd_transfer
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   371
+      Top             =   355
       Transparent     =   False
+      Visible         =   True
+      Width           =   700
+   End
+   Begin DesktopListBox lb_dst_libraries
+      AllowAutoDeactivate=   True
+      AllowAutoHideScrollbars=   True
+      AllowExpandableRows=   False
+      AllowFocusRing  =   True
+      AllowResizableColumns=   False
+      AllowRowDragging=   False
+      AllowRowReordering=   False
+      Bold            =   False
+      ColumnCount     =   1
+      ColumnWidths    =   ""
+      DefaultRowHeight=   -1
+      DropIndicatorVisible=   False
+      Enabled         =   True
+      FontName        =   "Tahoma"
+      FontSize        =   12.0
+      FontUnit        =   0
+      GridLineStyle   =   0
+      HasBorder       =   True
+      HasHeader       =   True
+      HasHorizontalScrollbar=   False
+      HasVerticalScrollbar=   True
+      HeadingIndex    =   -1
+      Height          =   180
+      Index           =   -2147483648
+      InitialValue    =   ""
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      RequiresSelection=   False
+      RowSelectionType=   0
+      Scope           =   0
+      TabIndex        =   5
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   435
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   700
+      _ScrollOffset   =   0
+      _ScrollWidth    =   -1
+   End
+   Begin DesktopLabel Label3
+      AllowAutoDeactivate=   True
+      Bold            =   True
+      Enabled         =   True
+      FontName        =   "Tahoma"
+      FontSize        =   12.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Multiline       =   False
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   6
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   "Libraries available in source project"
+      TextAlignment   =   0
+      TextColor       =   &c000000
+      Tooltip         =   ""
+      Top             =   105
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   700
+   End
+   Begin DesktopLabel Label4
+      AllowAutoDeactivate=   True
+      Bold            =   True
+      Enabled         =   True
+      FontName        =   "Tahoma"
+      FontSize        =   12.0
+      FontUnit        =   0
+      Height          =   20
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Multiline       =   False
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   7
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   "Libraries discovered in destination project"
+      TextAlignment   =   0
+      TextColor       =   &c000000
+      Tooltip         =   ""
+      Top             =   415
+      Transparent     =   False
+      Underline       =   False
       Visible         =   True
       Width           =   700
    End
@@ -206,15 +318,27 @@ End
 		  , app.GetConfiguration.XojoFolderBase _
 		  , app)
 		  
-		  lb_libraries.ColumnCount = 5
+		  lb_src_libraries.ColumnCount = 5
 		  
-		  lb_libraries.HeaderAt(0) = "Discovered libraries"
-		  lb_libraries.HeaderAt(1) = "Name" 
-		  lb_libraries.HeaderAt(2) =  "Version"
-		  lb_libraries.HeaderAt(3) = "Author"
-		  lb_libraries.HeaderAt(4) = "Select"
+		  lb_src_libraries.HeaderAt(0) = "Discovered libraries"
+		  lb_src_libraries.HeaderAt(1) = "Name" 
+		  lb_src_libraries.HeaderAt(2) =  "Version"
+		  lb_src_libraries.HeaderAt(3) = "Author"
+		  lb_src_libraries.HeaderAt(4) = "Transfer"
 		  
-		  lb_libraries.ColumnTypeAt(4) = DesktopListBox.CellTypes.CheckBox
+		  lb_src_libraries.ColumnTypeAt(4) = DesktopListBox.CellTypes.CheckBox
+		  
+		  
+		  lb_dst_libraries.ColumnCount = 5
+		  
+		  lb_dst_libraries.HeaderAt(0) = "Discovered libraries"
+		  lb_dst_libraries.HeaderAt(1) = "Name" 
+		  lb_dst_libraries.HeaderAt(2) =  "Version"
+		  lb_dst_libraries.HeaderAt(3) = "Author"
+		  lb_dst_libraries.HeaderAt(4) = "Remove"
+		  
+		  lb_dst_libraries.ColumnTypeAt(4) = DesktopListBox.CellTypes.CheckBox
+		  
 		  
 		  Return
 		  
@@ -229,27 +353,34 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Sub ExtractInfo()
+		Sub ExtractDestinationInfo()
+		  ExtractInfo(DestinationProject, lb_dst_libraries)
 		  
-		  var prj as clXojoProject = self.SourceProject
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub ExtractInfo(prj as clXojoProject, lb_out as DesktopListBox)
+		  
+		  
 		  var rowidx as integer
 		  
 		  var r() as clXojoProjectSourceLine = prj.FindLibraryHeads(prj.FindShareableFolder)
 		  
 		  
-		  lb_libraries.RemoveAllRows
+		  lb_out.RemoveAllRows
 		  
 		  for each s as clXojoProjectSourceLine in r
 		    var d as Dictionary = prj.GetAllLibraryInformation(s.value, prj.FindShareableFolder())
 		    
-		    lb_libraries.AddRow("")
-		    rowidx = lb_libraries.LastAddedRowIndex
+		    lb_out.AddRow("")
+		    rowidx = lb_out.LastAddedRowIndex
 		    
-		    lb_libraries.CellTextAt(rowidx, 0) = s.value
+		    lb_out.CellTextAt(rowidx, 0) = s.value
 		    
-		    lb_libraries.CellTextAt(rowidx, 1) = d.Lookup(clXojoLibraryInfo.cstLibraryName, "")
-		    lb_libraries.CellTextAt(rowidx, 2) = d.Lookup(clXojoLibraryInfo.cstLibraryVersion, "")
-		    lb_libraries.CellTextAt(rowidx, 3) = d.Lookup(clXojoLibraryInfo.cstLibraryAuthor, "")
+		    lb_out.CellTextAt(rowidx, 1) = d.Lookup(clXojoLibraryInfo.cstLibraryName, "")
+		    lb_out.CellTextAt(rowidx, 2) = d.Lookup(clXojoLibraryInfo.cstLibraryVersion, "")
+		    lb_out.CellTextAt(rowidx, 3) = d.Lookup(clXojoLibraryInfo.cstLibraryAuthor, "")
 		    
 		    
 		    
@@ -257,6 +388,14 @@ End
 		  
 		  
 		  return
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub ExtractSourceInfo()
+		  
+		  ExtractInfo(SourceProject, lb_src_libraries)
 		  
 		End Sub
 	#tag EndMethod
@@ -278,7 +417,7 @@ End
 		Sub TargetSelected()
 		  SourceProject = ccSourceProject.getSelectedProject()
 		  
-		  ExtractInfo
+		  ExtractSourceInfo
 		  
 		  Return
 		End Sub
@@ -291,12 +430,12 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events ccdestinationProject
+#tag Events ccDestinationProject
 	#tag Event
 		Sub TargetSelected()
-		  DestinationProject = ccSourceProject.getSelectedProject()
+		  DestinationProject = ccDestinationProject.getSelectedProject()
 		  
-		  ExtractInfo
+		  ExtractDestinationInfo
 		  
 		  Return
 		End Sub

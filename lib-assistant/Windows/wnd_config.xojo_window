@@ -32,8 +32,8 @@ Begin DesktopWindow wnd_config
       Caption         =   "Save"
       Default         =   False
       Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
+      FontName        =   "Tahoma"
+      FontSize        =   12.0
       FontUnit        =   0
       Height          =   20
       Index           =   -2147483648
@@ -60,8 +60,8 @@ Begin DesktopWindow wnd_config
       AllowAutoDeactivate=   True
       Bold            =   False
       Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
+      FontName        =   "Tahoma"
+      FontSize        =   12.0
       FontUnit        =   0
       Height          =   324
       Index           =   -2147483648
@@ -75,7 +75,7 @@ Begin DesktopWindow wnd_config
       Panels          =   ""
       Scope           =   0
       SmallTabs       =   False
-      TabDefinition   =   "Files and folders\rLIbrary setup\rLocal repository"
+      TabDefinition   =   "Files and folders\rLibrary setup\rLocal repository"
       TabIndex        =   6
       TabPanelIndex   =   0
       TabStop         =   True
@@ -93,8 +93,8 @@ Begin DesktopWindow wnd_config
          Caption         =   "Button"
          Default         =   False
          Enabled         =   True
-         FontName        =   "System"
-         FontSize        =   0.0
+         FontName        =   "Tahoma"
+         FontSize        =   12.0
          FontUnit        =   0
          Height          =   20
          Index           =   -2147483648
@@ -126,8 +126,8 @@ Begin DesktopWindow wnd_config
          BackgroundColor =   &cFFFFFF
          Bold            =   False
          Enabled         =   True
-         FontName        =   "System"
-         FontSize        =   0.0
+         FontName        =   "Tahoma"
+         FontSize        =   12.0
          FontUnit        =   0
          Format          =   ""
          HasBorder       =   True
@@ -164,8 +164,8 @@ Begin DesktopWindow wnd_config
          AllowAutoDeactivate=   True
          Bold            =   False
          Enabled         =   True
-         FontName        =   "System"
-         FontSize        =   0.0
+         FontName        =   "Tahoma"
+         FontSize        =   12.0
          FontUnit        =   0
          Height          =   22
          Index           =   -2147483648
@@ -197,8 +197,8 @@ Begin DesktopWindow wnd_config
          AllowAutoDeactivate=   True
          Bold            =   False
          Enabled         =   True
-         FontName        =   "System"
-         FontSize        =   0.0
+         FontName        =   "Tahoma"
+         FontSize        =   12.0
          FontUnit        =   0
          Height          =   22
          Index           =   -2147483648
@@ -240,8 +240,8 @@ Begin DesktopWindow wnd_config
          DefaultRowHeight=   -1
          DropIndicatorVisible=   False
          Enabled         =   False
-         FontName        =   "System"
-         FontSize        =   0.0
+         FontName        =   "Tahoma"
+         FontSize        =   12.0
          FontUnit        =   0
          GridLineStyle   =   0
          HasBorder       =   True
@@ -272,14 +272,15 @@ Begin DesktopWindow wnd_config
          Underline       =   False
          Visible         =   True
          Width           =   331
+         _ScrollOffset   =   0
          _ScrollWidth    =   -1
       End
       Begin DesktopLabel Label3
          AllowAutoDeactivate=   True
          Bold            =   False
          Enabled         =   True
-         FontName        =   "System"
-         FontSize        =   0.0
+         FontName        =   "Tahoma"
+         FontSize        =   12.0
          FontUnit        =   0
          Height          =   22
          Index           =   -2147483648
@@ -315,8 +316,8 @@ Begin DesktopWindow wnd_config
          BackgroundColor =   &cFFFFFF
          Bold            =   False
          Enabled         =   True
-         FontName        =   "System"
-         FontSize        =   0.0
+         FontName        =   "Tahoma"
+         FontSize        =   12.0
          FontUnit        =   0
          Format          =   ""
          HasBorder       =   True

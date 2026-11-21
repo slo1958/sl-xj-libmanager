@@ -27,11 +27,11 @@ Begin DesktopContainer ccProjectPicker
    Width           =   700
    Begin DesktopLabel lbl_Target
       AllowAutoDeactivate=   True
-      Bold            =   False
+      Bold            =   True
       Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
-      FontUnit        =   0
+      FontName        =   "tahoma"
+      FontSize        =   14.0
+      FontUnit        =   2
       Height          =   32
       Index           =   -2147483648
       Italic          =   False
@@ -47,7 +47,7 @@ Begin DesktopContainer ccProjectPicker
       TabIndex        =   0
       TabPanelIndex   =   0
       TabStop         =   True
-      Text            =   "Select your target project. "
+      Text            =   "Select your project. "
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
@@ -64,7 +64,7 @@ Begin DesktopContainer ccProjectPicker
       Caption         =   "Select xyz"
       Default         =   False
       Enabled         =   True
-      FontName        =   "System"
+      FontName        =   "Tahoma"
       FontSize        =   0.0
       FontUnit        =   0
       Height          =   32
@@ -95,7 +95,7 @@ Begin DesktopContainer ccProjectPicker
       Caption         =   "Clear"
       Default         =   False
       Enabled         =   True
-      FontName        =   "System"
+      FontName        =   "Tahoma"
       FontSize        =   0.0
       FontUnit        =   0
       Height          =   32

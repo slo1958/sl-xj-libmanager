@@ -39,8 +39,8 @@ Begin DesktopWindow wnd_project_content
       DefaultRowHeight=   -1
       DropIndicatorVisible=   False
       Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
+      FontName        =   "Tahoma"
+      FontSize        =   12.0
       FontUnit        =   0
       GridLineStyle   =   0
       HasBorder       =   True
@@ -87,8 +87,8 @@ Begin DesktopWindow wnd_project_content
       DefaultRowHeight=   -1
       DropIndicatorVisible=   False
       Enabled         =   True
-      FontName        =   "System"
-      FontSize        =   0.0
+      FontName        =   "Tahoma"
+      FontSize        =   12.0
       FontUnit        =   0
       GridLineStyle   =   0
       HasBorder       =   True
