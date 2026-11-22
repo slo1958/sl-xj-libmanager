@@ -96,12 +96,12 @@ Begin DesktopWindow wnd_project_content
       HasHorizontalScrollbar=   False
       HasVerticalScrollbar=   True
       HeadingIndex    =   -1
-      Height          =   152
+      Height          =   240
       Index           =   -2147483648
       InitialValue    =   ""
       Italic          =   False
       Left            =   20
-      LockBottom      =   False
+      LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   False
@@ -182,53 +182,58 @@ Begin DesktopWindow wnd_project_content
       Visible         =   True
       Width           =   320
    End
-   Begin DesktopListBox lb_structure
+   Begin DesktopCanvas Canvas1
       AllowAutoDeactivate=   True
-      AllowAutoHideScrollbars=   True
-      AllowExpandableRows=   False
+      AllowFocus      =   False
       AllowFocusRing  =   True
-      AllowResizableColumns=   False
-      AllowRowDragging=   False
-      AllowRowReordering=   False
-      Bold            =   False
-      ColumnCount     =   1
-      ColumnWidths    =   ""
-      DefaultRowHeight=   -1
-      DropIndicatorVisible=   False
+      AllowTabs       =   False
+      Backdrop        =   0
       Enabled         =   True
-      FontName        =   "Tahoma"
-      FontSize        =   12.0
-      FontUnit        =   0
-      GridLineStyle   =   0
-      HasBorder       =   True
-      HasHeader       =   True
-      HasHorizontalScrollbar=   False
-      HasVerticalScrollbar=   True
-      HeadingIndex    =   -1
-      Height          =   152
+      Height          =   240
       Index           =   -2147483648
-      InitialValue    =   ""
-      Italic          =   False
       Left            =   360
-      LockBottom      =   False
+      LockBottom      =   True
       LockedInPosition=   False
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      RequiresSelection=   False
-      RowSelectionType=   0
       Scope           =   0
-      TabIndex        =   5
+      TabIndex        =   6
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
       Top             =   340
       Transparent     =   False
-      Underline       =   False
       Visible         =   True
-      Width           =   360
-      _ScrollOffset   =   0
-      _ScrollWidth    =   -1
+      Width           =   340
+   End
+   Begin DesktopScrollbar scScrollPict
+      AllowAutoDeactivate=   True
+      AllowFocus      =   True
+      AllowLiveScrolling=   True
+      Enabled         =   True
+      Height          =   236
+      Index           =   -2147483648
+      Left            =   705
+      LineStep        =   1
+      LockBottom      =   True
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      MaximumValue    =   100
+      MinimumValue    =   0
+      PageStep        =   20
+      Scope           =   0
+      TabIndex        =   7
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   340
+      Transparent     =   False
+      Value           =   0
+      Visible         =   True
+      Width           =   15
    End
 End
 #tag EndDesktopWindow
@@ -249,8 +254,10 @@ End
 		  lb_properties.HeaderAt(0) = "Properties"
 		  lb_properties.HeaderAt(1) = " "
 		  
-		  lb_structure.ColumnCount = 1
-		  lb_structure.HeaderAt(0) = "Structure"
+		  //lb_structure.ColumnCount = 1
+		  //lb_structure.HeaderAt(0) = "Structure"
+		  
+		  Canvas1.Refresh(true)
 		  
 		  Return
 		  
@@ -279,7 +286,7 @@ End
 		  
 		  for i as integer = 0 to 1
 		    
-		    var LibraryHeads() as clXojoProjectSourceLine = prj.FindLibraryHeads(SectionHead(i))
+		    var LibraryHeads() as clXojoProjectSourceLine = prj.GetLibrariesInTopFolder(SectionHead(i))
 		    
 		    for each LibraryHead as clXojoProjectSourceLine in LibraryHeads
 		      var libraryName as String = LibraryHead.Value
@@ -301,9 +308,179 @@ End
 		End Sub
 	#tag EndMethod
 
+	#tag Method, Flags = &h0
+		Sub ResetImage()
+		  Self.StructurePict = nil
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub ShowLibraryProperties(head as clXojoProjectSourceLine)
+		  
+		  lb_properties.RemoveAllRows
+		  
+		  var boldItems() as string = array ( _ 
+		  clXojoLibraryInfo.cstLibraryAuthor _
+		  ,clXojoLibraryInfo.cstLibraryName _
+		  ,clXojoLibraryInfo.cstLibraryVersion _
+		  ,clXojoLibraryInfo.cstLibraryRequirements _
+		  )
+		  
+		  if head <> nil then 
+		    
+		    var d as Dictionary = project.GetAllLibraryInformation(head)
+		    
+		    for each k as string in d.keys
+		      var newidx as integer 
+		      var newstd as Boolean = false
+		      
+		      lb_properties.addrow("")
+		      
+		      newidx = lb_properties.LastAddedRowIndex
+		      
+		      newstd = boldItems.indexof(k) >= 0
+		      
+		      lb_properties.CellTextAt(newidx, 0) = k
+		      lb_properties.CellTextAt(newidx, 1) = d.Value(k)
+		      
+		      lb_properties.CellBoldAt(newidx, 1) = newstd
+		      
+		      
+		    next
+		    
+		  end if
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub ShowLibraryStructure(head as clXojoProjectSourceLine)
+		  const cstRowHeight as integer = 20
+		  const cstTotalWidth as integer = 340
+		  const cstOffset  as integer = -5
+		  const cstDrawingOffset as integer = 10
+		  
+		  var vertLineLastY(20) as integer
+		  
+		  for i as integer = 0 to vertLineLastY.LastIndex
+		    vertLineLastY(i) = -1
+		    
+		  next
+		  
+		  // lb_structure.RemoveAllRows
+		  
+		  self.StructurePict = nil
+		  
+		  if head = nil then return
+		   
+		  var results() as pair = project.NavigateSubTree(head, 0)
+		  
+		  //
+		  // Calculate height of picture
+		  //
+		  var htot as integer = results.Count * cstRowHeight + cstRowHeight * 2
+		  var wtot as integer = cstTotalWidth
+		  var hcurrent as integer = cstRowHeight
+		  
+		  var lastlevel as integer = 0
+		  
+		  self.StructurePict = new Picture(wtot, htot, 32)
+		  
+		  var pct as Picture = self.StructurePict
+		  
+		  pct.Graphics.FontName = "Tahoma"
+		  pct.Graphics.FontSize = 12
+		  
+		  scScrollPict.Value = 0
+		  scScrollPict.MaximumValue = pct.Height - Canvas1.Height + 20
+		  
+		  for each p as pair in results
+		    var h as clXojoProjectSourceLine = clXojoProjectSourceLine(p.right)
+		    var str as string = h.key + "  " + h.value
+		    var curlevel as integer = p.Left
+		    
+		    var xLineStart as integer = (curlevel - 1 ) * 20 + 5 + cstDrawingOffset
+		    var xLineEnd as integer = curlevel * 20 - 5 + cstDrawingOffset
+		    
+		    if p.left > 0 then 
+		      
+		      var VertLineDrawFromY as integer
+		      
+		      if vertLineLastY( curlevel) > 0 then
+		        VertLineDrawFromY = vertLineLastY( curlevel)
+		        
+		      else
+		        VertLineDrawFromY  = hcurrent + cstOffset  - cstRowHeight + 10 
+		        
+		      end if
+		      
+		      pct.Graphics.DrawingColor = rgb(128, 128, 128)
+		      pct.Graphics.DrawLine( xLineStart, hcurrent + cstOffset  , xLineEnd, hcurrent + cstOffset  )
+		      pct.Graphics.DrawLine( xLineStart , VertLineDrawFromY, xLineStart, hcurrent + cstOffset)
+		      
+		      
+		      vertLineLastY( p.left) = VertLineDrawFromY
+		      
+		      
+		      for i as integer = curlevel + 1 to vertLineLastY.LastIndex
+		        vertLineLastY(i) = -1
+		        
+		      next
+		      
+		      lastlevel = curlevel
+		      
+		    end if
+		    
+		    pct.Graphics.DrawingColor = rgb(0, 0, 0)
+		    pct.Graphics.DrawText(str, p.left*20 + cstDrawingOffset , hcurrent)
+		    
+		    // lb_structure.AddRow (msg)
+		    
+		    hcurrent = hcurrent + cstRowHeight
+		     
+		  next
+		  
+		  Canvas1.Refresh(true)
+		  
+		  return
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub ShowLibraryStructure2(head as clXojoProjectSourceLine)
+		  // 
+		  // 
+		  // lb_structure.RemoveAllRows
+		  // 
+		  // if head <> nil then 
+		  // var results() as pair = project.NavigateSubTree(head, 0)
+		  // 
+		  // for each p as pair in results
+		  // var h as clXojoProjectSourceLine = clXojoProjectSourceLine(p.right)
+		  // 
+		  // var msg as string = FixStr("-", p.left*2) + h.key + "  " + h.value
+		  // 
+		  // lb_structure.AddRow (msg)
+		  // 
+		  // next
+		  // 
+		  // end if
+		  // 
+		  // return
+		  
+		End Sub
+	#tag EndMethod
+
 
 	#tag Property, Flags = &h21
 		Private project As clXojoProject
+	#tag EndProperty
+
+	#tag Property, Flags = &h0
+		StructurePict As Picture
 	#tag EndProperty
 
 
@@ -324,56 +501,12 @@ End
 		  
 		  if r isa clXojoProjectSourceLine then head = clXojoProjectSourceLine(r)
 		  
-		  lb_properties.RemoveAllRows
+		  ShowLibraryProperties(head)
 		  
-		  if head <> nil then 
-		    
-		    var d as Dictionary = project.GetAllLibraryInformation(head)
-		    
-		    for each k as string in d.keys
-		      var newidx as integer 
-		      var newstd as Boolean = false
-		      
-		      lb_properties.addrow("")
-		      
-		      newidx = lb_properties.LastAddedRowIndex
-		      
-		      newstd = k = clXojoLibraryInfo.cstLibraryAuthor _
-		      or k = clXojoLibraryInfo.cstLibraryName _
-		      or k = clXojoLibraryInfo.cstLibraryVersion
-		      
-		      lb_properties.CellTextAt(newidx, 0) = k
-		      lb_properties.CellTextAt(newidx, 1) = d.Value(k)
-		      
-		      lb_properties.CellBoldAt(newidx, 1) = newstd
-		      
-		      
-		    next
-		    
-		  end if
-		  
-		  
-		  lb_structure.RemoveAllRows
-		  
-		  if head <> nil then 
-		    var results() as pair = project.NavigateSubTree(head, 0)
-		    
-		    for each p as pair in results
-		      var h as clXojoProjectSourceLine = clXojoProjectSourceLine(p.right)
-		      
-		      var msg as string = FixStr("-", p.left*2) + h.key + "  " + h.value
-		      
-		      lb_structure.AddRow (msg)
-		      
-		    next
-		    
-		  end if
+		  ShowLibraryStructure(head)
 		  
 		  Return
-		  
-		  // 
-		  // var d as Dictionary = prj.GetAllLibraryInformation(libraryName, h(i))
-		  // lb_libraries.RowTagAt(lb_libraries.LastAddedRowIndex) = d
+		   
 		  
 		End Sub
 	#tag EndEvent
@@ -395,7 +528,7 @@ End
 		  
 		  lb_libraries.RemoveAllRows
 		  lb_properties.RemoveAllRows
-		  lb_structure.RemoveAllRows
+		  //lb_structure.RemoveAllRows
 		  
 		  Return
 		  
@@ -406,6 +539,30 @@ End
 	#tag Event
 		Sub Opening()
 		  me.Text = "This list contains all constants defined in the library information module."
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events Canvas1
+	#tag Event
+		Sub Paint(g As Graphics, areas() As Rect)
+		  
+		  if self.StructurePict <> nil then g.DrawPicture(self.StructurePict, 0, -scScrollPict.Value)
+		  
+		  g.DrawingColor = rgb(200, 200, 200)
+		  
+		  g.DrawRectangle(0, 0, g.Width, g.Height)
+		  
+		  
+		  
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events scScrollPict
+	#tag Event
+		Sub ValueChanged()
+		  
+		  Canvas1.Refresh(true)
 		  
 		End Sub
 	#tag EndEvent

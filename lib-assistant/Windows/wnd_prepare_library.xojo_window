@@ -330,7 +330,7 @@ Begin DesktopWindow wnd_prepare_library
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   422
+      Top             =   324
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -362,7 +362,7 @@ Begin DesktopWindow wnd_prepare_library
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   344
+      Top             =   376
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -432,6 +432,69 @@ Begin DesktopWindow wnd_prepare_library
       Visible         =   True
       Width           =   520
    End
+   Begin DesktopButton btn_open
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Cancel          =   False
+      Caption         =   "Open project"
+      Default         =   False
+      Enabled         =   False
+      FontName        =   "Tahoma"
+      FontSize        =   12.0
+      FontUnit        =   0
+      Height          =   40
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   574
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      MacButtonStyle  =   0
+      Scope           =   2
+      TabIndex        =   13
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   422
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   146
+   End
+   Begin DesktopLabel lbl_status1
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Enabled         =   True
+      FontName        =   "tahoma"
+      FontSize        =   12.0
+      FontUnit        =   0
+      Height          =   35
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   20
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Multiline       =   True
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   14
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   "Open the project in the Xojo IDE. \nThis works only if the Xojo IDE is registered in the host operating system as application handling '.xojo-project' files"
+      TextAlignment   =   0
+      TextColor       =   &c000000
+      Tooltip         =   ""
+      Top             =   422
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   522
+   End
 End
 #tag EndDesktopWindow
 
@@ -487,12 +550,15 @@ End
 		Sub TargetSelected()
 		  ProjectInfo = ccSourceProject.getSelectedProject()
 		  CheckReadyToUpdate
+		  
+		  btn_open.Enabled = true
 		End Sub
 	#tag EndEvent
 	#tag Event
 		Sub ClearSelected()
 		  ProjectInfo = nil
 		  CheckReadyToUpdate
+		  btn_open.Enabled = false
 		  
 		End Sub
 	#tag EndEvent
@@ -527,6 +593,18 @@ End
 		    lbl_status.Text = "Assets have been added to the project. You can now move the relevant project items in the new folder."
 		  end if
 		  
+		  
+		  Return
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events btn_open
+	#tag Event
+		Sub Pressed()
+		  
+		  self.Close
+		  
+		  self.ProjectInfo.SourceProjectFile.Open
 		  
 		  Return
 		End Sub

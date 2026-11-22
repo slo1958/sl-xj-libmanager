@@ -21,7 +21,7 @@ Begin DesktopWindow wnd_transfer
    MinimumHeight   =   64
    MinimumWidth    =   64
    Resizeable      =   True
-   Title           =   "Untitled"
+   Title           =   "Import libraries"
    Type            =   0
    Visible         =   True
    Width           =   740
@@ -387,7 +387,7 @@ Begin DesktopWindow wnd_transfer
       Visible         =   True
       Width           =   700
    End
-   Begin DesktopButton Button1
+   Begin DesktopButton btn_proceed
       AllowAutoDeactivate=   True
       Bold            =   False
       Cancel          =   False
@@ -400,7 +400,7 @@ Begin DesktopWindow wnd_transfer
       Height          =   20
       Index           =   -2147483648
       Italic          =   False
-      Left            =   640
+      Left            =   614
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
@@ -412,11 +412,11 @@ Begin DesktopWindow wnd_transfer
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   760
+      Top             =   672
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      Width           =   80
+      Width           =   106
    End
    Begin DesktopLabel lb_pub_info
       AllowAutoDeactivate=   True
@@ -457,7 +457,7 @@ Begin DesktopWindow wnd_transfer
       FontName        =   "System"
       FontSize        =   0.0
       FontUnit        =   0
-      Height          =   85
+      Height          =   73
       Index           =   -2147483648
       Italic          =   False
       Left            =   355
@@ -489,7 +489,7 @@ Begin DesktopWindow wnd_transfer
       FontName        =   "Tahoma"
       FontSize        =   12.0
       FontUnit        =   0
-      Height          =   30
+      Height          =   20
       Index           =   -2147483648
       Italic          =   False
       Left            =   200
@@ -498,7 +498,7 @@ Begin DesktopWindow wnd_transfer
       LockLeft        =   True
       LockRight       =   False
       LockTop         =   True
-      Multiline       =   True
+      Multiline       =   False
       Scope           =   0
       Selectable      =   False
       TabIndex        =   13
@@ -513,6 +513,70 @@ Begin DesktopWindow wnd_transfer
       Underline       =   False
       Visible         =   True
       Width           =   520
+   End
+   Begin DesktopButton btn_open
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Cancel          =   False
+      Caption         =   "Open project"
+      Default         =   False
+      Enabled         =   False
+      FontName        =   "Tahoma"
+      FontSize        =   12.0
+      FontUnit        =   0
+      Height          =   40
+      Index           =   -2147483648
+      Italic          =   False
+      Left            =   614
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      MacButtonStyle  =   0
+      Scope           =   2
+      TabIndex        =   14
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Tooltip         =   ""
+      Top             =   740
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   106
+   End
+   Begin DesktopLabel lbl_status1
+      AllowAutoDeactivate=   True
+      Bold            =   False
+      Enabled         =   True
+      FontName        =   "tahoma"
+      FontSize        =   12.0
+      FontUnit        =   0
+      Height          =   63
+      Index           =   -2147483648
+      InitialParent   =   ""
+      Italic          =   False
+      Left            =   355
+      LockBottom      =   False
+      LockedInPosition=   False
+      LockLeft        =   True
+      LockRight       =   False
+      LockTop         =   True
+      Multiline       =   True
+      Scope           =   0
+      Selectable      =   False
+      TabIndex        =   15
+      TabPanelIndex   =   0
+      TabStop         =   True
+      Text            =   "Open the destination project in the Xojo IDE. \nThis works only if the Xojo IDE is registered in the host operating system as application handling '.xojo-project' files"
+      TextAlignment   =   0
+      TextColor       =   &c000000
+      Tooltip         =   ""
+      Top             =   717
+      Transparent     =   False
+      Underline       =   False
+      Visible         =   True
+      Width           =   247
    End
 End
 #tag EndDesktopWindow
@@ -607,7 +671,7 @@ End
 		  lb_out.RemoveAllRows
 		  
 		  for each libraryHead as clXojoProjectSourceLine in libraryHeads
-		    var r() as clXojoProjectSourceLine = prj.FindLibraryHeads(libraryHead)
+		    var r() as clXojoProjectSourceLine = prj.GetLibrariesInTopFolder(libraryHead)
 		    
 		    
 		    for each sourceItem as clXojoProjectSourceLine in r
@@ -669,6 +733,19 @@ End
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Sub ResetUI()
+		  
+		  if SourceProject = nil then lb_src_libraries.RemoveAllRows
+		  if DestinationProject = nil then lb_dst_libraries.RemoveAllRows
+		  
+		  lb_actions.RemoveAllRows
+		  lb_res.Text = "" 
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Sub UpdateActions()
 		  
 		  lb_actions.RemoveAllRows
@@ -719,14 +796,50 @@ End
 		    var chk as Boolean = lb.CellCheckBoxValueAt(i, 4)
 		    var nam as String = lb.CellTextAt(i,0)
 		    
+		    var srcitem as clXojoProjectSourceLine = nil
+		    var srcinfo as clXojoLibraryInfo = nil
+		    
+		    var req_libname() as string
+		    
+		    
 		    if chk then 
+		      
 		      lb_actions.AddRow("Transfer " + nam)
 		      LibraryToMove.Add(nam)
+		      
+		      
+		      // Find requirements
+		      
+		      srcitem = clXojoProjectSourceLine(lb.RowTagAt(i) )
+		      
+		      if srcitem <> nil then srcinfo = SourceProject.GetLibraryInformation(srcitem.value, SourceProject.FindShareableFolder)
+		      
+		      if srcinfo <> nil then req_libname = srcinfo.GetRequiredLibraries()
+		      
+		      
+		      for each req as string in req_libname
+		        var fndlibsrc as clXojoProjectSourceLine = SourceProject.GetLibraryInTopFolder(req, SourceProject.FindShareableFolder)
+		        var fndlibdst as clXojoProjectSourceLine = DestinationProject.GetLibraryInTopFolder(req, DestinationProject.FindUsedLibraryFolder)
+		        
+		        if fndlibsrc = nil then
+		          lb_actions.AddRow("Selected library depends on [" + req + "] missing in project.")
+		          
+		        elseif fndlibdst <> nil then
+		          lb_actions.AddRow("Selected library depends on [" + req + "] already in destination project.")
+		          
+		        else
+		          lb_actions.AddRow("Selected library depends on [" + req + "] added to list.")
+		          LibraryToMove.Add(req)
+		          
+		        end if
+		        
+		      next 
 		      
 		    end if
 		    
 		  next
 		  
+		  btn_proceed.Enabled = LibraryToMove.Count > 0
 		  
 		  Return
 		End Sub
@@ -734,6 +847,9 @@ End
 
 	#tag Method, Flags = &h0
 		Sub UpdateDestinationProject()
+		  
+		  lb_res.Text = "Updating destination project..."
+		  lb_res.Refresh(true)
 		  
 		  var parentIDInSourceProject as int64 = SourceProject.FindShareableFolder().GetloadedID
 		  
@@ -762,20 +878,6 @@ End
 		  ExtractDestinationInfo
 		  
 		  return
-		  
-		  
-		End Sub
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
-		Sub UpdateUI()
-		  
-		  if SourceProject = nil then lb_src_libraries.RemoveAllRows
-		  if DestinationProject = nil then lb_dst_libraries.RemoveAllRows
-		  
-		  
-		  lb_actions.RemoveAllRows
-		  lb_res.Text = "" 
 		  
 		  
 		End Sub
@@ -823,8 +925,9 @@ End
 	#tag Event
 		Sub ClearSelected()
 		  SourceProject = nil
+		  btn_proceed.Enabled = false
 		  
-		  UpdateUI
+		  ResetUI
 		  
 		  CheckReadyToTransfer
 		  
@@ -843,6 +946,7 @@ End
 	#tag Event
 		Sub TargetSelected()
 		  DestinationProject = ccDestinationProject.getSelectedProject()
+		  btn_open.Enabled = true
 		  
 		  if DuplicateOk() then
 		    ExtractDestinationInfo
@@ -858,8 +962,10 @@ End
 	#tag Event
 		Sub ClearSelected()
 		  DestinationProject = nil
+		  btn_open.Enabled = false
+		  btn_proceed.Enabled = false
 		  
-		  UpdateUI
+		  ResetUI
 		  
 		  CheckReadyToTransfer
 		  
@@ -874,10 +980,22 @@ End
 		End Sub
 	#tag EndEvent
 #tag EndEvents
-#tag Events Button1
+#tag Events btn_proceed
 	#tag Event
 		Sub Pressed()
 		  if LibraryToMove.Count > 0 then updateDestinationProject
+		End Sub
+	#tag EndEvent
+#tag EndEvents
+#tag Events btn_open
+	#tag Event
+		Sub Pressed()
+		  
+		  self.Close
+		  
+		  self.DestinationProject.SourceProjectFile.Open
+		  
+		  Return
 		End Sub
 	#tag EndEvent
 #tag EndEvents

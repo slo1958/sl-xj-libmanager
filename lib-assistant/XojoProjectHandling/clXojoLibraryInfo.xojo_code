@@ -8,14 +8,14 @@ Protected Class clXojoLibraryInfo
 		    self.Name = Source.Lookup(cstLibraryName, projectFolderName)
 		    self.Version = source.Lookup(cstLibraryVersion, "Unspecified")
 		    self.projName = projectFolderName
-		    self.Requirements = source.Lookup(cstLibraryRequirement,"")
+		    self.Requirements = source.Lookup(cstLibraryRequirements,"")
 		    
 		  else
 		    self.Author = "Unknown"
 		    self.Name = projectFolderName
 		    self.Version = "Unspecified"
 		    self.projName = projectFolderName
-		    self.Requirements = source.Lookup(cstLibraryRequirement,"")
+		    self.Requirements = source.Lookup(cstLibraryRequirements,"")
 		    
 		  end if
 		  
@@ -53,7 +53,7 @@ Protected Class clXojoLibraryInfo
 		  //
 		  var results() as string
 		  
-		  var template as string = "#tag Constant, Name = %0, Type = String, Dynamic = False, Default = \""%1"", Scope = Public"
+		  var template as string = "#tag Constant, Name = %0, Type = String, Dynamic = False, Default = \""%1"", Scope = Protected"
 		  
 		  // TODO: clean up library name
 		  
@@ -73,7 +73,7 @@ Protected Class clXojoLibraryInfo
 		  results.add("#tag EndConstant")
 		  results.add("")
 		  
-		  results.Add(ReplacePlaceholders(template, cstLibraryRequirement, self.LibraryRequirements))
+		  results.Add(ReplacePlaceholders(template, cstLibraryRequirements, self.LibraryRequirements))
 		  results.add("#tag EndConstant")
 		  results.add("")
 		  
@@ -84,6 +84,13 @@ Protected Class clXojoLibraryInfo
 		  Return results
 		  
 		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetRequiredLibraries() As string()
+		  
+		  Return self.Required
 		End Function
 	#tag EndMethod
 
@@ -187,7 +194,7 @@ Protected Class clXojoLibraryInfo
 	#tag Constant, Name = cstLibraryName, Type = String, Dynamic = False, Default = \"LibraryName", Scope = Public
 	#tag EndConstant
 
-	#tag Constant, Name = cstLibraryRequirement, Type = String, Dynamic = False, Default = \"Requires", Scope = Public
+	#tag Constant, Name = cstLibraryRequirements, Type = String, Dynamic = False, Default = \"LibraryRequirements", Scope = Public
 	#tag EndConstant
 
 	#tag Constant, Name = cstLibraryVersion, Type = String, Dynamic = False, Default = \"LibraryVersion", Scope = Public

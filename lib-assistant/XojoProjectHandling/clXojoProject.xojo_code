@@ -263,33 +263,6 @@ Protected Class clXojoProject
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function FindLibraryHeads(LibraryFolder as clXojoProjectSourceLine) As clXojoProjectSourceLine()
-		  //
-		  // Libraries are folders under the top folder
-		  // The library folder is either 'Shareable' or 'UsedLibraries'
-		  //
-		  var results() as clXojoProjectSourceLine
-		  
-		  var h as clXojoProjectSourceLine = LibraryFolder
-		  
-		  if h = nil then return results
-		  
-		  for each s as clXojoProjectSourceLine in h.Children
-		    if s.key = clXojoProjectConstants.cstFolder then
-		      results.Add(s)
-		      
-		      
-		    end if
-		    
-		    
-		  next
-		  
-		  return results
-		  
-		End Function
-	#tag EndMethod
-
-	#tag Method, Flags = &h0
 		Function FindShareableFolder() As clXojoProjectSourceLine
 		  
 		  
@@ -412,7 +385,7 @@ Protected Class clXojoProject
 		  
 		  var results as new Dictionary
 		  
-		  var libraries() as clXojoProjectSourceLine = FindLibraryHeads(LibrariesTopFolder)
+		  var libraries() as clXojoProjectSourceLine = GetLibrariesInTopFolder(LibrariesTopFolder)
 		  var library as clXojoProjectSourceLine = nil 
 		  var infomodule as clXojoProjectSourceLine = nil
 		  
@@ -430,6 +403,34 @@ Protected Class clXojoProject
 		  end if
 		  
 		  return GetAllLibraryInformation(library)
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetLibrariesInTopFolder(LibraryFolder as clXojoProjectSourceLine) As clXojoProjectSourceLine()
+		  //
+		  // Libraries are folders under the top folder
+		  // The library folder is either 'Shareable' or 'UsedLibraries'
+		  //
+		  var results() as clXojoProjectSourceLine
+		  
+		  var h as clXojoProjectSourceLine = LibraryFolder
+		  
+		  if h = nil then return results
+		  
+		  for each s as clXojoProjectSourceLine in h.Children
+		    if s.key = clXojoProjectConstants.cstFolder then
+		      results.Add(s)
+		      
+		      
+		    end if
+		    
+		    
+		  next
+		  
+		  return results
+		  
 		  
 		End Function
 	#tag EndMethod
@@ -465,6 +466,26 @@ Protected Class clXojoProject
 		  var results as new clXojoLibraryInfo(d, self.ProjectFolder.Name)
 		  
 		  return results
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function GetLibraryInTopFolder(LibraryName as string, LibraryFolder as clXojoProjectSourceLine) As clXojoProjectSourceLine
+		  
+		  var temp() as clXojoProjectSourceLine = GetLibrariesInTopFolder(LibraryFolder)
+		  
+		  if temp.Count = 0 then return nil
+		  
+		  for each item as clXojoProjectSourceLine in temp
+		    if item.value = LibraryName then return item
+		    
+		  next
+		  
+		  return nil
+		  
+		  
+		  
 		  
 		End Function
 	#tag EndMethod
@@ -659,7 +680,7 @@ Protected Class clXojoProject
 		  
 		  var projectLinesToTransfer() as clXojoProjectSourceLine
 		  
-		  var availLibraries() as clXojoProjectSourceLine = SourceProject.FindLibraryHeads(SourceProject.FindShareableFolder())
+		  var availLibraries() as clXojoProjectSourceLine = SourceProject.GetLibrariesInTopFolder(SourceProject.FindShareableFolder())
 		  
 		  for each availLibrary as clXojoProjectSourceLine in availLibraries
 		    if libraries.IndexOf(availLibrary.value) >=0 then

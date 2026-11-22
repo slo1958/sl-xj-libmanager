@@ -18,9 +18,7 @@ Implements itfShareProgress
 
 	#tag MenuHandler
 		Function ActionsCheckproject() As Boolean Handles ActionsCheckproject.Action
-		  var w as new wnd_project_content
-		  
-		  w.show
+		  Launch_Project_Checking
 		  
 		  Return True
 		  
@@ -29,21 +27,18 @@ Implements itfShareProgress
 
 	#tag MenuHandler
 		Function ActionsPreparealibraryproject() As Boolean Handles ActionsPreparealibraryproject.Action
-		  var w as new wnd_prepare_library
 		  
-		  w.show
+		  Launch_Prepare_Project
 		  
 		  Return True
+		  
 		  
 		End Function
 	#tag EndMenuHandler
 
 	#tag MenuHandler
 		Function ActionsTransferlibraries() As Boolean Handles ActionsTransferlibraries.Action
-		  
-		  var w as new wnd_transfer
-		  
-		  w.show
+		  Launch_Simple_Library_Import
 		  
 		  Return True
 		  
@@ -68,6 +63,38 @@ Implements itfShareProgress
 		  return self.Configuration
 		  
 		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Launch_Prepare_Project()
+		  var w as new wnd_prepare_library
+		  
+		  w.show
+		  
+		  
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Launch_Project_Checking()
+		  
+		  var w as new wnd_project_content
+		  
+		  w.show
+		  
+		End Sub
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Sub Launch_Simple_Library_Import()
+		  
+		  var w as new wnd_transfer
+		  
+		  w.show
+		  
+		  
+		End Sub
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
