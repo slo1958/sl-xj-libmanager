@@ -663,7 +663,7 @@ Protected Class clXojoProject
 		  for each topItem as clXojoProjectSourceLine in topItems
 		    if topItem <> nil then
 		      for each item as clXojoProjectSourceLine in topItem.Children
-		        if item.key = clXojoProjectConstants.cstFolder and Libraries.IndexOfLibrary(item.value) >= 0 then
+		        if item.key = clXojoProjectConstants.cstFolder and LibrariesToMove.IndexOfLibrary(item.value) >= 0 then
 		          libOk = false
 		          issues.Add("Library " + item.value + " already present in the destination")
 		          
@@ -677,16 +677,18 @@ Protected Class clXojoProject
 		  if not libOK then return String.FromArray(issues, chr(9))
 		  
 		  
-		  // var projectLinesToTransfer() as clXojoProjectSourceLine
+		   var projectLinesToTransfer() as clXojoProjectSourceLine
 		  
 		  // Locate sourceLine in published libraries
 		  var availLibraries() as clXojoProjectSourceLine = SourceProject.GetLibrariesInTopFolder(SourceProject.FindShareableFolder())
+		  var parentIDInSourceProject as int64 = SourceProject.FindShareableFolder().GetloadedID
 		  
 		  for each availLibrary as clXojoProjectSourceLine in availLibraries
 		    var libraryToMoveIndex as integer = LibrariesToMove.IndexOfLibrary(availLibrary.Value)
 		    
-		    if libraryToMoveIndex >= 0
+		    if libraryToMoveIndex >= 0 then
 		      LibrariesToMove(libraryToMoveIndex).ProjectSourceLine = availLibrary
+		      LibrariesToMove(libraryToMoveIndex).TopIDInSource = parentIDInSourceProject
 		      
 		      var results() as pair = SourceProject.NavigateSubTree(availLibrary, 0)
 		      
@@ -705,8 +707,7 @@ Protected Class clXojoProject
 		  
 		  if projectLinesToTransfer.Count = 0 then Return "Nothing to move"
 		  
-		  var parentIDInSourceProject as int64 = SourceProject.FindShareableFolder().GetloadedID
-		  
+		  // UPDATE REQUIRED
 		  var res as string = self.ImportItems(projectLinesToTransfer, parentIDInSourceProject, true)
 		  
 		  Return res

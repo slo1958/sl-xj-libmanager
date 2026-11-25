@@ -82,7 +82,7 @@ Protected Class clXojoProjectSourceLine
 		  self.source = prmSource.source
 		  
 		  self.updatedOwnID = prmSource.updatedOwnID
-		   
+		  
 		  self.updatedParentID = prmSource.updatedParentID
 		  
 		  self.updatedRelativePathElements.RemoveAll
@@ -259,7 +259,7 @@ Protected Class clXojoProjectSourceLine
 		    
 		    if t.IndexOf("Constant") >0 and t.indexof("EndConstant") < 0 then 
 		      var v1 as string = getValue(t, "Name")
-		      var v2 as string = getValue(t, "Default")
+		      var v2 as string = getValue(t, "Default").ReplaceAll("\x2C",",")
 		      results.Value(v1) = v2
 		      
 		    end if
@@ -283,7 +283,7 @@ Protected Class clXojoProjectSourceLine
 		    f = alternateProjectFolder
 		    
 		  end if
-		   
+		  
 		  for each s as string in self.relativePathElements
 		    f = f.Child(s)
 		    

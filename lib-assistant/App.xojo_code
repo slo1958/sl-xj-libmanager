@@ -4,6 +4,24 @@ Inherits DesktopApplication
 Implements itfShareProgress
 	#tag Event
 		Sub Opening()
+		  var s as string = "1234"
+		  var v as variant = s
+		  var i as integer = v
+		  
+		  
+		  
+		  var s1 as string = "1234"
+		  var s2 as string = "9876"
+		  
+		  var v1 as variant = s1
+		  
+		  var v2 as variant = v1
+		  
+		  v2 = s2
+		  
+		  var i1 as integer = v1
+		  var i2 as integer = v2
+		  
 		  
 		  
 		  self.Configuration = new clXojoSCAConfiguration(cstPrefFileName)

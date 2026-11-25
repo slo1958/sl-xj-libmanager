@@ -38,7 +38,7 @@ Protected Class clLibraryToMove
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		Untitled2 As Integer
+		TopIDInSource As int64
 	#tag EndProperty
 
 
@@ -88,19 +88,19 @@ Protected Class clLibraryToMove
 			Visible=false
 			Group="Behavior"
 			InitialValue=""
-			Type="Integer"
-			EditorType=""
+			Type="string"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
 			Name="LibrarySource"
 			Visible=false
 			Group="Behavior"
 			InitialValue=""
-			Type="Integer"
-			EditorType=""
+			Type="string"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 		#tag ViewProperty
-			Name="Untitled2"
+			Name="TopIDInSource"
 			Visible=false
 			Group="Behavior"
 			InitialValue=""
