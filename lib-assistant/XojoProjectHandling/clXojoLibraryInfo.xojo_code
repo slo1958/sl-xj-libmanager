@@ -177,6 +177,11 @@ Protected Class clXojoLibraryInfo
 			    
 			  end if
 			  
+			  for i as integer = 0 to self.Required.LastIndex
+			    self.Required(i) = self.Required(i).Trim
+			    
+			  next
+			  
 			  Return
 			End Set
 		#tag EndSetter

@@ -77,7 +77,7 @@ Begin DesktopWindow wnd_transfer
       HasHorizontalScrollbar=   False
       HasVerticalScrollbar=   True
       HeadingIndex    =   -1
-      Height          =   140
+      Height          =   120
       Index           =   -2147483648
       InitialValue    =   ""
       Italic          =   False
@@ -160,7 +160,7 @@ Begin DesktopWindow wnd_transfer
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   295
+      Top             =   275
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -190,7 +190,7 @@ Begin DesktopWindow wnd_transfer
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   315
+      Top             =   295
       Transparent     =   False
       Visible         =   True
       Width           =   700
@@ -218,7 +218,7 @@ Begin DesktopWindow wnd_transfer
       HasHorizontalScrollbar=   False
       HasVerticalScrollbar=   True
       HeadingIndex    =   -1
-      Height          =   140
+      Height          =   120
       Index           =   -2147483648
       InitialValue    =   ""
       Italic          =   False
@@ -235,7 +235,7 @@ Begin DesktopWindow wnd_transfer
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   395
+      Top             =   375
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -301,7 +301,7 @@ Begin DesktopWindow wnd_transfer
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   373
+      Top             =   355
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -326,11 +326,11 @@ Begin DesktopWindow wnd_transfer
       FontUnit        =   0
       GridLineStyle   =   0
       HasBorder       =   True
-      HasHeader       =   False
+      HasHeader       =   True
       HasHorizontalScrollbar=   False
       HasVerticalScrollbar=   True
       HeadingIndex    =   -1
-      Height          =   193
+      Height          =   121
       Index           =   -2147483648
       InitialValue    =   ""
       Italic          =   False
@@ -347,11 +347,11 @@ Begin DesktopWindow wnd_transfer
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   587
+      Top             =   560
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      Width           =   316
+      Width           =   700
       _ScrollOffset   =   0
       _ScrollWidth    =   -1
    End
@@ -381,7 +381,7 @@ Begin DesktopWindow wnd_transfer
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   563
+      Top             =   540
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -412,7 +412,7 @@ Begin DesktopWindow wnd_transfer
       TabPanelIndex   =   0
       TabStop         =   True
       Tooltip         =   ""
-      Top             =   672
+      Top             =   751
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -444,7 +444,7 @@ Begin DesktopWindow wnd_transfer
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   538
+      Top             =   507
       Transparent     =   False
       Underline       =   False
       Visible         =   False
@@ -457,10 +457,10 @@ Begin DesktopWindow wnd_transfer
       FontName        =   "System"
       FontSize        =   0.0
       FontUnit        =   0
-      Height          =   73
+      Height          =   46
       Index           =   -2147483648
       Italic          =   False
-      Left            =   355
+      Left            =   389
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
@@ -476,11 +476,11 @@ Begin DesktopWindow wnd_transfer
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   587
+      Top             =   693
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      Width           =   357
+      Width           =   331
    End
    Begin DesktopLabel Label6
       AllowAutoDeactivate=   True
@@ -508,7 +508,7 @@ Begin DesktopWindow wnd_transfer
       TextAlignment   =   3
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   295
+      Top             =   275
       Transparent     =   False
       Underline       =   False
       Visible         =   True
@@ -527,7 +527,7 @@ Begin DesktopWindow wnd_transfer
       Height          =   40
       Index           =   -2147483648
       Italic          =   False
-      Left            =   614
+      Left            =   244
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
@@ -552,11 +552,11 @@ Begin DesktopWindow wnd_transfer
       FontName        =   "tahoma"
       FontSize        =   12.0
       FontUnit        =   0
-      Height          =   63
+      Height          =   46
       Index           =   -2147483648
       InitialParent   =   ""
       Italic          =   False
-      Left            =   355
+      Left            =   20
       LockBottom      =   False
       LockedInPosition=   False
       LockLeft        =   True
@@ -572,11 +572,11 @@ Begin DesktopWindow wnd_transfer
       TextAlignment   =   0
       TextColor       =   &c000000
       Tooltip         =   ""
-      Top             =   717
+      Top             =   693
       Transparent     =   False
       Underline       =   False
       Visible         =   True
-      Width           =   247
+      Width           =   330
    End
 End
 #tag EndDesktopWindow
@@ -619,11 +619,38 @@ End
 		  //lb_dst_libraries.ColumnTypeAt(4) = DesktopListBox.CellTypes.CheckBox
 		  
 		  
+		  lb_actions.RemoveAllRows
+		  lb_actions.ColumnCount = 3
+		  lb_actions.HeaderAt(0) = "Libraries"
+		  lb_actions.HeaderAt(1) = "In"
+		  lb_actions.HeaderAt(2) = "Description"
+		  
+		  
+		  
+		  
 		  Return
 		  
 		End Sub
 	#tag EndEvent
 
+
+	#tag Method, Flags = &h0
+		Sub AddActionDescription(prmLIbrary as string, prmWhere as string, prmInfo as string)
+		  
+		  var idx as integer
+		  
+		  lb_actions.AddRow("")
+		  idx = lb_actions.LastAddedRowIndex
+		  
+		  lb_actions.CellTextAt(idx, 0) = prmLIbrary
+		  lb_actions.CellTextAt(idx, 1) = prmWhere
+		  lb_actions.CellTextAt(idx, 2) = prmInfo
+		  
+		  return
+		  
+		  
+		End Sub
+	#tag EndMethod
 
 	#tag Method, Flags = &h0
 		Sub CheckReadyToTransfer()
@@ -803,8 +830,7 @@ End
 		    
 		    
 		    if chk then 
-		      
-		      lb_actions.AddRow("Transfer " + nam)
+		      AddActionDescription(nam, "Published", "Transfer requested")
 		      
 		      LibraryToMove.Add(new clLibraryToMove(clXojoProjectConstants.ShareableText, nam))
 		      
@@ -826,17 +852,18 @@ End
 		        var mv as clLibraryToMove = nil
 		        
 		        if fndlibdst <> nil then
-		          lb_actions.AddRow("Selected library depends on [" + req + "] already in destination project.")
+		          AddActionDescription(req,"-", "Dependency already in project")
 		          
 		        elseif fndlibsrcPublish = nil and fndlibsrcUsing = nil then  
-		          lb_actions.AddRow("Selected library depends on [" + req + "] missing in project.")
+		          AddActionDescription(req,"-", "Missing in project")
 		          
 		        elseif fndlibsrcPublish = nil and fndlibsrcUsing <> nil then
-		          lb_actions.AddRow("Selected library depends on [" + req + "] used in source project, added to list.")
+		          AddActionDescription(req, "Used", "Dependency will be transfered")
 		          mv = new clLibraryToMove(clXojoProjectConstants.DestinationText, req)
 		          
 		        else
-		          lb_actions.AddRow("Selected library depends on [" + req + "] published by source , added to list.")
+		          AddActionDescription(req, "Published", "Dependency will be transfered")
+		          
 		          mv = new clLibraryToMove(clXojoProjectConstants.ShareableText, req)
 		          
 		          
@@ -993,7 +1020,14 @@ End
 #tag Events btn_proceed
 	#tag Event
 		Sub Pressed()
-		  if LibraryToMove.Count > 0 then updateDestinationProject
+		  if LibraryToMove.Count > 0 then 
+		    me.Enabled = False
+		    updateDestinationProject
+		    
+		    me.Enabled = true
+		    
+		  end if
+		  
 		End Sub
 	#tag EndEvent
 #tag EndEvents
