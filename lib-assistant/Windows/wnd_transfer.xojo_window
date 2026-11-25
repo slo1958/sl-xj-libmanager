@@ -805,7 +805,8 @@ End
 		    if chk then 
 		      
 		      lb_actions.AddRow("Transfer " + nam)
-		      LibraryToMove.Add(nam)
+		      
+		      LibraryToMove.Add(new clLibraryToMove(clXojoProjectConstants.ShareableText, nam))
 		      
 		      
 		      // Find requirements
@@ -818,20 +819,29 @@ End
 		      
 		      
 		      for each req as string in req_libname
-		        var fndlibsrc as clXojoProjectSourceLine = SourceProject.GetLibraryInTopFolder(req, SourceProject.FindShareableFolder)
+		        var fndlibsrcPublish as clXojoProjectSourceLine = SourceProject.GetLibraryInTopFolder(req, SourceProject.FindShareableFolder)
+		        var fndlibsrcUsing as clXojoProjectSourceLine = SourceProject.GetLibraryInTopFolder(req,SourceProject.FindUsedLibraryFolder)
 		        var fndlibdst as clXojoProjectSourceLine = DestinationProject.GetLibraryInTopFolder(req, DestinationProject.FindUsedLibraryFolder)
 		        
-		        if fndlibsrc = nil then
-		          lb_actions.AddRow("Selected library depends on [" + req + "] missing in project.")
-		          
-		        elseif fndlibdst <> nil then
+		        var mv as clLibraryToMove = nil
+		        
+		        if fndlibdst <> nil then
 		          lb_actions.AddRow("Selected library depends on [" + req + "] already in destination project.")
 		          
+		        elseif fndlibsrcPublish = nil and fndlibsrcUsing = nil then  
+		          lb_actions.AddRow("Selected library depends on [" + req + "] missing in project.")
+		          
+		        elseif fndlibsrcPublish = nil and fndlibsrcUsing <> nil then
+		          lb_actions.AddRow("Selected library depends on [" + req + "] used in source project, added to list.")
+		          mv = new clLibraryToMove(clXojoProjectConstants.DestinationText, req)
+		          
 		        else
-		          lb_actions.AddRow("Selected library depends on [" + req + "] added to list.")
-		          LibraryToMove.Add(req)
+		          lb_actions.AddRow("Selected library depends on [" + req + "] published by source , added to list.")
+		          mv = new clLibraryToMove(clXojoProjectConstants.ShareableText, req)
+		          
 		          
 		        end if
+		        if mv <> nil then  LibraryToMove.Add(mv)
 		        
 		      next 
 		      
@@ -889,7 +899,7 @@ End
 	#tag EndProperty
 
 	#tag Property, Flags = &h0
-		LibraryToMove() As String
+		LibraryToMove() As clLibraryToMove
 	#tag EndProperty
 
 	#tag Property, Flags = &h0

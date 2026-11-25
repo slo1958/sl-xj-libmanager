@@ -641,7 +641,7 @@ Protected Class clXojoProject
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
-		Function ImportLibraries(SourceProject as clXojoProject, Libraries() as string, createOnDisk as Boolean) As string
+		Function ImportLibraries(SourceProject as clXojoProject, LibrariesToMove() as clLibraryToMove, createOnDisk as Boolean) As string
 		  //
 		  // Imports the libraries from the source project into the current project
 		  //
@@ -657,14 +657,13 @@ Protected Class clXojoProject
 		  // Check if any library is already in the project
 		  //
 		  
-		  
 		  topItems.Add(FindShareableFolder())
 		  topItems.Add(FindUsedLibraryFolder())
 		  
 		  for each topItem as clXojoProjectSourceLine in topItems
 		    if topItem <> nil then
 		      for each item as clXojoProjectSourceLine in topItem.Children
-		        if item.key = clXojoProjectConstants.cstFolder and Libraries.IndexOf(item.value) >= 0 then
+		        if item.key = clXojoProjectConstants.cstFolder and Libraries.IndexOfLibrary(item.value) >= 0 then
 		          libOk = false
 		          issues.Add("Library " + item.value + " already present in the destination")
 		          
@@ -678,12 +677,17 @@ Protected Class clXojoProject
 		  if not libOK then return String.FromArray(issues, chr(9))
 		  
 		  
-		  var projectLinesToTransfer() as clXojoProjectSourceLine
+		  // var projectLinesToTransfer() as clXojoProjectSourceLine
 		  
+		  // Locate sourceLine in published libraries
 		  var availLibraries() as clXojoProjectSourceLine = SourceProject.GetLibrariesInTopFolder(SourceProject.FindShareableFolder())
 		  
 		  for each availLibrary as clXojoProjectSourceLine in availLibraries
-		    if libraries.IndexOf(availLibrary.value) >=0 then
+		    var libraryToMoveIndex as integer = LibrariesToMove.IndexOfLibrary(availLibrary.Value)
+		    
+		    if libraryToMoveIndex >= 0
+		      LibrariesToMove(libraryToMoveIndex).ProjectSourceLine = availLibrary
+		      
 		      var results() as pair = SourceProject.NavigateSubTree(availLibrary, 0)
 		      
 		      for each p as pair in results
@@ -696,6 +700,8 @@ Protected Class clXojoProject
 		    end if
 		    
 		  next
+		  
+		  
 		  
 		  if projectLinesToTransfer.Count = 0 then Return "Nothing to move"
 		  

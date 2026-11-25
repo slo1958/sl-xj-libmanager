@@ -80,6 +80,35 @@ Protected Module mdHelpers
 	#tag EndMethod
 
 	#tag Method, Flags = &h0
+		Function IndexOfLibrary(extends list() as clLibraryToMove, LibraryName as string) As integer
+		  
+		  
+		  for i as integer = 0 to list.LastIndex
+		    if list(i).LibraryName = LibraryName then return i
+		    
+		  next
+		  
+		  return -1
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
+		Function IndexOfLibrary1(extends list() as clLibraryToMove, LibrarySource as string, LibraryName as string) As integer
+		  
+		  
+		  for i as integer = 0 to list.LastIndex
+		    if list(i).LibraryName = LibraryName and list(i).LibrarySource = LibrarySource then return i
+		    
+		    
+		  next
+		  
+		  return -1
+		  
+		End Function
+	#tag EndMethod
+
+	#tag Method, Flags = &h0
 		Function IsExistingFIle(fld as FolderItem) As Boolean
 		  if fld = nil then return false
 		  

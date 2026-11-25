@@ -374,7 +374,7 @@ End
 		  self.StructurePict = nil
 		  
 		  if head = nil then return
-		   
+		  
 		  var results() as pair = project.NavigateSubTree(head, 0)
 		  
 		  //
@@ -439,7 +439,7 @@ End
 		    // lb_structure.AddRow (msg)
 		    
 		    hcurrent = hcurrent + cstRowHeight
-		     
+		    
 		  next
 		  
 		  Canvas1.Refresh(true)
@@ -506,7 +506,7 @@ End
 		  ShowLibraryStructure(head)
 		  
 		  Return
-		   
+		  
 		  
 		End Sub
 	#tag EndEvent
@@ -809,6 +809,14 @@ End
 		Group="Deprecated"
 		InitialValue="False"
 		Type="Boolean"
+		EditorType=""
+	#tag EndViewProperty
+	#tag ViewProperty
+		Name="StructurePict"
+		Visible=false
+		Group="Behavior"
+		InitialValue=""
+		Type="Picture"
 		EditorType=""
 	#tag EndViewProperty
 #tag EndViewBehavior

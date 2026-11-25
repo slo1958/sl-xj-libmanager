@@ -5,6 +5,7 @@ OrigIDEVersion=20260201
 Class=App;App.xojo_code;&h0000000028D607FF;&h0000000000000000;false
 Folder=Windows;Windows;&h0000000045B76FFF;&h0000000000000000;false
 Folder=XojoProjectHandling;XojoProjectHandling;&h0000000063D827FF;&h0000000000000000;false
+Class=clLibraryToMove;XojoProjectHandling/clLibraryToMove.xojo_code;&h000000005B6627FF;&h0000000063D827FF;false
 DesktopWindow=wnd_prepare_library;Windows/wnd_prepare_library.xojo_window;&h0000000035FE3FFF;&h0000000045B76FFF;false
 DesktopWindow=wnd_config;Windows/wnd_config.xojo_window;&h0000000052EF0FFF;&h0000000045B76FFF;false
 DesktopWindow=wnd_project_content;Windows/wnd_project_content.xojo_window;&h0000000076ACE7FF;&h0000000045B76FFF;false

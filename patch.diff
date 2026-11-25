@@ -1,0 +1,216 @@
+diff --git a/lib-assistant/.sl-xj-lib-assistant.xojo_uistate b/lib-assistant/.sl-xj-lib-assistant.xojo_uistate
+index 651c652..58ece67 100644
+Binary files a/lib-assistant/.sl-xj-lib-assistant.xojo_uistate and b/lib-assistant/.sl-xj-lib-assistant.xojo_uistate differ
+diff --git a/lib-assistant/Windows/wnd_project_content.xojo_window b/lib-assistant/Windows/wnd_project_content.xojo_window
+index 0d2a93b..08b8745 100644
+--- a/lib-assistant/Windows/wnd_project_content.xojo_window
++++ b/lib-assistant/Windows/wnd_project_content.xojo_window
+@@ -374,7 +374,7 @@ End
+ 		  self.StructurePict = nil
+ 		  
+ 		  if head = nil then return
+-		   
++		  
+ 		  var results() as pair = project.NavigateSubTree(head, 0)
+ 		  
+ 		  //
+@@ -439,7 +439,7 @@ End
+ 		    // lb_structure.AddRow (msg)
+ 		    
+ 		    hcurrent = hcurrent + cstRowHeight
+-		     
++		    
+ 		  next
+ 		  
+ 		  Canvas1.Refresh(true)
+@@ -506,7 +506,7 @@ End
+ 		  ShowLibraryStructure(head)
+ 		  
+ 		  Return
+-		   
++		  
+ 		  
+ 		End Sub
+ 	#tag EndEvent
+@@ -811,4 +811,12 @@ End
+ 		Type="Boolean"
+ 		EditorType=""
+ 	#tag EndViewProperty
++	#tag ViewProperty
++		Name="StructurePict"
++		Visible=false
++		Group="Behavior"
++		InitialValue=""
++		Type="Picture"
++		EditorType=""
++	#tag EndViewProperty
+ #tag EndViewBehavior
+diff --git a/lib-assistant/Windows/wnd_transfer.xojo_window b/lib-assistant/Windows/wnd_transfer.xojo_window
+index ca5dcfd..8e55539 100644
+--- a/lib-assistant/Windows/wnd_transfer.xojo_window
++++ b/lib-assistant/Windows/wnd_transfer.xojo_window
+@@ -805,7 +805,8 @@ End
+ 		    if chk then 
+ 		      
+ 		      lb_actions.AddRow("Transfer " + nam)
+-		      LibraryToMove.Add(nam)
++		      
++		      LibraryToMove.Add(new clLibraryToMove(clXojoProjectConstants.ShareableText, nam))
+ 		      
+ 		      
+ 		      // Find requirements
+@@ -818,20 +819,29 @@ End
+ 		      
+ 		      
+ 		      for each req as string in req_libname
+-		        var fndlibsrc as clXojoProjectSourceLine = SourceProject.GetLibraryInTopFolder(req, SourceProject.FindShareableFolder)
++		        var fndlibsrcPublish as clXojoProjectSourceLine = SourceProject.GetLibraryInTopFolder(req, SourceProject.FindShareableFolder)
++		        var fndlibsrcUsing as clXojoProjectSourceLine = SourceProject.GetLibraryInTopFolder(req,SourceProject.FindUsedLibraryFolder)
+ 		        var fndlibdst as clXojoProjectSourceLine = DestinationProject.GetLibraryInTopFolder(req, DestinationProject.FindUsedLibraryFolder)
+ 		        
+-		        if fndlibsrc = nil then
++		        var mv as clLibraryToMove = nil
++		        
++		        if fndlibdst <> nil then
++		          lb_actions.AddRow("Selected library depends on [" + req + "] already in destination project.")
++		          
++		        elseif fndlibsrcPublish = nil and fndlibsrcUsing = nil then  
+ 		          lb_actions.AddRow("Selected library depends on [" + req + "] missing in project.")
+ 		          
+-		        elseif fndlibdst <> nil then
+-		          lb_actions.AddRow("Selected library depends on [" + req + "] already in destination project.")
++		        elseif fndlibsrcPublish = nil and fndlibsrcUsing <> nil then
++		          lb_actions.AddRow("Selected library depends on [" + req + "] used in source project, added to list.")
++		          mv = new clLibraryToMove(clXojoProjectConstants.DestinationText, req)
+ 		          
+ 		        else
+-		          lb_actions.AddRow("Selected library depends on [" + req + "] added to list.")
+-		          LibraryToMove.Add(req)
++		          lb_actions.AddRow("Selected library depends on [" + req + "] published by source , added to list.")
++		          mv = new clLibraryToMove(clXojoProjectConstants.ShareableText, req)
++		          
+ 		          
+ 		        end if
++		        if mv <> nil then  LibraryToMove.Add(mv)
+ 		        
+ 		      next 
+ 		      
+@@ -889,7 +899,7 @@ End
+ 	#tag EndProperty
+ 
+ 	#tag Property, Flags = &h0
+-		LibraryToMove() As String
++		LibraryToMove() As clLibraryToMove
+ 	#tag EndProperty
+ 
+ 	#tag Property, Flags = &h0
+diff --git a/lib-assistant/XojoProjectHandling/clXojoProject.xojo_code b/lib-assistant/XojoProjectHandling/clXojoProject.xojo_code
+index 0b7a2ae..f34e9e6 100644
+--- a/lib-assistant/XojoProjectHandling/clXojoProject.xojo_code
++++ b/lib-assistant/XojoProjectHandling/clXojoProject.xojo_code
+@@ -641,7 +641,7 @@ Protected Class clXojoProject
+ 	#tag EndMethod
+ 
+ 	#tag Method, Flags = &h0
+-		Function ImportLibraries(SourceProject as clXojoProject, Libraries() as string, createOnDisk as Boolean) As string
++		Function ImportLibraries(SourceProject as clXojoProject, LibrariesToMove() as clLibraryToMove, createOnDisk as Boolean) As string
+ 		  //
+ 		  // Imports the libraries from the source project into the current project
+ 		  //
+@@ -657,14 +657,13 @@ Protected Class clXojoProject
+ 		  // Check if any library is already in the project
+ 		  //
+ 		  
+-		  
+ 		  topItems.Add(FindShareableFolder())
+ 		  topItems.Add(FindUsedLibraryFolder())
+ 		  
+ 		  for each topItem as clXojoProjectSourceLine in topItems
+ 		    if topItem <> nil then
+ 		      for each item as clXojoProjectSourceLine in topItem.Children
+-		        if item.key = clXojoProjectConstants.cstFolder and Libraries.IndexOf(item.value) >= 0 then
++		        if item.key = clXojoProjectConstants.cstFolder and Libraries.IndexOfLibrary(item.value) >= 0 then
+ 		          libOk = false
+ 		          issues.Add("Library " + item.value + " already present in the destination")
+ 		          
+@@ -678,12 +677,17 @@ Protected Class clXojoProject
+ 		  if not libOK then return String.FromArray(issues, chr(9))
+ 		  
+ 		  
+-		  var projectLinesToTransfer() as clXojoProjectSourceLine
++		  // var projectLinesToTransfer() as clXojoProjectSourceLine
+ 		  
++		  // Locate sourceLine in published libraries
+ 		  var availLibraries() as clXojoProjectSourceLine = SourceProject.GetLibrariesInTopFolder(SourceProject.FindShareableFolder())
+ 		  
+ 		  for each availLibrary as clXojoProjectSourceLine in availLibraries
+-		    if libraries.IndexOf(availLibrary.value) >=0 then
++		    var libraryToMoveIndex as integer = LibrariesToMove.IndexOfLibrary(availLibrary.Value)
++		    
++		    if libraryToMoveIndex >= 0
++		      LibrariesToMove(libraryToMoveIndex).ProjectSourceLine = availLibrary
++		      
+ 		      var results() as pair = SourceProject.NavigateSubTree(availLibrary, 0)
+ 		      
+ 		      for each p as pair in results
+@@ -697,6 +701,8 @@ Protected Class clXojoProject
+ 		    
+ 		  next
+ 		  
++		  
++		  
+ 		  if projectLinesToTransfer.Count = 0 then Return "Nothing to move"
+ 		  
+ 		  var parentIDInSourceProject as int64 = SourceProject.FindShareableFolder().GetloadedID
+diff --git a/lib-assistant/mdHelpers.xojo_code b/lib-assistant/mdHelpers.xojo_code
+index 3cd2aba..b256958 100644
+--- a/lib-assistant/mdHelpers.xojo_code
++++ b/lib-assistant/mdHelpers.xojo_code
+@@ -79,6 +79,35 @@ Protected Module mdHelpers
+ 		End Function
+ 	#tag EndMethod
+ 
++	#tag Method, Flags = &h0
++		Function IndexOfLibrary(extends list() as clLibraryToMove, LibraryName as string) As integer
++		  
++		  
++		  for i as integer = 0 to list.LastIndex
++		    if list(i).LibraryName = LibraryName then return i
++		    
++		  next
++		  
++		  return -1
++		  
++		End Function
++	#tag EndMethod
++
++	#tag Method, Flags = &h0
++		Function IndexOfLibrary1(extends list() as clLibraryToMove, LibrarySource as string, LibraryName as string) As integer
++		  
++		  
++		  for i as integer = 0 to list.LastIndex
++		    if list(i).LibraryName = LibraryName and list(i).LibrarySource = LibrarySource then return i
++		    
++		    
++		  next
++		  
++		  return -1
++		  
++		End Function
++	#tag EndMethod
++
+ 	#tag Method, Flags = &h0
+ 		Function IsExistingFIle(fld as FolderItem) As Boolean
+ 		  if fld = nil then return false
+diff --git a/lib-assistant/sl-xj-lib-assistant.xojo_project b/lib-assistant/sl-xj-lib-assistant.xojo_project
+index d1cc3e3..8edcd53 100644
+--- a/lib-assistant/sl-xj-lib-assistant.xojo_project
++++ b/lib-assistant/sl-xj-lib-assistant.xojo_project
+@@ -5,6 +5,7 @@ OrigIDEVersion=20260201
+ Class=App;App.xojo_code;&h0000000028D607FF;&h0000000000000000;false
+ Folder=Windows;Windows;&h0000000045B76FFF;&h0000000000000000;false
+ Folder=XojoProjectHandling;XojoProjectHandling;&h0000000063D827FF;&h0000000000000000;false
++Class=clLibraryToMove;XojoProjectHandling/clLibraryToMove.xojo_code;&h000000005B6627FF;&h0000000063D827FF;false
+ DesktopWindow=wnd_prepare_library;Windows/wnd_prepare_library.xojo_window;&h0000000035FE3FFF;&h0000000045B76FFF;false
+ DesktopWindow=wnd_config;Windows/wnd_config.xojo_window;&h0000000052EF0FFF;&h0000000045B76FFF;false
+ DesktopWindow=wnd_project_content;Windows/wnd_project_content.xojo_window;&h0000000076ACE7FF;&h0000000045B76FFF;false
